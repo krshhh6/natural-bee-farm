@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Home, Store, Info, MessageSquare, User, Heart, ShoppingBag, ChevronDown, Menu, X } from 'lucide-react';
+import { Home, Store, Info, MessageSquare, User, Heart, ShoppingBag, ChevronDown, Menu, X, LogOut } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 
 interface NavbarProps {
   selectedCategory: string;
@@ -14,8 +15,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSelectCategory,
 }) => {
   const { cartCount, setIsCartOpen } = useCart();
+  const { user, setIsAuthModalOpen, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   const categories = [
     { id: 'all', label: 'All Delicacies' },
@@ -125,14 +128,51 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Right User, Wishlist & Cart Pill Button */}
           <div className="flex items-center space-x-2 sm:space-x-3">
             
-            {/* User Account Icon */}
-            <button
-              onClick={() => alert('User Account Login')}
-              className="p-2.5 rounded-full text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
-              aria-label="User Account"
-            >
-              <User className="w-5 h-5" />
-            </button>
+            {/* User Account / Profile Menu */}
+            <div className="relative">
+              <button
+                onClick={() => {
+                  if (user) {
+                    setUserDropdownOpen(!userDropdownOpen);
+                  } else {
+                    setIsAuthModalOpen(true);
+                  }
+                }}
+                className="p-2 rounded-full text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors flex items-center gap-1"
+                aria-label="User Account"
+                title={user ? user.name : 'Sign In / Register'}
+              >
+                {user ? (
+                  <div className="w-8 h-8 rounded-full bg-[#c8674d] text-white flex items-center justify-center font-bold text-xs shadow-sm">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                ) : (
+                  <User className="w-5 h-5" />
+                )}
+              </button>
+
+              {/* User Logged In Dropdown */}
+              {user && userDropdownOpen && (
+                <div className="absolute top-full mt-2 right-0 w-56 bg-white dark:bg-stone-900 rounded-2xl shadow-xl border border-stone-200 dark:border-stone-800 p-3 z-50 animate-fadeIn">
+                  <div className="px-3 py-2 border-b border-stone-100 dark:border-stone-800">
+                    <div className="font-bold text-sm text-stone-900 dark:text-stone-100 truncate">{user.name}</div>
+                    <div className="text-xs text-stone-500 truncate">{user.email}</div>
+                  </div>
+                  <div className="pt-2 space-y-1">
+                    <button
+                      onClick={() => {
+                        logout();
+                        setUserDropdownOpen(false);
+                      }}
+                      className="w-full text-left px-3 py-2 text-xs font-bold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-xl flex items-center gap-2 transition-colors"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span>Log Out</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Wishlist Heart Icon */}
             <button

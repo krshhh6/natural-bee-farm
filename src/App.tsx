@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CartProvider, useCart } from './context/CartContext';
+import { AuthProvider } from './context/AuthContext';
 import { AnnouncementBar } from './components/AnnouncementBar';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
@@ -13,6 +14,7 @@ import { Testimonials } from './components/Testimonials';
 import { Footer } from './components/Footer';
 import { ProductModal } from './components/ProductModal';
 import { CartDrawer } from './components/CartDrawer';
+import { AuthModal } from './components/AuthModal';
 import { PRODUCTS } from './data/products';
 import type { CategoryType } from './types';
 import { CheckCircle2 } from 'lucide-react';
@@ -106,6 +108,7 @@ const MainContent: React.FC = () => {
       {/* Overlays & Modals */}
       <ProductModal />
       <CartDrawer />
+      <AuthModal />
 
     </div>
   );
@@ -113,9 +116,11 @@ const MainContent: React.FC = () => {
 
 export function App() {
   return (
-    <CartProvider>
-      <MainContent />
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <MainContent />
+      </CartProvider>
+    </AuthProvider>
   );
 }
 
