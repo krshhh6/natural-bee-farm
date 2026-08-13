@@ -8,12 +8,12 @@
   --color-charcoal: #282823;
   --color-ebony: #595C56;
   --color-sunray: #E9BE5F;
-  --color-blond: #F5E8B6;
+  --color-blond: #FEFDF5;
 }
 
 @layer base {
   body {
-    @apply bg-[#F5E8B6] text-[#282823] font-sans antialiased selection:bg-[#E9BE5F] selection:text-[#282823];
+    @apply bg-[#FEFDF5] text-[#282823] font-sans antialiased selection:bg-[#E9BE5F] selection:text-[#282823];
   }
 }
 

@@ -10,7 +10,7 @@ export const TrustStrip: React.FC = () => {
   ];
 
   return (
-    <section className="py-6 bg-[#F5E8B6] dark:bg-[#282823] border-b border-[#595C56]/30 transition-colors">
+    <section className="py-6 bg-[#FEFDF5] dark:bg-[#282823] border-b border-[#595C56]/30 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Horizontal Marquee Scroll Container */}

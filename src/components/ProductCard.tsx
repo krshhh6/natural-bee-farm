@@ -1,5 +1,5 @@
-import React from 'react';
-import { Star, ShoppingBag, Eye, Heart } from 'lucide-react';
+import React, { useState } from 'react';
+import { Star, Sparkles, ChevronDown } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import type { Product } from '../types';
 
@@ -10,116 +10,133 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
   const { addToCart, showToast } = useCart();
+  
+  const weights = product.weightsAvailable || [product.weight];
+  const [selectedWeight, setSelectedWeight] = useState<string>(product.weight);
+
+  // Dynamic price calculation based on selected weight ratio
+  const getWeightMultiplier = (weightStr: string) => {
+    if (weightStr.includes('1kg') || weightStr.includes('1 kg') || weightStr.includes('1000 ML') || weightStr.includes('5 kg')) {
+      if (product.weight.includes('250')) return 3.5;
+      if (product.weight.includes('500') || product.weight.includes('2 kg')) return 1.8;
+      if (weightStr.includes('5 kg')) return 2.2;
+    }
+    if (weightStr.includes('250g') || weightStr.includes('250 ML') || weightStr.includes('1 kg')) {
+      if (product.weight.includes('500')) return 0.55;
+      if (product.weight.includes('2 kg')) return 0.55;
+    }
+    if (weightStr.includes('5000 ML')) return 4.5;
+    return 1;
+  };
+
+  const multiplier = getWeightMultiplier(selectedWeight);
+  const currentPrice = Math.round(product.price * multiplier);
+  const currentOriginalPrice = product.originalPrice ? Math.round(product.originalPrice * multiplier) : undefined;
+  const emiPrice = Math.round(currentPrice / 4);
+
+  // Badge Text & Emoji
+  const badgeText = product.badgeText || (product.isBestSeller ? 'Best Seller' : product.isMustTry ? 'Must Try' : 'Trending');
+  const badgeEmoji = product.badgeEmoji || (product.isBestSeller ? '🔥' : product.isMustTry ? '😋' : '🚀');
+  const discountText = product.discountTag || (product.originalPrice ? `Upto ${Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF` : 'Flat 12% OFF');
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
-    addToCart(product, product.weight);
-    showToast(`Added ${product.name} (${product.weight}) to your cart! 🍯`);
+    const itemToAdd = {
+      ...product,
+      price: currentPrice,
+    };
+    addToCart(itemToAdd, selectedWeight);
+    showToast(`Added ${product.name} (${selectedWeight}) to cart! 🛒`);
   };
 
   return (
     <div
       onClick={() => onQuickView(product)}
-      className="group bg-[#F5E8B6] dark:bg-[#1C1C18] rounded-3xl p-4 border border-[#595C56]/30 dark:border-[#595C56]/40 shadow-sm hover:shadow-xl hover:border-[#E9BE5F] transition-all duration-300 flex flex-col justify-between cursor-pointer transform hover:-translate-y-1"
+      className="group bg-white dark:bg-[#1E1C18] rounded-2xl p-4 sm:p-5 border border-[#E7DFD3] dark:border-[#3D372E] shadow-sm hover:shadow-2xl hover:border-[#D4AF37]/60 transition-all duration-300 flex flex-col justify-between cursor-pointer relative h-full transform hover:-translate-y-1"
     >
-      {/* Product Image Container */}
-      <div className="relative aspect-square rounded-2xl overflow-hidden bg-[#FAF3D6] dark:bg-[#282823] p-3 flex items-center justify-center">
-        
-        {/* Badges */}
-        <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5">
-          {product.isBestSeller && (
-            <span className="bg-[#E9BE5F] text-[#282823] font-extrabold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm">
-              Best Seller
-            </span>
-          )}
-          {product.isOrganic && (
-            <span className="bg-[#282823] text-[#E9BE5F] font-bold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full shadow-sm border border-[#E9BE5F]/30">
-              100% Pure
-            </span>
-          )}
-        </div>
-
-        {/* Quick View & Heart Overlay Buttons */}
-        <div className="absolute top-3 right-3 z-10 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onQuickView(product);
-            }}
-            className="p-2 rounded-full bg-[#282823]/90 text-[#F5E8B6] hover:bg-[#E9BE5F] hover:text-[#282823] shadow-md transition-colors"
-            title="Quick View"
-          >
-            <Eye className="w-4 h-4" />
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              alert(`Added ${product.name} to Wishlist!`);
-            }}
-            className="p-2 rounded-full bg-[#282823]/90 text-[#F5E8B6] hover:bg-[#E9BE5F] hover:text-[#282823] shadow-md transition-colors"
-            title="Save to Wishlist"
-          >
-            <Heart className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Product Image */}
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full h-full object-cover rounded-xl transform group-hover:scale-105 transition-transform duration-500"
-        />
+      {/* Top Left Deep Red Discount Badge */}
+      <div className="absolute top-3.5 left-0 z-10 bg-gradient-to-r from-[#B91C1C] via-[#DC2626] to-[#B91C1C] text-white font-bold text-[11px] sm:text-xs px-3.5 py-1 rounded-r-full rounded-tl-xl shadow-md flex items-center gap-1.5 tracking-wide border-r border-t border-red-300/30">
+        <Sparkles className="w-3 h-3 text-white fill-white" />
+        <span>{discountText}</span>
       </div>
 
-      {/* Product Content Details */}
-      <div className="mt-4 space-y-2 flex-1 flex flex-col justify-between">
-        
-        <div>
-          {/* Category & Weight */}
-          <div className="flex items-center justify-between text-xs font-semibold text-[#595C56] dark:text-[#E9BE5F]">
-            <span>{product.categoryName}</span>
-            <span className="bg-[#FAF3D6] dark:bg-[#282823] text-[#282823] dark:text-[#F5E8B6] px-2 py-0.5 rounded-md text-[10px] border border-[#595C56]/30">
-              {product.weight}
+      <div>
+        {/* Product Image Container */}
+        <div className="relative w-full aspect-square sm:aspect-[4/3] rounded-xl bg-[#FAF8F5] dark:bg-[#25221D] p-3 flex items-center justify-center overflow-hidden mb-3.5 border border-[#F0EADF] dark:border-[#332E27] group-hover:border-[#D4AF37]/40 transition-colors">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-500"
+          />
+        </div>
+
+        {/* Product Title */}
+        <h3 className="font-serif text-base sm:text-lg font-bold text-[#3D2716] dark:text-[#F3E5AB] leading-snug line-clamp-2 mb-2 group-hover:text-[#B8661B] dark:group-hover:text-[#D4AF37] transition-colors">
+          {product.name}
+        </h3>
+
+        {/* Highlight Tag (Forest Green Pill) */}
+        <div className="mb-2.5">
+          <span className="bg-[#165B2F] dark:bg-[#1B5E33] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full inline-flex items-center gap-1 shadow-xs border border-green-400/20">
+            <span>{badgeEmoji}</span>
+            <span>{badgeText}</span>
+          </span>
+        </div>
+
+        {/* Rating Stars Row */}
+        <div className="flex items-center gap-1.5 text-xs font-bold text-[#231F1B] dark:text-[#E6DBCB] mb-3.5">
+          <Star className="w-3.5 h-3.5 fill-[#231F1B] text-[#231F1B] dark:fill-[#D4AF37] dark:text-[#D4AF37]" />
+          <span>{product.rating} Star</span>
+        </div>
+
+        {/* Weight / Variant Dropdown Selector */}
+        <div className="relative mb-3.5" onClick={(e) => e.stopPropagation()}>
+          <select
+            value={selectedWeight}
+            onChange={(e) => setSelectedWeight(e.target.value)}
+            className="w-full appearance-none bg-[#FDF8F0] dark:bg-[#28241E] border border-[#E2D4C0] dark:border-[#473E32] text-[#3B2818] dark:text-[#F3E5AB] font-semibold text-xs sm:text-sm rounded-xl px-3.5 py-2.5 pr-8 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#B8661B]/30 transition-all shadow-inner"
+          >
+            {weights.map((w) => (
+              <option key={w} value={w} className="bg-white dark:bg-[#1C1A17] text-[#231F1B] dark:text-[#F3E5AB]">
+                {w}
+              </option>
+            ))}
+          </select>
+          <ChevronDown className="w-4 h-4 text-[#8C4B13] dark:text-[#D4AF37] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+        </div>
+
+        {/* Price & EMI Section */}
+        <div className="space-y-1 mb-2.5">
+          <div className="flex items-baseline gap-2">
+            <span className="text-lg sm:text-xl font-extrabold text-[#231F1B] dark:text-white tracking-tight">
+              ₹{currentPrice}.00
+            </span>
+            {currentOriginalPrice && (
+              <span className="text-xs text-neutral-400 line-through font-normal">
+                ₹{currentOriginalPrice}.00
+              </span>
+            )}
+          </div>
+
+          {/* EMI Subtext */}
+          <div className="text-[11px] sm:text-xs text-neutral-600 dark:text-neutral-400 flex items-center flex-wrap gap-1">
+            <span>or</span>
+            <span className="text-[#15803D] dark:text-[#4ADE80] font-extrabold">₹{emiPrice}</span>
+            <span>/Month</span>
+            <span className="bg-gradient-to-r from-[#8C4B13] to-[#A85B18] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded shadow-xs ml-0.5">
+              Buy on EMI
             </span>
           </div>
-
-          {/* Title */}
-          <h3 className="font-serif text-sm sm:text-base font-bold text-[#282823] dark:text-[#F5E8B6] line-clamp-1 group-hover:text-[#E9BE5F] transition-colors mt-1">
-            {product.name}
-          </h3>
         </div>
-
-        {/* Price & Rating Row */}
-        <div className="pt-2 flex items-center justify-between">
-          <div>
-            <div className="text-sm sm:text-base font-extrabold text-[#282823] dark:text-[#F5E8B6]">
-              ₹{product.price}
-              {product.originalPrice && (
-                <span className="ml-1.5 text-xs text-[#595C56] line-through font-normal">
-                  ₹{product.originalPrice}
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Rating Stars */}
-          <div className="flex items-center space-x-1 bg-[#FAF3D6] dark:bg-[#282823] px-2 py-1 rounded-lg text-xs font-bold text-[#282823] dark:text-[#F5E8B6] border border-[#595C56]/30">
-            <Star className="w-3.5 h-3.5 fill-[#E9BE5F] text-[#E9BE5F]" />
-            <span>{product.rating}</span>
-            <span className="text-[10px] text-[#595C56]">({product.reviewsCount})</span>
-          </div>
-        </div>
-
-        {/* Add to Cart Button */}
-        <button
-          onClick={handleAddToCart}
-          className="w-full mt-3 bg-[#E9BE5F] hover:bg-[#D4AA4B] text-[#282823] font-bold py-2.5 rounded-2xl text-xs sm:text-sm shadow-md shadow-[#E9BE5F]/25 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
-        >
-          <ShoppingBag className="w-4 h-4 text-[#282823]" />
-          <span>Add to Cart</span>
-        </button>
-
       </div>
+
+      {/* Add To Cart Button */}
+      <button
+        onClick={handleAddToCart}
+        className="w-full mt-3.5 bg-gradient-to-r from-[#9C5B23] via-[#8C4B13] to-[#733B0D] hover:from-[#8C4B13] hover:to-[#5A2C08] active:scale-[0.98] text-white font-extrabold py-3 rounded-xl text-xs sm:text-sm tracking-widest uppercase shadow-md shadow-[#8C4B13]/25 flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer border border-[#B8661B]/30"
+      >
+        <span>ADD TO CART</span>
+      </button>
     </div>
   );
 };

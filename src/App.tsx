@@ -55,7 +55,7 @@ const MainContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#F5E8B6] dark:bg-[#1C1C18] text-[#282823] dark:text-[#F5E8B6] transition-colors duration-200 selection:bg-[#E9BE5F] selection:text-[#282823]">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#FEFDF5] dark:bg-[#1C1C18] text-[#282823] dark:text-[#FEFDF5] transition-colors duration-200 selection:bg-[#E9BE5F] selection:text-[#282823]">
       
       {/* Toast Notification */}
       {toastMessage && (

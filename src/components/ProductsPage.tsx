@@ -26,7 +26,7 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({
   const [organicOnly, setOrganicOnly] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#F5E8B6] dark:bg-[#1C1C18] text-[#282823] dark:text-[#F5E8B6] pb-16 transition-colors">
+    <div className="min-h-screen bg-[#FEFDF5] dark:bg-[#1C1C18] text-[#282823] dark:text-[#FEFDF5] pb-16 transition-colors">
       
       {/* Page Header & Breadcrumb Banner */}
       <div className="bg-[#282823] text-[#F5E8B6] py-10 sm:py-14 border-b border-[#595C56]/40 relative overflow-hidden">

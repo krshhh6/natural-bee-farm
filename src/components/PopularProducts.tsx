@@ -18,13 +18,12 @@ export const PopularProducts: React.FC<PopularProductsProps> = ({
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Filter for top honey items
-  const honeyProducts = products.filter((p) => p.category === 'honey');
-  const top4Honey = honeyProducts.slice(0, 4);
+  // Grab the top 4 featured products matching the screenshot (Gir Cow Ghee, Khapli Atta, Mustard Oil, Wild Forest Honey)
+  const top4Products = products.slice(0, 4);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const scrollAmount = 320;
+      const scrollAmount = 340;
       scrollRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth',
@@ -34,32 +33,27 @@ export const PopularProducts: React.FC<PopularProductsProps> = ({
 
   const handleViewAll = () => {
     if (onSelectCategory) {
-      onSelectCategory('honey');
+      onSelectCategory('all');
     }
-    const catalogEl = document.getElementById('product-catalog');
-    if (catalogEl) {
-      catalogEl.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      onExploreClick();
-    }
+    onExploreClick();
   };
 
   return (
-    <section className="py-12 sm:py-16 bg-[#F5E8B6] dark:bg-[#1C1C18] transition-colors">
+    <section className="py-12 sm:py-16 bg-[#FEFDF5] dark:bg-[#141412] transition-colors border-y border-[#EBE5DB] dark:border-neutral-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Outer Card Wrapper */}
-        <div className="bg-[#FAF3D6] dark:bg-[#282823] border-t-4 border-[#E9BE5F] rounded-[32px] p-6 sm:p-10 shadow-xl border border-[#595C56]/30 relative overflow-hidden">
+        {/* Outer Section Card */}
+        <div className="bg-[#FEFDF5] dark:bg-[#1E1E1A] border-t-4 border-[#9C5B23] rounded-[28px] p-6 sm:p-10 shadow-sm border border-[#EBE5DB] dark:border-neutral-800 relative overflow-hidden">
           
           {/* Header Row */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
             <div>
-              <div className="inline-flex items-center space-x-1.5 text-[#282823] dark:text-[#E9BE5F] text-xs font-bold uppercase tracking-widest bg-[#E9BE5F]/15 px-3 py-1 rounded-full border border-[#E9BE5F]/30 mb-2">
-                <Flame className="w-3.5 h-3.5 text-[#E9BE5F] fill-[#E9BE5F]" />
-                <span>Top Artisanal Honey</span>
+              <div className="inline-flex items-center space-x-1.5 text-[#9C5B23] dark:text-[#E9BE5F] text-xs font-bold uppercase tracking-widest bg-[#9C5B23]/10 px-3 py-1 rounded-full border border-[#9C5B23]/20 mb-2">
+                <Flame className="w-3.5 h-3.5 text-[#9C5B23] fill-[#9C5B23]" />
+                <span>TOP BESTSELLERS</span>
               </div>
               <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#282823] dark:text-[#F5E8B6]">
-                Top 4 Raw Apiary Honey
+                Featured Traditional Essentials
               </h2>
             </div>
 
@@ -68,14 +62,14 @@ export const PopularProducts: React.FC<PopularProductsProps> = ({
               <div className="hidden sm:flex items-center gap-2">
                 <button
                   onClick={() => scroll('left')}
-                  className="p-2.5 rounded-full bg-[#F5E8B6] dark:bg-[#1C1C18] text-[#282823] dark:text-[#F5E8B6] hover:bg-[#E9BE5F] dark:hover:bg-[#E9BE5F] dark:hover:text-[#282823] transition-colors border border-[#595C56]/30 shadow-sm"
+                  className="p-2.5 rounded-full bg-white dark:bg-[#282823] text-[#282823] dark:text-[#F5E8B6] hover:bg-[#9C5B23] hover:text-white dark:hover:bg-[#9C5B23] transition-colors border border-[#595C56]/30 shadow-sm"
                   aria-label="Scroll Left"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => scroll('right')}
-                  className="p-2.5 rounded-full bg-[#F5E8B6] dark:bg-[#1C1C18] text-[#282823] dark:text-[#F5E8B6] hover:bg-[#E9BE5F] dark:hover:bg-[#E9BE5F] dark:hover:text-[#282823] transition-colors border border-[#595C56]/30 shadow-sm"
+                  className="p-2.5 rounded-full bg-white dark:bg-[#282823] text-[#282823] dark:text-[#F5E8B6] hover:bg-[#9C5B23] hover:text-white dark:hover:bg-[#9C5B23] transition-colors border border-[#595C56]/30 shadow-sm"
                   aria-label="Scroll Right"
                 >
                   <ChevronRight className="w-4 h-4" />
@@ -84,22 +78,22 @@ export const PopularProducts: React.FC<PopularProductsProps> = ({
 
               <button
                 onClick={handleViewAll}
-                className="bg-[#E9BE5F] hover:bg-[#D4AA4B] text-[#282823] px-5 py-2.5 rounded-full text-xs sm:text-sm font-extrabold shadow-md shadow-[#E9BE5F]/20 flex items-center gap-1.5 transition-all transform hover:scale-105 active:scale-95 border border-[#282823]"
+                className="bg-[#9C5B23] hover:bg-[#834917] text-white px-5 py-2.5 rounded-full text-xs sm:text-sm font-extrabold shadow-md shadow-[#9C5B23]/20 flex items-center gap-1.5 transition-all transform hover:scale-105 active:scale-95"
               >
-                <span>View All Honey</span>
-                <ArrowRight className="w-4 h-4 text-[#282823]" />
+                <span>View All Products</span>
+                <ArrowRight className="w-4 h-4 text-white" />
               </button>
             </div>
           </div>
 
-          {/* Horizontally Scrollable List of Top 4 Honey Cards + View All Card */}
+          {/* Horizontally Scrollable List / Grid of Cards */}
           <div
             ref={scrollRef}
             className="flex gap-6 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scroll-smooth"
-            style={{ scrollbarWidth: 'thin', scrollbarColor: '#E9BE5F #282823' }}
+            style={{ scrollbarWidth: 'thin', scrollbarColor: '#9C5B23 #FAF7F0' }}
           >
-            {top4Honey.map((product) => (
-              <div key={product.id} className="min-w-[280px] sm:min-w-[300px] max-w-[320px] shrink-0 snap-start">
+            {top4Products.map((product) => (
+              <div key={product.id} className="min-w-[270px] sm:min-w-[290px] max-w-[310px] shrink-0 snap-start">
                 <ProductCard
                   product={product}
                   onQuickView={onQuickView}
@@ -107,22 +101,22 @@ export const PopularProducts: React.FC<PopularProductsProps> = ({
               </div>
             ))}
 
-            {/* "View All" End Card in Horizontal Stream */}
+            {/* "View All" End Card */}
             <div
               onClick={handleViewAll}
-              className="min-w-[240px] sm:min-w-[260px] shrink-0 snap-start bg-[#F5E8B6]/60 dark:bg-[#1C1C18]/80 rounded-3xl border-2 border-dashed border-[#E9BE5F] p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-[#E9BE5F]/15 transition-all group hover:scale-[1.02]"
+              className="min-w-[240px] sm:min-w-[260px] shrink-0 snap-start bg-white/80 dark:bg-[#1C1C18]/80 rounded-2xl border-2 border-dashed border-[#9C5B23] p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-[#9C5B23]/10 transition-all group hover:scale-[1.02]"
             >
-              <div className="w-14 h-14 rounded-full bg-[#E9BE5F] text-[#282823] flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 rounded-full bg-[#9C5B23] text-white flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
                 <Sparkles className="w-7 h-7" />
               </div>
               <h3 className="font-serif text-lg font-bold text-[#282823] dark:text-[#F5E8B6] mb-1">
-                Explore Full Honey Range
+                Explore Full Range
               </h3>
-              <p className="text-xs text-[#282823]/70 dark:text-[#F5E8B6]/70 mb-4">
-                Discover all {honeyProducts.length}+ raw, unheated wild forest varieties.
+              <p className="text-xs text-neutral-600 dark:text-[#F5E8B6]/70 mb-4">
+                Discover all {products.length}+ pure artisanal delicacies & essentials.
               </p>
-              <span className="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#E9BE5F] group-hover:underline">
-                <span>View All Honey ({honeyProducts.length})</span>
+              <span className="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#9C5B23] dark:text-[#E9BE5F] group-hover:underline">
+                <span>View All ({products.length})</span>
                 <ArrowRight className="w-4 h-4" />
               </span>
             </div>

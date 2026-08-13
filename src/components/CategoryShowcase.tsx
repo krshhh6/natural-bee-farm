@@ -70,11 +70,11 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
   };
 
   return (
-    <section className="py-12 sm:py-16 bg-[#F5E8B6] dark:bg-[#1C1C18] transition-colors">
+    <section className="py-12 sm:py-16 bg-[#FEFDF5] dark:bg-[#1C1C18] transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Outer Card Wrapper with Rich Gradient Accent & Glow */}
-        <div className="bg-[#FAF3D6] dark:bg-[#282823] rounded-[36px] p-6 sm:p-10 shadow-2xl shadow-[#E9BE5F]/10 border border-[#E9BE5F]/30 relative overflow-hidden">
+        <div className="bg-[#FEFDF5] dark:bg-[#282823] rounded-[36px] p-6 sm:p-10 shadow-xl border border-[#E9BE5F]/30 relative overflow-hidden">
           
           {/* Subtle Golden Glow Overlay */}
           <div className="absolute -top-24 -right-24 w-72 h-72 bg-[#E9BE5F]/10 rounded-full blur-3xl pointer-events-none" />

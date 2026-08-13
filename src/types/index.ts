@@ -1,4 +1,4 @@
-export type CategoryType = 'all' | 'honey' | 'pickles' | 'badis' | 'spices' | 'flours';
+export type CategoryType = 'all' | 'honey' | 'pickles' | 'badis' | 'spices' | 'flours' | 'ghee' | 'oils';
 
 export interface Product {
   id: string;
@@ -17,6 +17,11 @@ export interface Product {
   isOrganic?: boolean;
   isBestSeller?: boolean;
   isNew?: boolean;
+  isMustTry?: boolean;
+  isTrending?: boolean;
+  badgeText?: string;
+  badgeEmoji?: string;
+  discountTag?: string;
   inStock: boolean;
   origin: string;
 }
