@@ -78,7 +78,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             </a>
 
             {/* Shop Dropdown Pill */}
-            <div className="relative">
+            <div
+              className="relative"
+              onMouseEnter={() => setShopDropdownOpen(true)}
+              onMouseLeave={() => setShopDropdownOpen(false)}
+            >
               <button
                 onClick={() => {
                   setShopDropdownOpen(!shopDropdownOpen);
@@ -89,28 +93,30 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 <Store className="w-4 h-4 text-[#E9BE5F]" />
                 <span>Shop</span>
-                <ChevronDown className="w-3.5 h-3.5 text-[#E9BE5F]" />
+                <ChevronDown className={`w-3.5 h-3.5 text-[#E9BE5F] transition-transform duration-200 ${shopDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {/* Dropdown Menu */}
               {shopDropdownOpen && (
-                <div className="absolute top-full mt-2 left-0 w-52 bg-[#282823] rounded-2xl shadow-xl border border-[#595C56]/40 py-2 z-50 animate-fadeIn">
-                  {categories.map((cat) => (
-                    <button
-                      key={cat.id}
-                      onClick={() => {
-                        onSelectCategory(cat.id);
-                        setShopDropdownOpen(false);
-                        const el = document.getElementById('product-catalog');
-                        if (el) el.scrollIntoView({ behavior: 'smooth' });
-                      }}
-                      className={`w-full text-left px-4 py-2 text-xs font-semibold hover:bg-[#595C56]/30 transition-colors ${
-                        selectedCategory === cat.id ? 'text-[#E9BE5F] font-bold' : 'text-[#F5E8B6]'
-                      }`}
-                    >
-                      {cat.label}
-                    </button>
-                  ))}
+                <div className="absolute top-full pt-1.5 left-0 w-52 z-50 animate-fadeIn">
+                  <div className="bg-[#282823] rounded-2xl shadow-xl border border-[#595C56]/40 py-2">
+                    {categories.map((cat) => (
+                      <button
+                        key={cat.id}
+                        onClick={() => {
+                          onSelectCategory(cat.id);
+                          setShopDropdownOpen(false);
+                          const el = document.getElementById('product-catalog');
+                          if (el) el.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                        className={`w-full text-left px-4 py-2 text-xs font-semibold hover:bg-[#595C56]/30 transition-colors ${
+                          selectedCategory === cat.id ? 'text-[#E9BE5F] font-bold' : 'text-[#F5E8B6]'
+                        }`}
+                      >
+                        {cat.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
@@ -149,7 +155,11 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center space-x-2 sm:space-x-3">
             
             {/* User Account / Profile Menu */}
-            <div className="relative">
+            <div
+              className="relative"
+              onMouseEnter={() => user && setUserDropdownOpen(true)}
+              onMouseLeave={() => setUserDropdownOpen(false)}
+            >
               <button
                 onClick={() => {
                   if (user) {
@@ -173,22 +183,24 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               {/* User Logged In Dropdown */}
               {user && userDropdownOpen && (
-                <div className="absolute top-full mt-2 right-0 w-56 bg-[#282823] rounded-2xl shadow-xl border border-[#595C56]/40 p-3 z-50 animate-fadeIn">
-                  <div className="px-3 py-2 border-b border-[#595C56]/30">
-                    <div className="font-bold text-sm text-[#F5E8B6] truncate">{user.name}</div>
-                    <div className="text-xs text-[#E9BE5F] truncate">{user.email}</div>
-                  </div>
-                  <div className="pt-2 space-y-1">
-                    <button
-                      onClick={() => {
-                        logout();
-                        setUserDropdownOpen(false);
-                      }}
-                      className="w-full text-left px-3 py-2 text-xs font-bold text-red-400 hover:bg-[#595C56]/30 rounded-xl flex items-center gap-2 transition-colors"
-                    >
-                      <LogOut className="w-3.5 h-3.5" />
-                      <span>Log Out</span>
-                    </button>
+                <div className="absolute top-full pt-1.5 right-0 w-56 z-50 animate-fadeIn">
+                  <div className="bg-[#282823] rounded-2xl shadow-xl border border-[#595C56]/40 p-3">
+                    <div className="px-3 py-2 border-b border-[#595C56]/30">
+                      <div className="font-bold text-sm text-[#F5E8B6] truncate">{user.name}</div>
+                      <div className="text-xs text-[#E9BE5F] truncate">{user.email}</div>
+                    </div>
+                    <div className="pt-2 space-y-1">
+                      <button
+                        onClick={() => {
+                          logout();
+                          setUserDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-3 py-2 text-xs font-bold text-red-400 hover:bg-[#595C56]/30 rounded-xl flex items-center gap-2 transition-colors"
+                      >
+                        <LogOut className="w-3.5 h-3.5" />
+                        <span>Log Out</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
