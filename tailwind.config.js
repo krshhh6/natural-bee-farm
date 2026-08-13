@@ -8,38 +8,40 @@ export default {
   theme: {
     extend: {
       colors: {
-        honey: {
-          50: '#fffbeb',
-          100: '#fef3c7',
-          200: '#fde68a',
-          300: '#fcd34d',
-          400: '#fbbf24',
-          500: '#f59e0b',
-          600: '#d97706',
-          700: '#b45309',
-          800: '#92400e',
-          900: '#78350f',
-          950: '#451a03',
+        charcoal: {
+          DEFAULT: '#282823',
+          dark: '#1C1C18',
+          light: '#363630',
         },
-        amber: {
-          50: '#fffbeb',
-          100: '#fef3c7',
-          200: '#fde68a',
-          300: '#fcd34d',
-          400: '#fbbf24',
-          500: '#f59e0b',
-          600: '#d97706',
-          700: '#b45309',
-          800: '#92400e',
-          900: '#78350f',
+        ebony: {
+          DEFAULT: '#595C56',
+          dark: '#454842',
+          light: '#72766E',
+        },
+        sunray: {
+          DEFAULT: '#E9BE5F',
+          hover: '#D4AA4B',
+          light: '#F2CD78',
+          dark: '#C49A3C',
+        },
+        blond: {
+          DEFAULT: '#F5E8B6',
+          light: '#FAF3D6',
+          dark: '#EBDC9D',
+        },
+        brand: {
+          charcoal: '#282823',
+          ebony: '#595C56',
+          sunray: '#E9BE5F',
+          blond: '#F5E8B6',
         },
         warm: {
-          bg: '#FAF8F5',
-          card: '#FFFFFF',
-          darkBg: '#12100E',
-          darkCard: '#1C1917',
-          border: '#E7E5E4',
-          accent: '#991B1B', // Deep spice red
+          bg: '#F5E8B6',
+          card: '#FAF3D6',
+          darkBg: '#282823',
+          darkCard: '#1C1C18',
+          border: '#E9BE5F',
+          accent: '#E9BE5F',
         }
       },
       fontFamily: {

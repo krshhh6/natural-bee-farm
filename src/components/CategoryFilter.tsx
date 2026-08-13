@@ -33,7 +33,7 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
   return (
     <div className="space-y-4 mb-8">
       {/* Category Pills & Filters Container */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-200 dark:border-stone-800 pb-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#595C56]/30 pb-4">
         
         {/* Scrollable Category Pills */}
         <div className="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-2 md:pb-0">
@@ -43,8 +43,8 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
               onClick={() => onSelectCategory(cat.id)}
               className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all ${
                 selectedCategory === cat.id
-                  ? 'bg-amber-500 text-stone-950 shadow-md shadow-amber-500/20 scale-105'
-                  : 'bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-700 border border-stone-200 dark:border-stone-700'
+                  ? 'bg-[#E9BE5F] text-[#282823] font-bold shadow-md shadow-[#E9BE5F]/25 scale-105'
+                  : 'bg-[#FAF3D6] dark:bg-[#282823] text-[#282823] dark:text-[#F5E8B6] hover:bg-[#F5E8B6] border border-[#595C56]/40'
               }`}
             >
               {cat.label}
@@ -60,26 +60,26 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
             onClick={onToggleOrganic}
             className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-semibold transition-all ${
               organicOnly
-                ? 'bg-emerald-100 dark:bg-emerald-950/80 border-emerald-500 text-emerald-800 dark:text-emerald-300'
-                : 'bg-white dark:bg-stone-800 border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400'
+                ? 'bg-emerald-950/80 border-emerald-500 text-emerald-300'
+                : 'bg-[#FAF3D6] dark:bg-[#282823] border-[#595C56]/40 text-[#282823] dark:text-[#F5E8B6]'
             }`}
           >
-            <Leaf className={`w-3.5 h-3.5 ${organicOnly ? 'text-emerald-600 dark:text-emerald-400' : 'text-stone-400'}`} />
+            <Leaf className={`w-3.5 h-3.5 ${organicOnly ? 'text-emerald-400' : 'text-[#E9BE5F]'}`} />
             <span>Organic Only</span>
           </button>
 
           {/* Sort Dropdown */}
-          <div className="flex items-center gap-2 bg-white dark:bg-stone-800 px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700">
-            <SlidersHorizontal className="w-3.5 h-3.5 text-stone-400" />
+          <div className="flex items-center gap-2 bg-[#FAF3D6] dark:bg-[#282823] px-3 py-1.5 rounded-xl border border-[#595C56]/40">
+            <SlidersHorizontal className="w-3.5 h-3.5 text-[#E9BE5F]" />
             <select
               value={sortBy}
               onChange={(e: any) => onSortChange(e.target.value)}
-              className="bg-transparent text-stone-700 dark:text-stone-200 text-xs sm:text-sm focus:outline-none cursor-pointer"
+              className="bg-transparent text-[#282823] dark:text-[#F5E8B6] text-xs sm:text-sm focus:outline-none cursor-pointer"
             >
-              <option value="featured" className="dark:bg-stone-800">Sort: Featured</option>
-              <option value="price-low" className="dark:bg-stone-800">Price: Low to High</option>
-              <option value="price-high" className="dark:bg-stone-800">Price: High to Low</option>
-              <option value="rating" className="dark:bg-stone-800">Highest Rated</option>
+              <option value="featured" className="bg-[#FAF3D6] dark:bg-[#282823] text-[#282823] dark:text-[#F5E8B6]">Sort: Featured</option>
+              <option value="price-low" className="bg-[#FAF3D6] dark:bg-[#282823] text-[#282823] dark:text-[#F5E8B6]">Price: Low to High</option>
+              <option value="price-high" className="bg-[#FAF3D6] dark:bg-[#282823] text-[#282823] dark:text-[#F5E8B6]">Price: High to Low</option>
+              <option value="rating" className="bg-[#FAF3D6] dark:bg-[#282823] text-[#282823] dark:text-[#F5E8B6]">Highest Rated</option>
             </select>
           </div>
 
@@ -88,8 +88,8 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
       </div>
 
       {/* Result Count Notice */}
-      <div className="text-xs text-stone-500 dark:text-stone-400 font-medium">
-        Showing <span className="font-bold text-stone-900 dark:text-stone-200">{productsCount}</span> authentic items
+      <div className="text-xs text-[#595C56] dark:text-[#F5E8B6]/70 font-medium">
+        Showing <span className="font-bold text-[#282823] dark:text-[#E9BE5F]">{productsCount}</span> authentic items
       </div>
     </div>
   );

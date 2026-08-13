@@ -24,7 +24,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<UserProfile | null>(() => {
-    const saved = localStorage.getItem('meadlight_user');
+    const saved = localStorage.getItem('naturabeefarm_user');
     return saved ? JSON.parse(saved) : null;
   });
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -40,9 +40,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     if (user) {
-      localStorage.setItem('meadlight_user', JSON.stringify(user));
+      localStorage.setItem('naturabeefarm_user', JSON.stringify(user));
     } else {
-      localStorage.removeItem('meadlight_user');
+      localStorage.removeItem('naturabeefarm_user');
     }
   }, [user]);
 

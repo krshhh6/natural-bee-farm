@@ -22,7 +22,7 @@ import type { CategoryType } from './types';
 import { CheckCircle2 } from 'lucide-react';
 
 const MainContent: React.FC = () => {
-  const { toastMessage } = useCart();
+  const { toastMessage, setQuickViewProduct } = useCart();
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>('all');
   const [searchQuery] = useState('');
   const [sortBy] = useState<'featured' | 'price-low' | 'price-high' | 'rating'>('featured');
@@ -50,12 +50,12 @@ const MainContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-warm-bg dark:bg-stone-900 text-stone-900 dark:text-stone-100 transition-colors duration-200 selection:bg-[#c8674d] selection:text-white">
+    <div className="min-h-screen bg-[#F5E8B6] dark:bg-[#1C1C18] text-[#282823] dark:text-[#F5E8B6] transition-colors duration-200 selection:bg-[#E9BE5F] selection:text-[#282823]">
       
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 left-6 z-50 bg-[#3b2319] text-[#f4ebd9] px-4 py-3 rounded-2xl shadow-2xl border border-amber-600/40 flex items-center space-x-2 text-xs sm:text-sm font-semibold animate-slide-up">
-          <CheckCircle2 className="w-5 h-5 text-[#e89b7b] shrink-0" />
+        <div className="fixed bottom-6 left-6 z-50 bg-[#282823] text-[#F5E8B6] px-4 py-3 rounded-2xl shadow-2xl border border-[#595C56]/40 flex items-center space-x-2 text-xs sm:text-sm font-semibold animate-slide-up">
+          <CheckCircle2 className="w-5 h-5 text-[#E9BE5F] shrink-0" />
           <span>{toastMessage}</span>
         </div>
       )}
@@ -78,7 +78,10 @@ const MainContent: React.FC = () => {
       <TrustStrip />
 
       {/* "Shop by Category" Showcase Card */}
-      <CategoryShowcase onSelectCategory={setSelectedCategory} />
+      <CategoryShowcase
+        selectedCategory={selectedCategory}
+        onSelectCategory={setSelectedCategory}
+      />
 
       {/* Main Product Catalog Section ("Featured Products") */}
       <main id="product-catalog" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -89,6 +92,7 @@ const MainContent: React.FC = () => {
           sortBy={sortBy}
           organicOnly={organicOnly}
           onSelectCategory={setSelectedCategory}
+          onQuickView={setQuickViewProduct}
         />
       </main>
 
@@ -96,7 +100,11 @@ const MainContent: React.FC = () => {
       <PromoBanners onShopClick={scrollToProducts} />
 
       {/* "Popular Products" Section */}
-      <PopularProducts products={PRODUCTS} onSelectCategory={setSelectedCategory} />
+      <PopularProducts
+        products={PRODUCTS}
+        onQuickView={setQuickViewProduct}
+        onExploreClick={scrollToProducts}
+      />
 
       {/* Brand Heritage Story */}
       <BrandStory />
@@ -119,27 +127,27 @@ const MainContent: React.FC = () => {
             items={[
               {
                 title: 'Home',
-                icon: <IconHome className="h-full w-full text-stone-700 dark:text-stone-200" />,
+                icon: <IconHome className="h-full w-full text-[#F5E8B6]" />,
                 href: '#',
               },
               {
                 title: 'Catalog',
-                icon: <IconShoppingBag className="h-full w-full text-stone-700 dark:text-stone-200" />,
+                icon: <IconShoppingBag className="h-full w-full text-[#F5E8B6]" />,
                 href: '#product-catalog',
               },
               {
                 title: 'Story',
-                icon: <IconBook className="h-full w-full text-stone-700 dark:text-stone-200" />,
-                href: '#brand-story',
+                icon: <IconBook className="h-full w-full text-[#F5E8B6]" />,
+                href: '#our-story',
               },
               {
                 title: 'Reviews',
-                icon: <IconStar className="h-full w-full text-stone-700 dark:text-stone-200" />,
+                icon: <IconStar className="h-full w-full text-[#F5E8B6]" />,
                 href: '#testimonials',
               },
               {
                 title: 'GitHub',
-                icon: <IconBrandGithub className="h-full w-full text-stone-700 dark:text-stone-200" />,
+                icon: <IconBrandGithub className="h-full w-full text-[#F5E8B6]" />,
                 href: 'https://github.com/krshhh6/natural-bee-farm',
               },
             ]}

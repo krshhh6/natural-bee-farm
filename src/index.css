@@ -4,9 +4,16 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-charcoal: #282823;
+  --color-ebony: #595C56;
+  --color-sunray: #E9BE5F;
+  --color-blond: #F5E8B6;
+}
+
 @layer base {
   body {
-    @apply bg-warm-bg text-stone-900 font-sans antialiased selection:bg-honey-200 selection:text-honey-900;
+    @apply bg-[#F5E8B6] text-[#282823] font-sans antialiased selection:bg-[#E9BE5F] selection:text-[#282823];
   }
 }
 
@@ -17,6 +24,6 @@
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #d97706;
+  background: #E9BE5F;
   border-radius: 9999px;
 }

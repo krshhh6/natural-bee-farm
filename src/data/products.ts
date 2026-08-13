@@ -2,8 +2,8 @@ import type { Product, Testimonial } from '../types';
 
 export const PRODUCTS: Product[] = [
   {
-    id: 'meadlight-raw-honey-500g',
-    name: 'Meadlight Wildforest Raw Honey',
+    id: 'natura-raw-honey-500g',
+    name: 'Natura Bee Farm Wildforest Raw Honey',
     category: 'honey',
     categoryName: 'Artisanal Honey',
     price: 499,
@@ -21,7 +21,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Himalayan Foothills & Bihar Forests',
   },
   {
-    id: 'meadlight-blossom-honey-500g',
+    id: 'natura-blossom-honey-500g',
     name: 'Single-Origin Blossom Honey',
     category: 'honey',
     categoryName: 'Artisanal Honey',
@@ -40,7 +40,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Patna Countryside, Bihar',
   },
   {
-    id: 'meadlight-cinnamon-honey-500g',
+    id: 'natura-cinnamon-honey-500g',
     name: 'Cinnamon & Spice Infused Honey',
     category: 'spices',
     categoryName: 'Handcrafted Spices & Honey',
@@ -59,7 +59,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Handmade Artisanal Batch, Bihar',
   },
   {
-    id: 'meadlight-tulsi-honey-500g',
+    id: 'natura-tulsi-honey-500g',
     name: 'Organic Tulsi (Holy Basil) Honey',
     category: 'honey',
     categoryName: 'Artisanal Honey',
@@ -77,7 +77,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Organic Tulsi Farms, Bihar',
   },
   {
-    id: 'meadlight-ashwagandha-honey-500g',
+    id: 'natura-ashwagandha-honey-500g',
     name: 'Ayurvedic Ashwagandha Honey Jar',
     category: 'badis',
     categoryName: 'Ayurvedic Health Essentials',
@@ -96,7 +96,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Traditional Ayurvedic Kitchens, Patna',
   },
   {
-    id: 'meadlight-neem-honey-500g',
+    id: 'natura-neem-honey-500g',
     name: 'Pure Organic Neem Blossom Honey',
     category: 'flours',
     categoryName: 'Herbal Delicacies',
@@ -114,7 +114,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Neem Orchards, Bihar',
   },
   {
-    id: 'meadlight-acacia-honey-500g',
+    id: 'natura-acacia-honey-500g',
     name: 'Himalayan Acacia & Sidr Honey',
     category: 'honey',
     categoryName: 'Artisanal Honey',
@@ -133,7 +133,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Himalayan Foothills',
   },
   {
-    id: 'meadlight-saffron-honey-250g',
+    id: 'natura-saffron-honey-250g',
     name: 'Kashmiri Kesar (Saffron) Honey',
     category: 'spices',
     categoryName: 'Handcrafted Spices & Honey',
@@ -171,7 +171,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Patna, Bihar',
   },
   {
-    id: 'meadlight-jamun-honey-500g',
+    id: 'natura-jamun-honey-500g',
     name: 'Wild Jamun Blossom Honey',
     category: 'honey',
     categoryName: 'Artisanal Honey',
@@ -189,7 +189,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Wild Jamun Groves, Bihar',
   },
   {
-    id: 'meadlight-wildflower-honey-500g',
+    id: 'natura-wildflower-honey-500g',
     name: 'Sun-Drenched Wildflower Honey',
     category: 'honey',
     categoryName: 'Artisanal Honey',
@@ -207,7 +207,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Rural Countryside, Bihar',
   },
   {
-    id: 'meadlight-karanj-honey-500g',
+    id: 'natura-karanj-honey-500g',
     name: 'Organic Karanj Herbal Honey',
     category: 'honey',
     categoryName: 'Artisanal Honey',
@@ -242,8 +242,8 @@ export const TESTIMONIALS: Testimonial[] = [
     name: 'Dr. Rajiv Mukherji',
     location: 'Kolkata',
     rating: 5,
-    comment: 'Meadlight Wildforest Raw Honey is the cleanest honey I have tasted. It doesn’t separate or feel sugary. You can smell the wild blossoms.',
-    productName: 'Meadlight Wildforest Raw Honey',
+    comment: 'Natura Bee Farm Wildforest Raw Honey is the cleanest honey I have tasted. It doesn’t separate or feel sugary. You can smell the wild blossoms.',
+    productName: 'Natura Bee Farm Wildforest Raw Honey',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
     date: 'Verified Buyer • 1 week ago'
   },
@@ -258,4 +258,3 @@ export const TESTIMONIALS: Testimonial[] = [
     date: 'Verified Buyer • 2 weeks ago'
   }
 ];
-
