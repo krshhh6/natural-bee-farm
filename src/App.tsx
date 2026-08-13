@@ -4,10 +4,10 @@ import { AuthProvider } from './context/AuthContext';
 import { AnnouncementBar } from './components/AnnouncementBar';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
-import { TrustStrip } from './components/TrustStrip';
 import { CategoryShowcase } from './components/CategoryShowcase';
 import { PromoBanners } from './components/PromoBanners';
 import { PopularProducts } from './components/PopularProducts';
+import { HeritagePillars } from './components/HeritagePillars';
 import { BrandStory } from './components/BrandStory';
 import { GallerySection } from './components/GallerySection';
 import { Testimonials } from './components/Testimonials';
@@ -92,9 +92,6 @@ const MainContent: React.FC = () => {
           {/* Hero Showcase Section */}
           <Hero onExploreClick={() => navigateToProducts()} />
 
-          {/* 5 White Pill Badges Trust Strip */}
-          <TrustStrip />
-
           {/* "Shop by Category" Showcase Card */}
           <CategoryShowcase
             selectedCategory={selectedCategory}
@@ -111,6 +108,9 @@ const MainContent: React.FC = () => {
             onExploreClick={() => navigateToProducts()}
             onSelectCategory={(cat) => navigateToProducts(cat)}
           />
+
+          {/* Heritage Pillars Section (Source To Table, Time-Honored Techniques, Unwavering Purity, Commitment to Community) */}
+          <HeritagePillars />
 
           {/* Brand Heritage Story */}
           <BrandStory />

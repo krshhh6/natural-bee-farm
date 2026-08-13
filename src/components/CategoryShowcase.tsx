@@ -1,5 +1,5 @@
-import React from 'react';
-import { ArrowRight, Sparkles, CheckCircle, Flame } from 'lucide-react';
+import React, { useRef } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface CategoryShowcaseProps {
   selectedCategory: string;
@@ -10,56 +10,62 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
   selectedCategory,
   onSelectCategory,
 }) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   const categories = [
     {
-      id: 'all',
-      name: 'All Delicacies',
-      subtitle: 'Complete Pantry',
-      count: '20+ Items',
-      image: '/Glass_jar_filled_with_honey_202608130958.jpeg',
-      badge: 'Popular',
-    },
-    {
-      id: 'honey',
-      name: 'Artisanal Honey',
-      subtitle: '100% Raw Apiary',
-      count: '8 Varieties',
+      id: 'ghee',
+      name: 'A2 Ghee',
+      subtitle: 'Bilona Curd Churned',
       image: '/Honey_jar_on_wooden_surface_202608130958.jpeg',
-      badge: 'Best Seller',
     },
     {
       id: 'pickles',
-      name: 'Traditional Pickles',
-      subtitle: 'Sun-Dried & Cold Pressed',
-      count: '5 Varieties',
+      name: 'Pickles',
+      subtitle: 'Sun-Dried Achar',
       image: '/Glass_jar_filled_with_mustard_202608131002.jpeg',
-      badge: 'Authentic',
+    },
+    {
+      id: 'flours',
+      name: 'Atta',
+      subtitle: 'Stone Ground Wheat',
+      image: '/Ashwagandha_honey_jar_on_stone_202608130959.jpeg',
+    },
+    {
+      id: 'oils',
+      name: 'Stone Pressed Oils',
+      subtitle: 'Cold Extracted Oils',
+      image: '/Glass_jar_filled_with_mustard_202608131002.jpeg',
+    },
+    {
+      id: 'honey',
+      name: 'Wild Honey',
+      subtitle: '100% Raw Apiary',
+      image: '/Glass_jar_filled_with_honey_202608130958.jpeg',
     },
     {
       id: 'badis',
       name: 'Sun-Dried Badis',
       subtitle: 'Hand-Rolled Lentils',
-      count: '4 Varieties',
-      image: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&q=80&w=400',
-      badge: 'Heritage',
+      image: '/Karanj_honey_jar_on_stone_202608131002.jpeg',
     },
     {
       id: 'spices',
-      name: 'Handcrafted Spices',
-      subtitle: 'Hand-Pounded Whole',
-      count: '6 Varieties',
+      name: 'Spices',
+      subtitle: 'Whole Hand-Pounded',
       image: '/Honey_jar_with_cinnamon_and_202608130958.jpeg',
-      badge: 'Aromatic',
-    },
-    {
-      id: 'flours',
-      name: 'Organic Flours',
-      subtitle: 'Stone Ground Chakki',
-      count: '4 Varieties',
-      image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=400',
-      badge: 'Pure',
     },
   ];
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const scrollAmount = 260;
+      scrollRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
+  };
 
   const handleCategoryClick = (categoryId: string) => {
     onSelectCategory(categoryId);
@@ -70,99 +76,88 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
   };
 
   return (
-    <section className="py-12 sm:py-16 bg-[#FEFDF5] dark:bg-[#1C1C18] transition-colors">
+    <section className="py-8 sm:py-12 bg-[#FEFDF5] dark:bg-[#1A1816] transition-colors relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Outer Card Wrapper with Rich Gradient Accent & Glow */}
-        <div className="bg-[#FEFDF5] dark:bg-[#282823] rounded-[36px] p-6 sm:p-10 shadow-xl border border-[#E9BE5F]/30 relative overflow-hidden">
+        {/* Top Categories Row with Navigation Arrows */}
+        <div className="relative flex items-center gap-3">
           
-          {/* Subtle Golden Glow Overlay */}
-          <div className="absolute -top-24 -right-24 w-72 h-72 bg-[#E9BE5F]/10 rounded-full blur-3xl pointer-events-none" />
+          {/* Scroll Left Arrow */}
+          <button
+            onClick={() => scroll('left')}
+            className="hidden sm:flex p-2.5 rounded-full bg-white dark:bg-[#25221D] text-[#231F1B] dark:text-[#FEFDF5] hover:bg-[#9C5B23] hover:text-white dark:hover:bg-[#9C5B23] transition-all border border-[#E7DFD3] dark:border-neutral-800 shadow-sm shrink-0 z-10"
+            aria-label="Previous Category"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
 
-          {/* Header Row */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 relative z-10">
-            <div>
-              <div className="inline-flex items-center space-x-2 text-[#282823] dark:text-[#E9BE5F] text-xs font-extrabold uppercase tracking-widest bg-[#E9BE5F]/15 px-3 py-1 rounded-full border border-[#E9BE5F]/30 mb-2">
-                <Sparkles className="w-3.5 h-3.5 text-[#E9BE5F]" />
-                <span>Explore Our Heritage Collection</span>
-              </div>
-              <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#282823] dark:text-[#F5E8B6] tracking-tight">
-                Shop By Category
-              </h2>
-            </div>
-
-            <button
-              onClick={() => handleCategoryClick('all')}
-              className="bg-[#E9BE5F] hover:bg-[#D4AA4B] text-[#282823] px-6 py-2.5 rounded-full text-xs sm:text-sm font-extrabold shadow-lg shadow-[#E9BE5F]/25 flex items-center gap-2 transition-all transform hover:scale-105 active:scale-95 border border-[#282823]"
-            >
-              <span>View All Products</span>
-              <ArrowRight className="w-4 h-4 text-[#282823]" />
-            </button>
-          </div>
-
-          {/* Grid Layout of Categories */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-5 relative z-10">
+          {/* Horizontally Scrollable Category Squircle Cards */}
+          <div
+            ref={scrollRef}
+            className="flex gap-4 sm:gap-5 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scroll-smooth flex-1 custom-scrollbar"
+          >
             {categories.map((category) => {
               const isSelected = selectedCategory === category.id;
               return (
                 <div
                   key={category.id}
                   onClick={() => handleCategoryClick(category.id)}
-                  className={`group relative rounded-3xl p-4 sm:p-5 cursor-pointer transition-all duration-300 flex flex-col items-center text-center transform ${
-                    isSelected
-                      ? 'bg-[#282823] text-[#F5E8B6] shadow-2xl scale-105 border-2 border-[#E9BE5F] ring-4 ring-[#E9BE5F]/20'
-                      : 'bg-[#F5E8B6] dark:bg-[#1C1C18] hover:bg-white dark:hover:bg-[#20201C] text-[#282823] dark:text-[#F5E8B6] border border-[#595C56]/30 hover:border-[#E9BE5F] hover:-translate-y-1.5 shadow-md hover:shadow-xl'
+                  className={`min-w-[130px] sm:min-w-[150px] shrink-0 snap-start flex flex-col items-center text-center cursor-pointer group transition-all duration-300 ${
+                    isSelected ? 'scale-105' : 'hover:-translate-y-1'
                   }`}
                 >
-                  {/* Category Pill Tag */}
-                  <span
-                    className={`absolute top-3 right-3 text-[9px] font-extrabold px-2 py-0.5 rounded-full transition-colors ${
+                  {/* Rounded Squircle Image Box */}
+                  <div
+                    className={`w-24 h-24 sm:w-28 sm:h-28 rounded-[24px] sm:rounded-[28px] overflow-hidden p-2 flex items-center justify-center transition-all duration-300 shadow-sm ${
                       isSelected
-                        ? 'bg-[#E9BE5F] text-[#282823]'
-                        : 'bg-[#282823]/10 dark:bg-[#595C56]/30 text-[#282823] dark:text-[#E9BE5F]'
+                        ? 'bg-[#F5EEDD] dark:bg-[#2F2923] border-2 border-[#9C5B23] shadow-md'
+                        : 'bg-[#F9F5EC] dark:bg-[#24201B] border border-[#E7DFD3] dark:border-neutral-800 group-hover:border-[#9C5B23] group-hover:shadow-md'
                     }`}
                   >
-                    {category.badge}
-                  </span>
-
-                  {/* Active Indicator Checkmark */}
-                  {isSelected && (
-                    <div className="absolute top-3 left-3 text-[#E9BE5F]">
-                      <CheckCircle className="w-4 h-4" />
-                    </div>
-                  )}
-
-                  {/* Category Circle Image with Pulsing Gradient Ring */}
-                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden p-1 bg-gradient-to-tr from-[#E9BE5F] via-[#D4AA4B] to-[#E9BE5F] shadow-lg group-hover:scale-110 transition-transform duration-300 mt-2">
                     <img
                       src={category.image}
                       alt={category.name}
-                      className="w-full h-full object-cover rounded-full"
-                      onError={(e) => {
-                        // Fallback in case of local asset load error
-                        (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1587049352847-4a222e784d38?auto=format&fit=crop&q=80&w=400';
-                      }}
+                      className="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
 
-                  <h3 className="font-serif text-sm sm:text-base font-bold mt-3.5 leading-snug line-clamp-1">
+                  {/* Category Name */}
+                  <h3 className="font-serif text-xs sm:text-sm font-bold text-[#231F1B] dark:text-[#FEFDF5] mt-2.5 group-hover:text-[#9C5B23] dark:group-hover:text-[#E9BE5F] transition-colors leading-tight">
                     {category.name}
                   </h3>
-                  
-                  <p className="text-[10px] sm:text-[11px] font-medium opacity-75 mt-0.5 line-clamp-1">
-                    {category.subtitle}
-                  </p>
-
-                  <div className="mt-2.5 pt-2 border-t border-[#595C56]/20 w-full flex items-center justify-center gap-1">
-                    <Flame className="w-3 h-3 text-[#E9BE5F]" />
-                    <span className="text-[11px] font-extrabold text-[#E9BE5F]">
-                      {category.count}
-                    </span>
-                  </div>
                 </div>
               );
             })}
           </div>
+
+          {/* Scroll Right Arrow */}
+          <button
+            onClick={() => scroll('right')}
+            className="hidden sm:flex p-2.5 rounded-full bg-white dark:bg-[#25221D] text-[#231F1B] dark:text-[#FEFDF5] hover:bg-[#9C5B23] hover:text-white dark:hover:bg-[#9C5B23] transition-all border border-[#E7DFD3] dark:border-neutral-800 shadow-sm shrink-0 z-10"
+            aria-label="Next Category"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+
+        </div>
+
+        {/* "Loved Across Generations" Section Header matching Rosier Foods */}
+        <div className="mt-16 sm:mt-20 text-center relative py-6">
+          
+          {/* Subtle Watermark Graphic Illustration Overlay */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-10 dark:opacity-5">
+            <svg className="w-full h-48 text-[#8C5E2B]" viewBox="0 0 800 200" fill="currentColor">
+              <path d="M100 150 C 200 100, 300 180, 400 120 C 500 60, 600 150, 700 130 L 700 200 L 100 200 Z" opacity="0.3"/>
+            </svg>
+          </div>
+
+          <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold text-[#8C5E2B] dark:text-[#E9BE5F] tracking-tight relative z-10">
+            Loved Across Generations
+          </h2>
+          
+          <p className="text-xs sm:text-base text-[#6B5A47] dark:text-[#FEFDF5]/70 max-w-xl mx-auto mt-3 font-medium relative z-10">
+            Authentic A2 Bilona Ghee, Raw Forest Honey, and Traditional Delicacies prepared using age-old Indian culinary wisdom.
+          </p>
 
         </div>
 
