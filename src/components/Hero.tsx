@@ -12,7 +12,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
       {/* Full Background Image (Hero.png) */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/Hero.png"
+          src="/J1.png"
           alt="Natura Bee Farm Raw Honey & Traditional Foods"
           className="w-full h-full object-cover object-center"
         />

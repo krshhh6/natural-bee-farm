@@ -15,7 +15,7 @@ export const PromoBanners: React.FC<PromoBannersProps> = ({ onShopClick }) => {
           {/* Background image overlay */}
           <div className="absolute inset-0 z-0 opacity-15 pointer-events-none">
             <img
-              src="/Hero.png"
+              src="/J1.png"
               alt="Promo background"
               className="w-full h-full object-cover object-right"
             />
@@ -70,7 +70,7 @@ export const PromoBanners: React.FC<PromoBannersProps> = ({ onShopClick }) => {
           {/* Background image overlay */}
           <div className="absolute inset-0 z-0 opacity-15 pointer-events-none">
             <img
-              src="/Hero.png"
+              src="/J1.png"
               alt="Promo background"
               className="w-full h-full object-cover object-left"
             />
