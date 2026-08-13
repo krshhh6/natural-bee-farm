@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { checkAndCompleteMagicLinkSignIn } from '../lib/firebase';
 
 export interface UserProfile {
   name: string;
   email: string;
   phone?: string;
   avatar?: string;
+  uid?: string;
 }
 
 interface AuthContextType {
@@ -13,7 +15,8 @@ interface AuthContextType {
   setIsAuthModalOpen: (open: boolean) => void;
   authMode: 'login' | 'register';
   setAuthMode: (mode: 'login' | 'register') => void;
-  login: (email: string, name?: string) => void;
+  login: (email: string, name?: string, avatar?: string) => void;
+  setUserProfile: (profile: UserProfile | null) => void;
   logout: () => void;
 }
 
@@ -28,6 +31,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
 
   useEffect(() => {
+    checkAndCompleteMagicLinkSignIn().then((profile) => {
+      if (profile) {
+        setUser(profile);
+      }
+    }).catch(err => console.warn('Magic link verification notice:', err));
+  }, []);
+
+  useEffect(() => {
     if (user) {
       localStorage.setItem('meadlight_user', JSON.stringify(user));
     } else {
@@ -35,14 +46,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [user]);
 
-  const login = (email: string, name?: string) => {
+  const login = (email: string, name?: string, avatar?: string) => {
     const newUser: UserProfile = {
       name: name || email.split('@')[0],
       email,
-      avatar: `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80`,
+      avatar: avatar || `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80`,
     };
     setUser(newUser);
     setIsAuthModalOpen(false);
+  };
+
+  const setUserProfile = (profile: UserProfile | null) => {
+    setUser(profile);
+    if (profile) setIsAuthModalOpen(false);
   };
 
   const logout = () => {
@@ -58,6 +74,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         authMode,
         setAuthMode,
         login,
+        setUserProfile,
         logout,
       }}
     >

@@ -67,6 +67,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Home Pill */}
             <a
               href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
               className="bg-[#c8674d] text-white px-5 py-2 rounded-full text-sm font-semibold flex items-center gap-2 shadow-md shadow-[#c8674d]/25 transition-transform hover:scale-105"
             >
               <Home className="w-4 h-4" />
@@ -76,7 +80,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Shop Dropdown Pill */}
             <div className="relative">
               <button
-                onClick={() => setShopDropdownOpen(!shopDropdownOpen)}
+                onClick={() => {
+                  setShopDropdownOpen(!shopDropdownOpen);
+                  const el = document.getElementById('product-catalog');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
                 className="text-stone-800 dark:text-stone-200 hover:text-[#c8674d] px-4 py-2 rounded-full text-sm font-medium flex items-center gap-1.5 transition-colors"
               >
                 <Store className="w-4 h-4" />
@@ -86,13 +94,15 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               {/* Dropdown Menu */}
               {shopDropdownOpen && (
-                <div className="absolute top-full mt-2 left-0 w-48 bg-white dark:bg-stone-900 rounded-2xl shadow-xl border border-stone-200 dark:border-stone-800 py-2 z-50 animate-fadeIn">
+                <div className="absolute top-full mt-2 left-0 w-52 bg-white dark:bg-stone-900 rounded-2xl shadow-xl border border-stone-200 dark:border-stone-800 py-2 z-50 animate-fadeIn">
                   {categories.map((cat) => (
                     <button
                       key={cat.id}
                       onClick={() => {
                         onSelectCategory(cat.id);
                         setShopDropdownOpen(false);
+                        const el = document.getElementById('product-catalog');
+                        if (el) el.scrollIntoView({ behavior: 'smooth' });
                       }}
                       className={`w-full text-left px-4 py-2 text-xs font-semibold hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors ${
                         selectedCategory === cat.id ? 'text-[#c8674d] font-bold' : 'text-stone-700 dark:text-stone-300'
@@ -108,6 +118,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* About Pill */}
             <a
               href="#our-story"
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.getElementById('our-story');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
               className="text-stone-800 dark:text-stone-200 hover:text-[#c8674d] px-4 py-2 rounded-full text-sm font-medium flex items-center gap-1.5 transition-colors"
             >
               <Info className="w-4 h-4" />
@@ -117,6 +132,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Contact Pill */}
             <a
               href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.getElementById('contact');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
               className="text-stone-800 dark:text-stone-200 hover:text-[#c8674d] px-4 py-2 rounded-full text-sm font-medium flex items-center gap-1.5 transition-colors"
             >
               <MessageSquare className="w-4 h-4" />
@@ -176,7 +196,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Wishlist Heart Icon */}
             <button
-              onClick={() => alert('Wishlist items')}
+              onClick={() => alert('Wishlist feature - items saved to your favorites!')}
               className="p-2.5 rounded-full text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
               aria-label="Wishlist"
             >
@@ -203,22 +223,59 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="lg:hidden py-4 border-t border-stone-200 dark:border-stone-800 space-y-2 animate-fadeIn">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => {
-                  onSelectCategory(cat.id);
-                  setMobileMenuOpen(false);
-                }}
-                className={`w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                  selectedCategory === cat.id
-                    ? 'bg-[#c8674d] text-white font-bold'
-                    : 'text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800'
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 flex items-center gap-2"
+            >
+              <Home className="w-4 h-4" />
+              <span>Home</span>
+            </button>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                const el = document.getElementById('our-story');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 flex items-center gap-2"
+            >
+              <Info className="w-4 h-4" />
+              <span>About Us</span>
+            </button>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                const el = document.getElementById('contact');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 flex items-center gap-2"
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span>Contact Us</span>
+            </button>
+            <div className="pt-2 border-t border-stone-200 dark:border-stone-800">
+              <div className="px-4 py-1 text-xs font-bold text-stone-400 uppercase tracking-wider">Shop Categories</div>
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => {
+                    onSelectCategory(cat.id);
+                    setMobileMenuOpen(false);
+                    const el = document.getElementById('product-catalog');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className={`w-full text-left px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+                    selectedCategory === cat.id
+                      ? 'bg-[#c8674d] text-white font-bold'
+                      : 'text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800'
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
           </div>
         )}
 

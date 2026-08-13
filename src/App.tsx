@@ -15,6 +15,8 @@ import { Footer } from './components/Footer';
 import { ProductModal } from './components/ProductModal';
 import { CartDrawer } from './components/CartDrawer';
 import { AuthModal } from './components/AuthModal';
+import { FloatingDock } from '@/components/ui/floating-dock';
+import { IconHome, IconShoppingBag, IconBook, IconStar, IconBrandGithub } from '@tabler/icons-react';
 import { PRODUCTS } from './data/products';
 import type { CategoryType } from './types';
 import { CheckCircle2 } from 'lucide-react';
@@ -109,6 +111,41 @@ const MainContent: React.FC = () => {
       <ProductModal />
       <CartDrawer />
       <AuthModal />
+
+      {/* Floating Dock Navigation (Mobile Only) */}
+      <div className="fixed bottom-6 inset-x-0 z-40 flex justify-center pointer-events-none md:hidden">
+        <div className="pointer-events-auto">
+          <FloatingDock
+            items={[
+              {
+                title: 'Home',
+                icon: <IconHome className="h-full w-full text-stone-700 dark:text-stone-200" />,
+                href: '#',
+              },
+              {
+                title: 'Catalog',
+                icon: <IconShoppingBag className="h-full w-full text-stone-700 dark:text-stone-200" />,
+                href: '#product-catalog',
+              },
+              {
+                title: 'Story',
+                icon: <IconBook className="h-full w-full text-stone-700 dark:text-stone-200" />,
+                href: '#brand-story',
+              },
+              {
+                title: 'Reviews',
+                icon: <IconStar className="h-full w-full text-stone-700 dark:text-stone-200" />,
+                href: '#testimonials',
+              },
+              {
+                title: 'GitHub',
+                icon: <IconBrandGithub className="h-full w-full text-stone-700 dark:text-stone-200" />,
+                href: 'https://github.com/krshhh6/natural-bee-farm',
+              },
+            ]}
+          />
+        </div>
+      </div>
 
     </div>
   );

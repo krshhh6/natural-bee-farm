@@ -11,32 +11,32 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({ onSelectCate
     {
       id: 'pickles',
       title: 'Homemade Pickles',
-      image: 'https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&w=400&q=80',
+      image: '/Glass_jar_filled_with_mustard_202608131002.jpeg',
     },
     {
       id: 'flours',
-      title: 'Millets & Flours',
-      image: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=400&q=80',
+      title: 'Herbal Infusions',
+      image: '/Glass_jar_of_neem_honey_202608130959.jpeg',
     },
     {
       id: 'badis',
-      title: 'Papads & Badi',
-      image: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=400&q=80',
+      title: 'Ayurvedic Wellness',
+      image: '/Ashwagandha_honey_jar_on_stone_202608130959.jpeg',
     },
     {
       id: 'honey',
-      title: 'Snacks & Chips',
-      image: 'https://images.unsplash.com/photo-1587049352847-4a222e784d38?auto=format&fit=crop&w=400&q=80',
+      title: 'Artisanal Honey',
+      image: '/Glass_jar_filled_with_honey_202608130958.jpeg',
     },
     {
       id: 'spices',
-      title: 'Specialty Items',
-      image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=400&q=80',
+      title: 'Spiced Honey & Masalas',
+      image: '/Honey_jar_with_cinnamon_and_202608130958.jpeg',
     },
     {
-      id: 'badis',
-      title: 'Traditional Badis',
-      image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=400&q=80',
+      id: 'honey',
+      title: 'Wildflower Honey',
+      image: '/Glass_jar_with_wildflower_honey_202608131002.jpeg',
     },
   ];
 

@@ -57,6 +57,11 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
               {/* Secondary Our Story Button */}
               <a
                 href="#our-story"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const el = document.getElementById('our-story');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
                 className="w-full sm:w-auto bg-white hover:bg-stone-50 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-900 dark:text-stone-100 border border-stone-800 dark:border-stone-600 font-semibold px-8 py-4 rounded-full flex items-center justify-center gap-2.5 text-base transition-all hover:scale-105"
               >
                 <Info className="w-5 h-5" />
