@@ -28,6 +28,8 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 
 export const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: 'select_account' });
+
 export const appleProvider = new OAuthProvider('apple.com');
 
 // Firestore Helper: Save User Profile
@@ -69,7 +71,7 @@ export const checkAndCompleteMagicLinkSignIn = async () => {
         uid: user.uid,
         name: user.displayName || email.split('@')[0],
         email: email,
-        avatar: `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80`,
+        avatar: user.photoURL || `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80`,
         isEmailVerified: true
       };
       await saveUserProfileToFirestore(user.uid, profile);
@@ -89,40 +91,30 @@ export const sendVerificationEmailToUser = async (user: any) => {
 
 // Google Popup Login with Firebase
 export const signInWithGoogle = async () => {
-  try {
-    const result = await signInWithPopup(auth, googleProvider);
-    const user = result.user;
-    const profile = {
-      uid: user.uid,
-      name: user.displayName || user.email?.split('@')[0] || 'Google User',
-      email: user.email || '',
-      avatar: user.photoURL || `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80`,
-      isEmailVerified: true
-    };
-    await saveUserProfileToFirestore(user.uid, profile);
-    return profile;
-  } catch (error: any) {
-    console.error('Google Auth Error:', error);
-    throw error;
-  }
+  const result = await signInWithPopup(auth, googleProvider);
+  const user = result.user;
+  const profile = {
+    uid: user.uid,
+    name: user.displayName || user.email?.split('@')[0] || 'Google User',
+    email: user.email || '',
+    avatar: user.photoURL || `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80`,
+    isEmailVerified: true
+  };
+  await saveUserProfileToFirestore(user.uid, profile);
+  return profile;
 };
 
 // Apple Popup Login with Firebase
 export const signInWithApple = async () => {
-  try {
-    const result = await signInWithPopup(auth, appleProvider);
-    const user = result.user;
-    const profile = {
-      uid: user.uid,
-      name: user.displayName || user.email?.split('@')[0] || 'Apple User',
-      email: user.email || '',
-      avatar: user.photoURL || `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80`,
-      isEmailVerified: true
-    };
-    await saveUserProfileToFirestore(user.uid, profile);
-    return profile;
-  } catch (error: any) {
-    console.error('Apple Auth Error:', error);
-    throw error;
-  }
+  const result = await signInWithPopup(auth, appleProvider);
+  const user = result.user;
+  const profile = {
+    uid: user.uid,
+    name: user.displayName || user.email?.split('@')[0] || 'Apple User',
+    email: user.email || '',
+    avatar: user.photoURL || `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80`,
+    isEmailVerified: true
+  };
+  await saveUserProfileToFirestore(user.uid, profile);
+  return profile;
 };

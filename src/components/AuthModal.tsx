@@ -43,9 +43,7 @@ export const AuthModal: React.FC = () => {
       showToast(`✨ Magic Sign-In link sent to ${email}! Check your inbox to log in.`);
     } catch (err: any) {
       console.warn('Magic link error:', err);
-      // Fallback demo log in
-      login(email);
-      showToast(`✨ Magic link sent to ${email}! (Signed in for demo view)`);
+      alert(`Error sending link: ${err?.message || err}`);
     } finally {
       setSendingMagicLink(false);
     }
@@ -72,22 +70,16 @@ export const AuthModal: React.FC = () => {
       }
       if (profile) {
         setUserProfile(profile);
-        showToast(`Signed in with ${provider} successfully! Welcome, ${profile.name} 🎉`);
+        showToast(`Signed in as ${profile.name} (${profile.email}) 🎉`);
       }
     } catch (err: any) {
-      console.warn(`${provider} login popup error / provider configuration notice:`, err);
-      
-      // Fallback sign in
-      const fallbackEmail = `user.${provider.toLowerCase()}@naturalbeefarm.in`;
-      const fallbackName = `${provider} User`;
-      const fallbackAvatar = `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80`;
-      
-      login(fallbackEmail, fallbackName, fallbackAvatar);
-      
-      if (err?.code === 'auth/operation-not-allowed') {
-        showToast(`Signed in as ${provider} User! (To use live OAuth, enable ${provider} in Firebase Auth Console)`);
+      console.error(`${provider} Auth Error:`, err);
+      if (err?.code === 'auth/popup-closed-by-user') {
+        showToast('Sign in cancelled.');
+      } else if (err?.code === 'auth/unauthorized-domain') {
+        alert(`Domain Notice: Please add ${window.location.hostname} to Authorized Domains in Firebase Console > Authentication > Settings.`);
       } else {
-        showToast(`Signed in with ${provider}! 🎉`);
+        alert(`${provider} Sign In Error: ${err?.message || err}`);
       }
     } finally {
       setLoadingProvider(null);

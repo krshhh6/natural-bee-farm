@@ -10,9 +10,11 @@ declare module 'firebase/auth' {
   export function getAuth(app?: any): any;
   export class GoogleAuthProvider {
     constructor();
+    setCustomParameters(params: Record<string, string>): void;
   }
   export class OAuthProvider {
     constructor(providerId: string);
+    setCustomParameters(params: Record<string, string>): void;
   }
   export function signInWithPopup(auth: any, provider: any): Promise<any>;
   export function signInWithEmailAndPassword(auth: any, email: string, pass: string): Promise<any>;
@@ -28,9 +30,11 @@ declare module '@firebase/auth' {
   export function getAuth(app?: any): any;
   export class GoogleAuthProvider {
     constructor();
+    setCustomParameters(params: Record<string, string>): void;
   }
   export class OAuthProvider {
     constructor(providerId: string);
+    setCustomParameters(params: Record<string, string>): void;
   }
   export function signInWithPopup(auth: any, provider: any): Promise<any>;
   export function signInWithEmailAndPassword(auth: any, email: string, pass: string): Promise<any>;
