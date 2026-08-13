@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, Store, Info, MessageSquare, User, Heart, ShoppingBag, ChevronDown, Menu, X, LogOut } from 'lucide-react';
+import { Home, Store, Info, MessageSquare, User, Heart, ShoppingBag, ChevronDown, Menu, X, LogOut, Image } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 
@@ -8,11 +8,15 @@ interface NavbarProps {
   onSelectCategory: (category: any) => void;
   isDarkMode: boolean;
   toggleDarkMode: () => void;
+  currentPage?: 'home' | 'products';
+  onNavigate?: (page: 'home' | 'products') => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   selectedCategory,
   onSelectCategory,
+  currentPage = 'home',
+  onNavigate,
 }) => {
   const { cartCount, setIsCartOpen } = useCart();
   const { user, setIsAuthModalOpen, logout } = useAuth();
@@ -32,29 +36,36 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header className="sticky top-0 z-40 bg-[#282823]/95 dark:bg-[#1C1C18]/95 backdrop-blur-md border-b border-[#595C56]/30 text-[#F5E8B6] transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-16 sm:h-20">
           
           {/* Left Logo - Natura Bee Farm Brand */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2 sm:space-x-3">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg text-[#F5E8B6] hover:bg-[#595C56]/30 focus:outline-none"
+              className="lg:hidden p-1.5 sm:p-2 rounded-lg text-[#F5E8B6] hover:bg-[#595C56]/30 focus:outline-none"
               aria-label="Toggle Navigation Menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
 
-            <a href="#" className="flex items-center space-x-3 group">
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate?.('home');
+              }}
+              className="flex items-center space-x-2 sm:space-x-3 group"
+            >
               <img
                 src="/logo.png"
                 alt="Natura Bee Farm Logo"
-                className="w-12 h-12 object-contain transform group-hover:scale-105 transition-transform"
+                className="w-8 h-8 sm:w-12 sm:h-12 object-contain transform group-hover:scale-105 transition-transform shrink-0"
               />
-              <div className="flex flex-col">
-                <span className="font-serif text-2xl font-bold tracking-tight text-white leading-none">
+              <div className="flex flex-col min-w-0">
+                <span className="font-serif text-base sm:text-2xl font-bold tracking-tight text-white leading-none truncate">
                   Natura <span className="text-[#E9BE5F]">Bee Farm</span>
                 </span>
-                <span className="text-[10px] tracking-widest uppercase font-semibold text-[#F5E8B6]/80 mt-0.5">
+                <span className="hidden sm:block text-[10px] tracking-widest uppercase font-semibold text-[#F5E8B6]/80 mt-0.5">
                   Artisanal Honey & Co.
                 </span>
               </div>
@@ -69,9 +80,13 @@ export const Navbar: React.FC<NavbarProps> = ({
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                onNavigate?.('home');
               }}
-              className="bg-[#E9BE5F] hover:bg-[#D4AA4B] text-[#282823] px-5 py-2 rounded-full text-sm font-bold flex items-center gap-2 shadow-md shadow-[#E9BE5F]/30 transition-all hover:scale-105"
+              className={`px-5 py-2 rounded-full text-sm font-bold flex items-center gap-2 transition-all hover:scale-105 ${
+                currentPage === 'home'
+                  ? 'bg-[#E9BE5F] text-[#282823] shadow-md shadow-[#E9BE5F]/30'
+                  : 'text-[#F5E8B6] hover:text-[#E9BE5F]'
+              }`}
             >
               <Home className="w-4 h-4 text-[#282823]" />
               <span>Home</span>
@@ -85,11 +100,14 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <button
                 onClick={() => {
+                  onNavigate?.('products');
                   setShopDropdownOpen(!shopDropdownOpen);
-                  const el = document.getElementById('product-catalog');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="text-[#F5E8B6] hover:text-[#E9BE5F] px-4 py-2 rounded-full text-sm font-medium flex items-center gap-1.5 transition-colors"
+                className={`px-5 py-2 rounded-full text-sm font-bold flex items-center gap-1.5 transition-all ${
+                  currentPage === 'products'
+                    ? 'bg-[#E9BE5F] text-[#282823] shadow-md shadow-[#E9BE5F]/30'
+                    : 'text-[#F5E8B6] hover:text-[#E9BE5F]'
+                }`}
               >
                 <Store className="w-4 h-4 text-[#E9BE5F]" />
                 <span>Shop</span>
@@ -105,9 +123,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                         key={cat.id}
                         onClick={() => {
                           onSelectCategory(cat.id);
+                          onNavigate?.('products');
                           setShopDropdownOpen(false);
-                          const el = document.getElementById('product-catalog');
-                          if (el) el.scrollIntoView({ behavior: 'smooth' });
                         }}
                         className={`w-full text-left px-4 py-2 text-xs font-semibold hover:bg-[#595C56]/30 transition-colors ${
                           selectedCategory === cat.id ? 'text-[#E9BE5F] font-bold' : 'text-[#F5E8B6]'
@@ -120,6 +137,20 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </div>
               )}
             </div>
+
+            {/* Gallery Pill */}
+            <a
+              href="#gallery"
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.getElementById('gallery');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="text-[#F5E8B6] hover:text-[#E9BE5F] px-4 py-2 rounded-full text-sm font-medium flex items-center gap-1.5 transition-colors"
+            >
+              <Image className="w-4 h-4 text-[#E9BE5F]" />
+              <span>Gallery</span>
+            </a>
 
             {/* About Pill */}
             <a

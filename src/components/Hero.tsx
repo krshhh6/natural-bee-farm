@@ -25,14 +25,14 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
         <div className="max-w-xl lg:max-w-2xl w-full">
           
           {/* Frosted Glassmorphism Card (Shifted to Right Side) */}
-          <div className="bg-[#F5E8B6]/95 dark:bg-[#282823]/95 backdrop-blur-md rounded-[32px] sm:rounded-[40px] p-8 sm:p-12 lg:p-14 shadow-2xl border border-[#E9BE5F]/50 dark:border-[#595C56]/40 space-y-6">
+          <div className="bg-[#F5E8B6]/95 dark:bg-[#282823]/95 backdrop-blur-md rounded-[24px] sm:rounded-[40px] p-5 sm:p-12 lg:p-14 shadow-2xl border border-[#E9BE5F]/50 dark:border-[#595C56]/40 space-y-4 sm:space-y-6">
             
             {/* Headline Group */}
             <div className="space-y-1">
-              <div className="inline-block font-serif text-3xl sm:text-5xl lg:text-6xl font-bold text-[#282823] dark:text-white underline decoration-[#E9BE5F] decoration-4 underline-offset-8">
+              <div className="inline-block font-serif text-2xl sm:text-5xl lg:text-6xl font-bold text-[#282823] dark:text-white underline decoration-[#E9BE5F] decoration-4 underline-offset-8">
                 Traditional Foods
               </div>
-              <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold text-[#282823] dark:text-[#F5E8B6] tracking-tight leading-tight pt-2">
+              <h1 className="font-serif text-2xl sm:text-5xl lg:text-6xl font-bold text-[#282823] dark:text-[#F5E8B6] tracking-tight leading-tight pt-2">
                 Preserved at Scale
               </h1>
             </div>
