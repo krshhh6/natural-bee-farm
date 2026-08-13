@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { X, Eye, EyeOff, Loader2, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
-import { signInWithGoogle, signInWithApple, sendMagicLinkToEmail } from '../lib/firebase';
+import { signInWithGoogle, sendMagicLinkToEmail } from '../lib/firebase';
 
 export const AuthModal: React.FC = () => {
   const { isAuthModalOpen, setIsAuthModalOpen, authMode, setAuthMode, login, setUserProfile } = useAuth();
@@ -59,15 +59,10 @@ export const AuthModal: React.FC = () => {
     showToast(`Account created successfully! Welcome to Meadlight, @${username} 🎉`);
   };
 
-  const handleSocialLogin = async (provider: 'Google' | 'Apple') => {
+  const handleSocialLogin = async (provider: 'Google') => {
     setLoadingProvider(provider);
     try {
-      let profile;
-      if (provider === 'Google') {
-        profile = await signInWithGoogle();
-      } else {
-        profile = await signInWithApple();
-      }
+      const profile = await signInWithGoogle();
       if (profile) {
         setUserProfile(profile);
         showToast(`Signed in as ${profile.name} (${profile.email}) 🎉`);
@@ -78,12 +73,6 @@ export const AuthModal: React.FC = () => {
         showToast('Sign in cancelled.');
       } else if (err?.code === 'auth/unauthorized-domain') {
         alert(`Domain Notice: Please add ${window.location.hostname} to Authorized Domains in Firebase Console > Authentication > Settings.`);
-      } else if (err?.code === 'auth/operation-not-allowed') {
-        const fallbackEmail = `user.${provider.toLowerCase()}@naturalbeefarm.in`;
-        const fallbackName = `${provider} User`;
-        const fallbackAvatar = `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80`;
-        login(fallbackEmail, fallbackName, fallbackAvatar);
-        showToast(`Signed in as ${provider} User! (${provider} Developer keys pending in Firebase Console)`);
       } else {
         alert(`${provider} Sign In Error: ${err?.message || err}`);
       }
@@ -377,14 +366,13 @@ export const AuthModal: React.FC = () => {
           </div>
         </div>
 
-        {/* Social Login Buttons (Google & Apple) */}
-        <div className="flex items-center gap-3">
-          {/* Google Button */}
+        {/* Social Login Button (Full Width Google) */}
+        <div>
           <button
             type="button"
             disabled={loadingProvider !== null}
             onClick={() => handleSocialLogin('Google')}
-            className="flex-1 h-12 rounded-2xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 hover:border-[#c8674d] text-stone-800 dark:text-stone-100 font-semibold text-xs sm:text-sm flex items-center justify-center gap-2.5 shadow-sm transition-all hover:scale-[1.02] disabled:opacity-60"
+            className="w-full h-12 rounded-2xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 hover:border-[#c8674d] text-stone-800 dark:text-stone-100 font-semibold text-xs sm:text-sm flex items-center justify-center gap-3 shadow-sm transition-all hover:scale-[1.01] disabled:opacity-60"
           >
             {loadingProvider === 'Google' ? (
               <Loader2 className="w-4 h-4 animate-spin text-[#c8674d]" />
@@ -396,25 +384,7 @@ export const AuthModal: React.FC = () => {
                 <path fill="#F14336" d="M419.404,58.936l-82.933,67.896c-23.335-14.586-50.919-23.012-80.471-23.012c-66.729,0-123.429,42.957-143.965,102.724l-83.397-68.276h-0.014C71.23,56.123,157.06,0,256,0C318.115,0,375.068,22.126,419.404,58.936z" />
               </svg>
             )}
-            <span>Google</span>
-          </button>
-
-          {/* Apple Button */}
-          <button
-            type="button"
-            disabled={loadingProvider !== null}
-            onClick={() => handleSocialLogin('Apple')}
-            className="flex-1 h-12 rounded-2xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 hover:border-[#c8674d] text-stone-800 dark:text-stone-100 font-semibold text-xs sm:text-sm flex items-center justify-center gap-2.5 shadow-sm transition-all hover:scale-[1.02] disabled:opacity-60"
-          >
-            {loadingProvider === 'Apple' ? (
-              <Loader2 className="w-4 h-4 animate-spin text-[#c8674d]" />
-            ) : (
-              <svg className="w-5 h-5 shrink-0 fill-current" viewBox="0 0 22.773 22.773">
-                <path d="M15.769,0c0.053,0,0.106,0,0.162,0c0.13,1.606-0.483,2.806-1.228,3.675c-0.731,0.863-1.732,1.7-3.351,1.573c-0.108-1.583,0.506-2.694,1.25-3.561C13.292,0.879,14.557,0.16,15.769,0z"></path>
-                <path d="M20.67,16.716c0,0.016,0,0.03,0,0.045c-0.455,1.378-1.104,2.559-1.896,3.655c-0.723,0.995-1.609,2.334-3.191,2.334c-1.367,0-2.275-0.879-3.676-0.903c-1.482-0.024-2.297,0.735-3.652,0.926c-0.155,0-0.31,0-0.462,0c-0.995-0.144-1.798-0.932-2.383-1.642c-1.725-2.098-3.058-4.808-3.306-8.276c0-0.34,0-0.679,0-1.019c0.105-2.482,1.311-4.5,2.914-5.478c0.846-0.52,2.009-0.963,3.304-0.765c0.555,0.086,1.122,0.276,1.619,0.464c0.471,0.181,1.06,0.502,1.618,0.485c0.378-0.011,0.754-0.208,1.135-0.347c1.116-0.403,2.21-0.865,3.652-0.648c1.733,0.262,2.963,1.032,3.723,2.22c-1.466,0.933-2.625,2.339-2.427,4.74C17.818,14.688,19.086,15.964,20.67,16.716z"></path>
-              </svg>
-            )}
-            <span>Apple</span>
+            <span>Continue with Google</span>
           </button>
         </div>
 
