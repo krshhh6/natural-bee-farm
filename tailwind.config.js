@@ -46,7 +46,8 @@ export default {
       },
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
-        serif: ['Playfair Display', 'Merriweather', 'serif'],
+        serif: ['RosierFont', 'Playfair Display', 'Merriweather', 'serif'],
+        rosier: ['RosierFont', 'Playfair Display', 'serif'],
       },
       animation: {
         'marquee': 'marquee 25s linear infinite',
