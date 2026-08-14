@@ -16,8 +16,6 @@ import { ProductModal } from './components/ProductModal';
 import { CartDrawer } from './components/CartDrawer';
 import { AuthModal } from './components/AuthModal';
 import { ProductsPage } from './components/ProductsPage';
-import { FloatingDock } from '@/components/ui/floating-dock';
-import { IconHome, IconShoppingBag, IconBook, IconStar } from '@tabler/icons-react';
 import { PRODUCTS } from './data/products';
 import type { CategoryType } from './types';
 import { CheckCircle2, ShoppingBag, ArrowRight } from 'lucide-react';
