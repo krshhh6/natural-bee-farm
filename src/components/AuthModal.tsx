@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Eye, EyeOff, Loader2, Sparkles } from 'lucide-react';
+import { X, Eye, EyeOff, Loader2, Sparkles, User, Mail, Phone, Lock, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { signInWithGoogle, sendMagicLinkToEmail } from '../lib/firebase';
@@ -100,47 +100,47 @@ export const AuthModal: React.FC = () => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#282823]/80 backdrop-blur-md animate-fadeIn overflow-y-auto overscroll-contain"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#1C1810]/75 backdrop-blur-md animate-fadeIn"
       onClick={(e) => {
         if (e.target === e.currentTarget) setIsAuthModalOpen(false);
       }}
     >
-      {/* Outer Card Container */}
-      <div className="relative w-full max-w-[460px] bg-[#FAF3D6] dark:bg-[#282823] rounded-[28px] shadow-2xl border border-[#595C56]/40 p-6 sm:p-8 animate-slide-up max-h-[85vh] sm:max-h-[90vh] overflow-y-auto font-sans my-auto overscroll-contain">
+      {/* Outer Card Container with Paper Texture & Clean Custom Scrollbar */}
+      <div className="relative w-full max-w-[460px] bg-paper-texture dark:bg-[#1E1C18] rounded-[28px] sm:rounded-[32px] shadow-2xl border-2 border-[#E8D5B7] dark:border-[#3D372E] p-5 sm:p-7 animate-scale-up max-h-[90vh] overflow-y-auto no-scrollbar font-sans my-auto">
         
-        {/* Top Close Button */}
+        {/* Top Floating Close Button */}
         <button
           onClick={() => setIsAuthModalOpen(false)}
-          className="absolute top-5 right-5 p-2 rounded-full text-[#595C56] dark:text-[#F5E8B6]/70 hover:text-[#282823] hover:bg-[#F5E8B6] dark:hover:bg-[#1C1C18] transition-colors"
+          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#FAF5EB] dark:bg-[#2A2620] border border-[#E8D5B7] dark:border-[#3D372E] text-[#9C5B23] dark:text-[#E9BE5F] flex items-center justify-center hover:bg-[#9C5B23] hover:text-white transition-all shadow-xs"
           aria-label="Close modal"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4" />
         </button>
 
         {/* Header Icon + Title */}
-        <div className="flex items-center space-x-3 mb-6">
-          <div className="w-12 h-12 rounded-2xl bg-[#E9BE5F] flex items-center justify-center text-[#282823] font-serif font-black text-2xl shadow-md">
+        <div className="flex items-center space-x-3 mb-5 pr-8">
+          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#FAF5EB] via-[#F3E5AB] to-[#E9BE5F] border border-[#E8D5B7] flex items-center justify-center text-xl shadow-xs shrink-0">
             🐝
           </div>
           <div>
-            <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#282823] dark:text-[#F5E8B6]">
+            <h3 className="font-serif text-lg sm:text-xl font-bold text-[#2C1810] dark:text-white leading-snug">
               Natura Bee Farm
             </h3>
-            <p className="text-xs text-[#595C56] dark:text-[#F5E8B6]/70">
-              {authMode === 'login' ? 'Welcome back! Sign in to your account' : 'Create your account to start shopping'}
+            <p className="text-[11px] text-[#5C4033] dark:text-[#D8CFBF] font-medium">
+              {authMode === 'login' ? 'Sign in to access your pure honey orders' : 'Join 10,000+ pure raw honey lovers'}
             </p>
           </div>
         </div>
 
-        {/* Tab Toggle Switch (Sign In / Create Account) */}
-        <div className="flex bg-[#F5E8B6] dark:bg-[#1C1C18] p-1 rounded-2xl mb-6 border border-[#595C56]/30">
+        {/* Segmented Tab Pill Toggle (Sign In / Create Account) */}
+        <div className="flex bg-[#FAF5EB] dark:bg-[#181715] p-1 rounded-2xl mb-5 border border-[#E8D5B7] dark:border-[#3D372E] shadow-inner">
           <button
             type="button"
             onClick={() => setAuthMode('login')}
-            className={`flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+            className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${
               authMode === 'login'
-                ? 'bg-[#E9BE5F] text-[#282823] shadow-sm'
-                : 'text-[#595C56] dark:text-[#F5E8B6]/70 hover:text-[#282823]'
+                ? 'bg-[#9C5B23] text-white shadow-md'
+                : 'text-[#5C4033] dark:text-[#D8CFBF] hover:text-[#2C1810]'
             }`}
           >
             Sign In
@@ -148,10 +148,10 @@ export const AuthModal: React.FC = () => {
           <button
             type="button"
             onClick={() => setAuthMode('register')}
-            className={`flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+            className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${
               authMode === 'register'
-                ? 'bg-[#E9BE5F] text-[#282823] shadow-sm'
-                : 'text-[#595C56] dark:text-[#F5E8B6]/70 hover:text-[#282823]'
+                ? 'bg-[#9C5B23] text-white shadow-md'
+                : 'text-[#5C4033] dark:text-[#D8CFBF] hover:text-[#2C1810]'
             }`}
           >
             Create Account
@@ -161,46 +161,41 @@ export const AuthModal: React.FC = () => {
         {/* Dynamic Form Content */}
         {authMode === 'login' ? (
           /* SIGN IN FORM */
-          <form onSubmit={handleLoginSubmit} className="space-y-4">
+          <form onSubmit={handleLoginSubmit} className="space-y-3.5">
             
             {/* Email Field */}
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-[#282823] dark:text-[#F5E8B6]">Email</label>
-              <div className="h-12 border border-[#595C56]/40 focus-within:border-[#E9BE5F] rounded-2xl flex items-center px-3.5 bg-[#F5E8B6]/50 dark:bg-[#1C1C18] transition-colors">
-                <svg className="w-5 h-5 text-[#E9BE5F] shrink-0" viewBox="0 0 32 32" fill="currentColor">
-                  <path d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z"></path>
-                </svg>
+              <label className="text-[11px] font-bold uppercase tracking-wider text-[#5C4033] dark:text-[#D8CFBF]">Email Address</label>
+              <div className="h-10 sm:h-11 border border-[#E8D5B7] dark:border-[#3D372E] focus-within:border-[#9C5B23] rounded-xl flex items-center px-3 bg-white/80 dark:bg-[#181715] transition-colors shadow-2xs">
+                <Mail className="w-4 h-4 text-[#9C5B23] shrink-0" />
                 <input
                   type="email"
                   required
-                  placeholder="Enter your Email"
+                  placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full ml-3 bg-transparent text-xs sm:text-sm text-[#282823] dark:text-[#F5E8B6] placeholder-[#595C56] focus:outline-none"
+                  className="w-full ml-2.5 bg-transparent text-xs text-[#2C1810] dark:text-[#F5E8B6] placeholder-[#8C7A65] focus:outline-none"
                 />
               </div>
             </div>
 
             {/* Password Field */}
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-[#282823] dark:text-[#F5E8B6]">Password</label>
-              <div className="h-12 border border-[#595C56]/40 focus-within:border-[#E9BE5F] rounded-2xl flex items-center px-3.5 bg-[#F5E8B6]/50 dark:bg-[#1C1C18] transition-colors">
-                <svg className="w-5 h-5 text-[#E9BE5F] shrink-0" viewBox="-64 0 512 512" fill="currentColor">
-                  <path d="m336 512h-288c-26.453125 0-48-21.523438-48-48v-224c0-26.476562 21.546875-48 48-48h288c26.453125 0 48 21.523438 48 48v224c0 26.476562-21.546875 48-48 48zm-288-288c-8.8125 0-16 7.167969-16 16v224c0 8.832031 7.1875 16 16 16h288c8.8125 0 16-7.167969 16-16v-224c0-8.832031-7.1875-16-16-16zm0 0"></path>
-                  <path d="m304 224c-8.832031 0-16-7.167969-16-16v-80c0-52.929688-43.070312-96-96-96s-96 43.070312-96 96v80c0 8.832031-7.167969 16-16 16s-16-7.167969-16-16v-80c0-70.59375 57.40625-128 128-128s128 57.40625 128 128v80c0 8.832031-7.167969 16-16 16zm0 0"></path>
-                </svg>
+              <label className="text-[11px] font-bold uppercase tracking-wider text-[#5C4033] dark:text-[#D8CFBF]">Password</label>
+              <div className="h-10 sm:h-11 border border-[#E8D5B7] dark:border-[#3D372E] focus-within:border-[#9C5B23] rounded-xl flex items-center px-3 bg-white/80 dark:bg-[#181715] transition-colors shadow-2xs">
+                <Lock className="w-4 h-4 text-[#9C5B23] shrink-0" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required
-                  placeholder="Enter your Password"
+                  placeholder="Enter password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full ml-3 bg-transparent text-xs sm:text-sm text-[#282823] dark:text-[#F5E8B6] placeholder-[#595C56] focus:outline-none"
+                  className="w-full ml-2.5 bg-transparent text-xs text-[#2C1810] dark:text-[#F5E8B6] placeholder-[#8C7A65] focus:outline-none"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-[#E9BE5F] hover:text-[#D4AA4B] ml-2"
+                  className="text-[#9C5B23] hover:text-[#834917] ml-1.5"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -208,20 +203,20 @@ export const AuthModal: React.FC = () => {
             </div>
 
             {/* Remember Me & Forgot Password Row */}
-            <div className="flex items-center justify-between text-xs pt-1">
-              <label className="flex items-center space-x-2 cursor-pointer text-[#282823] dark:text-[#F5E8B6]">
+            <div className="flex items-center justify-between text-xs pt-0.5">
+              <label className="flex items-center space-x-1.5 cursor-pointer text-[#5C4033] dark:text-[#D8CFBF]">
                 <input
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="w-4 h-4 rounded border-[#595C56] text-[#E9BE5F] focus:ring-[#E9BE5F]"
+                  className="w-3.5 h-3.5 rounded border-[#E8D5B7] text-[#9C5B23] focus:ring-[#9C5B23]"
                 />
-                <span>Remember me</span>
+                <span className="text-[11px] font-medium">Remember me</span>
               </label>
               <button
                 type="button"
                 onClick={() => alert('Password reset link sent to your email!')}
-                className="text-[#282823] dark:text-[#E9BE5F] hover:underline font-semibold"
+                className="text-[11px] text-[#9C5B23] dark:text-[#E9BE5F] hover:underline font-bold"
               >
                 Forgot password?
               </button>
@@ -230,9 +225,10 @@ export const AuthModal: React.FC = () => {
             {/* Main Submit Button */}
             <button
               type="submit"
-              className="w-full h-12 bg-[#E9BE5F] hover:bg-[#D4AA4B] text-[#282823] font-bold rounded-2xl text-sm shadow-md shadow-[#E9BE5F]/25 transition-all hover:scale-[1.01] active:scale-[0.99] mt-3 cursor-pointer"
+              className="w-full h-11 bg-gradient-to-r from-[#9C5B23] via-[#B8661B] to-[#9C5B23] hover:bg-[#834917] text-white font-extrabold rounded-xl text-xs shadow-md shadow-[#9C5B23]/20 transition-all hover:scale-[1.01] active:scale-[0.99] mt-2 cursor-pointer flex items-center justify-center gap-1.5 border border-[#834917]"
             >
-              Sign In
+              <span>Sign In</span>
+              <ArrowRight className="w-3.5 h-3.5 text-white" />
             </button>
 
             {/* 1-Click Passwordless Magic Link Button */}
@@ -240,33 +236,22 @@ export const AuthModal: React.FC = () => {
               type="button"
               disabled={sendingMagicLink}
               onClick={handleSendMagicLink}
-              className="w-full py-2.5 bg-[#F5E8B6] hover:bg-[#FAF3D6] text-[#282823] font-bold rounded-2xl text-xs border border-[#E9BE5F] flex items-center justify-center gap-2 transition-all cursor-pointer"
+              className="w-full py-2 bg-[#FAF5EB] dark:bg-[#181715] hover:bg-white text-[#9C5B23] dark:text-[#E9BE5F] font-bold rounded-xl text-xs border border-[#E8D5B7] dark:border-[#3D372E] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs"
             >
               {sendingMagicLink ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin text-[#E9BE5F]" />
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-[#9C5B23]" />
               ) : (
-                <Sparkles className="w-3.5 h-3.5 text-[#E9BE5F]" />
+                <Sparkles className="w-3.5 h-3.5 text-[#9C5B23]" />
               )}
-              <span>Email 1-Click Magic Link (Passwordless)</span>
+              <span>Email 1-Click Passwordless Magic Link</span>
             </button>
-
-            {/* Switch to Sign Up */}
-            <p className="text-center text-xs text-[#595C56] dark:text-[#F5E8B6]/70 pt-1">
-              Don&apos;t have an account?{' '}
-              <span
-                onClick={() => setAuthMode('register')}
-                className="text-[#282823] dark:text-[#E9BE5F] font-bold cursor-pointer hover:underline"
-              >
-                Sign Up
-              </span>
-            </p>
 
             {/* Quick Demo Login */}
             <div className="text-center pt-1">
               <button
                 type="button"
                 onClick={handleDemoLogin}
-                className="text-xs text-[#595C56] dark:text-[#F5E8B6]/60 hover:text-[#E9BE5F] font-medium underline cursor-pointer"
+                className="text-[11px] text-[#8C5E2B] dark:text-[#E9BE5F] hover:underline font-bold"
               >
                 ⚡ Quick Demo Login
               </button>
@@ -274,106 +259,117 @@ export const AuthModal: React.FC = () => {
 
           </form>
         ) : (
-          /* SIGN UP FORM */
-          <form onSubmit={handleRegisterSubmit} className="space-y-3.5">
+          /* SIGN UP FORM — Compact 2-Column Grid Layout */
+          <form onSubmit={handleRegisterSubmit} className="space-y-3">
             
             {/* Username */}
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-[#282823] dark:text-[#F5E8B6]">Username</label>
-              <div className="h-11 border border-[#595C56]/40 focus-within:border-[#E9BE5F] rounded-2xl flex items-center px-3.5 bg-[#F5E8B6]/50 dark:bg-[#1C1C18]">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-[#5C4033] dark:text-[#D8CFBF]">Username</label>
+              <div className="h-10 border border-[#E8D5B7] dark:border-[#3D372E] focus-within:border-[#9C5B23] rounded-xl flex items-center px-3 bg-white/80 dark:bg-[#181715]">
+                <User className="w-3.5 h-3.5 text-[#9C5B23] shrink-0" />
                 <input
                   type="text"
                   required
                   placeholder="HoneyLover (no spaces)"
                   value={username}
                   onChange={(e) => setUsername(e.target.value.replace(/\s+/g, ''))}
-                  className="w-full bg-transparent text-xs sm:text-sm text-[#282823] dark:text-[#F5E8B6] placeholder-[#595C56] focus:outline-none"
+                  className="w-full ml-2 bg-transparent text-xs text-[#2C1810] dark:text-[#F5E8B6] placeholder-[#8C7A65] focus:outline-none"
                 />
               </div>
             </div>
 
-            {/* Email Field */}
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-[#282823] dark:text-[#F5E8B6]">Email</label>
-              <div className="h-11 border border-[#595C56]/40 focus-within:border-[#E9BE5F] rounded-2xl flex items-center px-3.5 bg-[#F5E8B6]/50 dark:bg-[#1C1C18]">
-                <input
-                  type="email"
-                  required
-                  placeholder="Enter your Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-transparent text-xs sm:text-sm text-[#282823] dark:text-[#F5E8B6] placeholder-[#595C56] focus:outline-none"
-                />
+            {/* 2-Column Row: Email & Mobile Number */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {/* Email */}
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold uppercase tracking-wider text-[#5C4033] dark:text-[#D8CFBF]">Email</label>
+                <div className="h-10 border border-[#E8D5B7] dark:border-[#3D372E] focus-within:border-[#9C5B23] rounded-xl flex items-center px-2.5 bg-white/80 dark:bg-[#181715]">
+                  <Mail className="w-3.5 h-3.5 text-[#9C5B23] shrink-0" />
+                  <input
+                    type="email"
+                    required
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full ml-2 bg-transparent text-xs text-[#2C1810] dark:text-[#F5E8B6] placeholder-[#8C7A65] focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Phone */}
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold uppercase tracking-wider text-[#5C4033] dark:text-[#D8CFBF]">Mobile</label>
+                <div className="h-10 border border-[#E8D5B7] dark:border-[#3D372E] focus-within:border-[#9C5B23] rounded-xl flex items-center px-2.5 bg-white/80 dark:bg-[#181715]">
+                  <Phone className="w-3.5 h-3.5 text-[#9C5B23] shrink-0" />
+                  <input
+                    type="tel"
+                    required
+                    placeholder="9835012345"
+                    maxLength={10}
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                    className="w-full ml-2 bg-transparent text-xs text-[#2C1810] dark:text-[#F5E8B6] placeholder-[#8C7A65] focus:outline-none"
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Phone */}
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-[#282823] dark:text-[#F5E8B6]">Mobile Number</label>
-              <div className="h-11 border border-[#595C56]/40 focus-within:border-[#E9BE5F] rounded-2xl flex items-center px-3.5 bg-[#F5E8B6]/50 dark:bg-[#1C1C18]">
-                <input
-                  type="tel"
-                  required
-                  placeholder="9835012345 (10 Digits)"
-                  maxLength={10}
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
-                  className="w-full bg-transparent text-xs sm:text-sm text-[#282823] dark:text-[#F5E8B6] placeholder-[#595C56] focus:outline-none"
-                />
+            {/* 2-Column Row: Password & Confirm Password */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {/* Password */}
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold uppercase tracking-wider text-[#5C4033] dark:text-[#D8CFBF]">Password</label>
+                <div className="h-10 border border-[#E8D5B7] dark:border-[#3D372E] focus-within:border-[#9C5B23] rounded-xl flex items-center px-2.5 bg-white/80 dark:bg-[#181715]">
+                  <Lock className="w-3.5 h-3.5 text-[#9C5B23] shrink-0" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full ml-2 bg-transparent text-xs text-[#2C1810] dark:text-[#F5E8B6] placeholder-[#8C7A65] focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="text-[#9C5B23] hover:text-[#834917] ml-1"
+                  >
+                    {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
               </div>
-            </div>
 
-            {/* Password */}
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-[#282823] dark:text-[#F5E8B6]">Password</label>
-              <div className="h-11 border border-[#595C56]/40 focus-within:border-[#E9BE5F] rounded-2xl flex items-center px-3.5 bg-[#F5E8B6]/50 dark:bg-[#1C1C18]">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  required
-                  placeholder="Enter your Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-transparent text-xs sm:text-sm text-[#282823] dark:text-[#F5E8B6] placeholder-[#595C56] focus:outline-none"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="text-[#E9BE5F] hover:text-[#D4AA4B] ml-2"
-                >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
-
-            {/* Confirm Password */}
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-[#282823] dark:text-[#F5E8B6]">Confirm Password</label>
-              <div className="h-11 border border-[#595C56]/40 focus-within:border-[#E9BE5F] rounded-2xl flex items-center px-3.5 bg-[#F5E8B6]/50 dark:bg-[#1C1C18]">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  required
-                  placeholder="Confirm Password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full bg-transparent text-xs sm:text-sm text-[#282823] dark:text-[#F5E8B6] placeholder-[#595C56] focus:outline-none"
-                />
+              {/* Confirm Password */}
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold uppercase tracking-wider text-[#5C4033] dark:text-[#D8CFBF]">Confirm</label>
+                <div className="h-10 border border-[#E8D5B7] dark:border-[#3D372E] focus-within:border-[#9C5B23] rounded-xl flex items-center px-2.5 bg-white/80 dark:bg-[#181715]">
+                  <Lock className="w-3.5 h-3.5 text-[#9C5B23] shrink-0" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    placeholder="Confirm"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full ml-2 bg-transparent text-xs text-[#2C1810] dark:text-[#F5E8B6] placeholder-[#8C7A65] focus:outline-none"
+                  />
+                </div>
               </div>
             </div>
 
             {/* Submit Register Button */}
             <button
               type="submit"
-              className="w-full h-12 bg-[#E9BE5F] hover:bg-[#D4AA4B] text-[#282823] font-bold rounded-2xl text-sm shadow-md shadow-[#E9BE5F]/25 transition-all hover:scale-[1.01] active:scale-[0.99] mt-2 cursor-pointer"
+              className="w-full h-11 bg-gradient-to-r from-[#9C5B23] via-[#B8661B] to-[#9C5B23] hover:bg-[#834917] text-white font-extrabold rounded-xl text-xs shadow-md shadow-[#9C5B23]/20 transition-all hover:scale-[1.01] active:scale-[0.99] mt-2 cursor-pointer border border-[#834917]"
             >
-              Sign Up
+              Create Account
             </button>
 
             {/* Switch to Sign In */}
-            <p className="text-center text-xs text-[#595C56] dark:text-[#F5E8B6]/70 pt-1">
+            <p className="text-center text-xs text-[#5C4033] dark:text-[#D8CFBF] pt-0.5">
               Already have an account?{' '}
               <span
                 onClick={() => setAuthMode('login')}
-                className="text-[#282823] dark:text-[#E9BE5F] font-bold cursor-pointer hover:underline"
+                className="text-[#9C5B23] dark:text-[#E9BE5F] font-bold cursor-pointer hover:underline"
               >
                 Sign In
               </span>
@@ -382,28 +378,27 @@ export const AuthModal: React.FC = () => {
         )}
 
         {/* Divider */}
-        <div className="relative my-5">
+        <div className="relative my-4">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-[#595C56]/30"></div>
+            <div className="w-full border-t border-[#E8D5B7] dark:border-[#3D372E]"></div>
           </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-[#FAF3D6] dark:bg-[#282823] px-3 text-[#595C56] dark:text-[#F5E8B6]/60 font-semibold">
-              Or With
+          <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-widest">
+            <span className="bg-[#FAF5EB] dark:bg-[#1E1C18] px-3 text-[#8C7A65]">
+              Or Continue With
             </span>
           </div>
         </div>
 
-        {/* Social Sign In Buttons */}
-        <div className="grid grid-cols-1 gap-2.5">
-          {/* Google */}
+        {/* Social Sign In Button */}
+        <div>
           <button
             type="button"
             disabled={loadingProvider === 'Google'}
             onClick={() => handleSocialLogin('Google')}
-            className="h-11 border border-[#595C56]/40 hover:border-[#E9BE5F] bg-[#F5E8B6]/50 dark:bg-[#1C1C18] rounded-2xl flex items-center justify-center space-x-2 transition-all hover:bg-[#F5E8B6] dark:hover:bg-[#201D19] cursor-pointer"
+            className="w-full h-10 border border-[#E8D5B7] dark:border-[#3D372E] hover:border-[#9C5B23] bg-white dark:bg-[#181715] rounded-xl flex items-center justify-center space-x-2 transition-all hover:shadow-xs cursor-pointer"
           >
             {loadingProvider === 'Google' ? (
-              <Loader2 className="w-4 h-4 animate-spin text-[#E9BE5F]" />
+              <Loader2 className="w-4 h-4 animate-spin text-[#9C5B23]" />
             ) : (
               <svg className="w-4 h-4" viewBox="0 0 24 24">
                 <path
@@ -424,20 +419,20 @@ export const AuthModal: React.FC = () => {
                 />
               </svg>
             )}
-            <span className="text-xs sm:text-sm font-semibold text-[#282823] dark:text-[#F5E8B6]">
+            <span className="text-xs font-extrabold text-[#2C1810] dark:text-white">
               {loadingProvider === 'Google' ? 'Signing in...' : 'Continue with Google'}
             </span>
           </button>
         </div>
 
         {/* Footer Note */}
-        <p className="mt-5 text-[10px] text-center text-[#595C56] dark:text-[#F5E8B6]/50">
+        <p className="mt-4 text-[10px] text-center text-[#5C4033] dark:text-[#D8CFBF]">
           By signing up, you agree to Natura Bee Farm&apos;s{' '}
-          <a href="#terms" className="underline hover:text-[#E9BE5F]">
-            Terms of Service
+          <a href="#terms" className="underline hover:text-[#9C5B23]">
+            Terms
           </a>{' '}
           and{' '}
-          <a href="#privacy" className="underline hover:text-[#E9BE5F]">
+          <a href="#privacy" className="underline hover:text-[#9C5B23]">
             Privacy Policy
           </a>.
         </p>
