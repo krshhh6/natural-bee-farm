@@ -10,12 +10,16 @@ export const TrustStrip: React.FC = () => {
     { icon: Star, title: '50+ Marts Trust Us' },
   ];
 
+  // Duplicated list for seamless 100% infinite marquee loop
+  const marqueeItems = [...highlights, ...highlights, ...highlights];
+
   return (
-    <section className="py-4 bg-[#FAF5EB] dark:bg-[#181715] transition-colors border-y border-[#E8D5B7] dark:border-[#3D372E] overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Horizontal Scroll Pill Strip */}
-        <div className="flex items-center justify-start sm:justify-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar py-1">
-          {highlights.map((item, idx) => {
+    <section className="py-3.5 bg-[#FAF5EB] dark:bg-[#181715] transition-colors border-y border-[#E8D5B7] dark:border-[#3D372E] overflow-hidden">
+      <div className="w-full overflow-hidden">
+        
+        {/* Infinite Auto-Scrolling Marquee Track */}
+        <div className="animate-marquee items-center gap-3 sm:gap-4 py-0.5">
+          {marqueeItems.map((item, idx) => {
             const Icon = item.icon;
             return (
               <div
@@ -32,6 +36,7 @@ export const TrustStrip: React.FC = () => {
             );
           })}
         </div>
+
       </div>
     </section>
   );

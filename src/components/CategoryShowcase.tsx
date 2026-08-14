@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import type { CategoryType } from '../types';
 
 interface CategoryShowcaseProps {
   selectedCategory: string;
-  onSelectCategory: (category: any) => void;
+  onSelectCategory: (categoryId: CategoryType) => void;
 }
 
 export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
@@ -12,29 +13,29 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const categories = [
+  const categories: { id: CategoryType; name: string; subtitle: string; image: string }[] = [
     {
-      id: 'wildforest',
-      name: 'Wild Forest',
-      subtitle: '100% Raw & Unfiltered',
+      id: 'all',
+      name: 'All Raw Honey',
+      subtitle: '100% Pure & Unfiltered',
       image: '/Glass_jar_filled_with_honey_202608130958.jpeg',
     },
     {
-      id: 'himalayan',
-      name: 'Himalayan Acacia',
-      subtitle: 'High-Altitude Nectars',
+      id: 'wildforest',
+      name: 'Wild Forest',
+      subtitle: 'Harvested from Deep Forests',
       image: '/Honey_jar_on_wood_table_202608130959.jpeg',
     },
     {
       id: 'spiced',
       name: 'Spice Infused',
-      subtitle: 'Cinnamon & Saffron',
+      subtitle: 'Cinnamon, Ginger & Clove',
       image: '/Honey_jar_with_cinnamon_and_202608130958.jpeg',
     },
     {
       id: 'ayurvedic',
       name: 'Ayurvedic Blends',
-      subtitle: 'Tulsi, Neem & More',
+      subtitle: 'Tulsi, Neem & Ashwagandha',
       image: '/Jar_of_tulsi_honey_on_202608130958.jpeg',
     },
     {
@@ -42,12 +43,6 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
       name: 'Monofloral',
       subtitle: 'Single Blossom Nectars',
       image: '/Glass_jar_with_jamun_honey_202608131002.jpeg',
-    },
-    {
-      id: 'herbal',
-      name: 'Herbal Honey',
-      subtitle: 'Karanj & Forest Herbs',
-      image: '/Karanj_honey_jar_on_stone_202608131002.jpeg',
     },
     {
       id: 'rawcomb',
@@ -59,15 +54,17 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const scrollAmount = 260;
-      scrollRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
+      const container = scrollRef.current;
+      const firstChild = container.firstElementChild as HTMLElement;
+      const cardWidth = firstChild ? firstChild.offsetWidth + 14 : 150;
+      container.scrollBy({
+        left: direction === 'left' ? -cardWidth : cardWidth,
         behavior: 'smooth',
       });
     }
   };
 
-  const handleCategoryClick = (categoryId: string) => {
+  const handleCategoryClick = (categoryId: CategoryType) => {
     onSelectCategory(categoryId);
     const catalogEl = document.getElementById('product-catalog');
     if (catalogEl) {
@@ -85,16 +82,21 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
           {/* Scroll Left Arrow */}
           <button
             onClick={() => scroll('left')}
-            className="hidden sm:flex p-2.5 rounded-full bg-white dark:bg-[#25221D] text-[#231F1B] dark:text-[#FEFDF5] hover:bg-[#9C5B23] hover:text-white dark:hover:bg-[#9C5B23] transition-all border border-[#E7DFD3] dark:border-neutral-800 shadow-sm shrink-0 z-10"
+            className="hidden sm:flex p-2.5 rounded-full bg-white dark:bg-[#25221D] text-[#231F1B] dark:text-[#FEFDF5] hover:bg-[#9C5B23] hover:text-white dark:hover:bg-[#9C5B23] transition-all border border-[#E7DFD3] dark:border-neutral-800 shadow-sm shrink-0 z-10 cursor-pointer"
             aria-label="Previous Category"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
 
-          {/* Horizontally Scrollable Category Squircle Cards */}
+          {/* Horizontally Scrollable Category Squircle Cards with Native Touch Momentum */}
           <div
             ref={scrollRef}
-            className="flex gap-4 sm:gap-5 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scroll-smooth flex-1 custom-scrollbar"
+            className="flex gap-3.5 sm:gap-5 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scroll-smooth flex-1 no-scrollbar px-1"
+            style={{
+              WebkitOverflowScrolling: 'touch',
+              touchAction: 'pan-x',
+              overscrollBehaviorX: 'contain',
+            }}
           >
             {categories.map((category) => {
               const isSelected = selectedCategory === category.id;
@@ -102,7 +104,7 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
                 <div
                   key={category.id}
                   onClick={() => handleCategoryClick(category.id)}
-                  className={`min-w-[130px] sm:min-w-[150px] shrink-0 snap-start flex flex-col items-center text-center cursor-pointer group transition-all duration-300 ${
+                  className={`min-w-[125px] sm:min-w-[150px] shrink-0 snap-start flex flex-col items-center text-center cursor-pointer group transition-all duration-300 ${
                     isSelected ? 'scale-105' : 'hover:-translate-y-1'
                   }`}
                 >
@@ -110,7 +112,7 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
                   <div
                     className={`w-24 h-24 sm:w-28 sm:h-28 rounded-[24px] sm:rounded-[28px] overflow-hidden p-2 flex items-center justify-center transition-all duration-300 shadow-sm ${
                       isSelected
-                        ? 'bg-[#F5EEDD] dark:bg-[#2F2923] border-2 border-[#9C5B23] shadow-md'
+                        ? 'bg-paper-texture dark:bg-[#2F2923] border-2 border-[#9C5B23] shadow-md'
                         : 'bg-[#F9F5EC] dark:bg-[#24201B] border border-[#E7DFD3] dark:border-neutral-800 group-hover:border-[#9C5B23] group-hover:shadow-md'
                     }`}
                   >
@@ -133,7 +135,7 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
           {/* Scroll Right Arrow */}
           <button
             onClick={() => scroll('right')}
-            className="hidden sm:flex p-2.5 rounded-full bg-white dark:bg-[#25221D] text-[#231F1B] dark:text-[#FEFDF5] hover:bg-[#9C5B23] hover:text-white dark:hover:bg-[#9C5B23] transition-all border border-[#E7DFD3] dark:border-neutral-800 shadow-sm shrink-0 z-10"
+            className="hidden sm:flex p-2.5 rounded-full bg-white dark:bg-[#25221D] text-[#231F1B] dark:text-[#FEFDF5] hover:bg-[#9C5B23] hover:text-white dark:hover:bg-[#9C5B23] transition-all border border-[#E7DFD3] dark:border-neutral-800 shadow-sm shrink-0 z-10 cursor-pointer"
             aria-label="Next Category"
           >
             <ChevronRight className="w-4 h-4" />
@@ -141,8 +143,8 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
 
         </div>
 
-        {/* "Loved Across Generations" Section Header matching Rosier Foods */}
-        <div className="mt-16 sm:mt-20 text-center relative py-6">
+        {/* "Loved Across Generations" Section Header */}
+        <div className="mt-14 sm:mt-20 text-center relative py-4">
           
           {/* Subtle Watermark Graphic Illustration Overlay */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-10 dark:opacity-5">

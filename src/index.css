@@ -25,12 +25,7 @@ html {
 
 @layer base {
   html, body, #root {
-    @apply text-[#2C1810] font-sans antialiased selection:bg-[#9C5B23] selection:text-white;
-    background-color: #FAF5EB;
-    background-image: url('/paper-texture.png');
-    background-size: 550px auto;
-    background-repeat: repeat;
-    background-attachment: fixed;
+    @apply bg-[#FEFDF5] text-[#2C1810] font-sans antialiased selection:bg-[#9C5B23] selection:text-white;
   }
 
   h1, h2, h3, h4, h5, h6, .font-serif {
@@ -38,18 +33,46 @@ html {
   }
 }
 
-/* ─── Artisanal Paper Texture Background Utilities ────────────────────────────── */
+/* ─── Section-Wise Artisanal Paper Texture Utility ────────────────────────────── */
 .bg-paper-texture {
   background-image: url('/paper-texture.png');
   background-size: cover;
-  background-repeat: repeat;
+  background-repeat: no-repeat;
   background-position: center;
 }
 
-/* ─── Scrollbars & Touch Swiping ────────────────────────────────────── */
+/* ─── Infinite Marquee Auto-Scroll Utility ────────────────────────────────────── */
+@keyframes marqueeScroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 20s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee:hover, .animate-marquee:active {
+  animation-play-state: paused;
+}
+
+/* ─── Scrollbars & Mobile Touch Swiping ────────────────────────────────────── */
 .custom-scrollbar, .no-scrollbar, [class*="overflow-x-auto"] {
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-x pan-y !important;
+  overscroll-behavior-x: contain !important;
+}
+
+@media (max-width: 768px) {
+  .snap-x {
+    scroll-snap-type: x proximity !important;
+  }
 }
 
 .custom-scrollbar::-webkit-scrollbar {

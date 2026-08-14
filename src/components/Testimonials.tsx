@@ -1,9 +1,10 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { TESTIMONIALS } from '../data/products';
 import { Star, CheckCircle, Quote, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
+import { useTouchSwipe } from '../utils/touchSwipe';
 
 export const Testimonials: React.FC = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useTouchSwipe<HTMLDivElement>();
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -60,7 +61,8 @@ export const Testimonials: React.FC = () => {
         {/* Testimonials Layout: Mobile Horizontal Scroll Carousel / Desktop 3-Col Grid */}
         <div
           ref={scrollRef}
-          className="flex sm:grid sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 overflow-x-auto sm:overflow-visible pb-3 sm:pb-0 snap-x snap-mandatory scroll-smooth no-scrollbar"
+          className="flex sm:grid sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 overflow-x-auto sm:overflow-visible pb-3 sm:pb-0 snap-x snap-proximity scroll-smooth no-scrollbar touch-pan-x"
+          style={{ WebkitOverflowScrolling: 'touch' }}
         >
           {TESTIMONIALS.map((item) => (
             <div

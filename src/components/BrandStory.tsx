@@ -1,6 +1,7 @@
 import React from 'react';
-import { Heart, Sun, Sparkles, Store, ShieldCheck, Award, Quote } from 'lucide-react';
+import { Heart, Sun, Sparkles, Store, ShieldCheck, Award } from 'lucide-react';
 import ScrollStack, { ScrollStackItem } from './ui/ScrollStack';
+import { ScrollReveal } from './ui/ScrollReveal';
 
 export const BrandStory: React.FC = () => {
   const pillars = [
@@ -46,24 +47,37 @@ export const BrandStory: React.FC = () => {
             <span>Our Living Heritage</span>
           </div>
 
-          <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#2C1810] dark:text-white tracking-tight leading-tight">
-            Bridging <span className="text-[#9C5B23] dark:text-[#E9BE5F] italic">Tradition</span> & Pure Artisanal Honey
-          </h2>
+          <ScrollReveal
+            baseOpacity={0.1}
+            enableBlur={true}
+            baseRotation={2}
+            blurStrength={6}
+            textClassName="font-serif text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#2C1810] dark:text-white tracking-tight leading-tight"
+          >
+            Bridging Tradition &amp; Pure Artisanal Honey
+          </ScrollReveal>
 
-          <p className="text-[#5C4033] dark:text-[#D8CFBF] text-base sm:text-lg leading-relaxed font-medium max-w-2xl mx-auto">
+          <ScrollReveal
+            baseOpacity={0.2}
+            enableBlur={true}
+            baseRotation={1}
+            blurStrength={4}
+            textClassName="text-[#5C4033] dark:text-[#D8CFBF] text-base sm:text-lg leading-relaxed font-medium max-w-2xl mx-auto"
+          >
             Natura Bee Farm was born out of a passion to preserve age-old Indian apiculture craftsmanship. From the wild forests of Bihar to your morning tea, we bring you 100% pure raw honey prepared without compromises.
-          </p>
+          </ScrollReveal>
         </div>
 
-        {/* Mobile Only: Natural Window Scroll Integrated <ScrollStack /> */}
-        <div className="block md:hidden my-4">
+        {/* Mobile Only: React Bits Lenis Smooth Scroll Integrated <ScrollStack /> */}
+        <div className="block md:hidden my-6">
           <ScrollStack
-            itemDistance={24}
-            itemScale={0.04}
-            itemStackDistance={16}
-            stackPosition="110px"
-            baseScale={0.88}
             useWindowScroll={true}
+            itemDistance={30}
+            itemScale={0.03}
+            itemStackDistance={24}
+            stackPosition="120px"
+            scaleEndPosition="60px"
+            baseScale={0.88}
           >
             {pillars.map((item, idx) => {
               const Icon = item.icon;
@@ -158,12 +172,17 @@ export const BrandStory: React.FC = () => {
         {/* Formal Quote Banner */}
         <div className="mt-12 sm:mt-16 bg-gradient-to-r from-[#FFFDF9] via-[#FAF5EB] to-[#FFFDF9] dark:from-[#1E1C18] dark:via-[#2A2620] dark:to-[#1E1C18] rounded-3xl p-8 sm:p-14 border-2 border-[#E8D5B7] dark:border-[#D4AF37]/35 text-center max-w-4xl mx-auto shadow-xl relative overflow-hidden">
           
-          {/* Subtle Quote Background Icon Watermark */}
-          <Quote className="w-32 h-32 text-[#9C5B23]/5 dark:text-[#D4AF37]/5 absolute -top-4 -left-4 pointer-events-none rotate-12" />
-          
-          <blockquote className="font-serif text-xl sm:text-2xl lg:text-3xl text-[#2C1810] dark:text-[#F3E5AB] italic font-semibold leading-relaxed relative z-10">
-            &quot;Honey is not just sweet nectar; it is nature&apos;s living heritage. When you taste our raw forest honey, you taste generations of care, wild blooms, and unadulterated purity.&quot;
-          </blockquote>
+          <div className="relative z-10">
+            <ScrollReveal
+              baseOpacity={0.15}
+              enableBlur={true}
+              baseRotation={2}
+              blurStrength={6}
+              textClassName="font-serif text-xl sm:text-2xl lg:text-3xl text-[#2C1810] dark:text-[#F3E5AB] italic font-semibold leading-relaxed"
+            >
+              &quot;Honey is not just sweet nectar; it is nature&apos;s living heritage. When you taste our raw forest honey, you taste generations of care, wild blooms, and unadulterated purity.&quot;
+            </ScrollReveal>
+          </div>
 
           <div className="mt-8 flex flex-col items-center justify-center gap-1 relative z-10">
             <div className="text-xs sm:text-sm text-[#9C5B23] dark:text-[#D4AF37] font-extrabold uppercase tracking-[0.2em]">

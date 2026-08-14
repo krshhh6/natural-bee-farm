@@ -8,7 +8,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
   return (
     <section
       onClick={onExploreClick}
-      className="relative w-full overflow-hidden bg-[#FEFDF5] dark:bg-[#1A1816] cursor-pointer group animate-fade-in"
+      className="relative w-full overflow-hidden bg-transparent dark:bg-[#1A1816] cursor-pointer group animate-fade-in"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
         <div className="relative w-full rounded-[24px] sm:rounded-[36px] overflow-hidden shadow-xl border border-[#E7DFD3] dark:border-neutral-800 transition-all duration-500 ease-out group-hover:shadow-2xl group-hover:border-[#E9BE5F]/60">
