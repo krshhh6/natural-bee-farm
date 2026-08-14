@@ -140,9 +140,23 @@ export const BrandStory: React.FC = () => {
             );
           })}
         </div>
+        {/* From Flower to Honey Infographic Process Card */}
+        <div className="mt-14 sm:mt-18 relative overflow-hidden rounded-3xl bg-paper-texture dark:bg-[#1C1C18] border-2 border-[#E8D5B7] dark:border-[#3D372E] p-6 sm:p-8 shadow-xl max-w-4xl mx-auto text-center group transition-all hover:shadow-2xl">
+          <div className="mb-4">
+            <span className="text-[10px] sm:text-xs font-black text-[#9C5B23] dark:text-[#E9BE5F] uppercase tracking-[0.2em]">OUR ARTISANAL CRAFT</span>
+            <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#2C1810] dark:text-white mt-1">From Flower to Pure Honey Process</h3>
+          </div>
+          <div className="bg-white/80 dark:bg-[#181715]/80 p-3 sm:p-5 rounded-2xl border border-[#E8D5B7]/60 dark:border-[#3D372E]">
+            <img
+              src="/flower-to-honey.png"
+              alt="From Flower to Honey - Artisanal Honey Making Process"
+              className="w-full max-w-2xl max-h-[260px] sm:max-h-[300px] object-contain mx-auto transform group-hover:scale-[1.01] transition-transform duration-500"
+            />
+          </div>
+        </div>
 
         {/* Formal Quote Banner */}
-        <div className="mt-16 sm:mt-20 bg-gradient-to-r from-[#FFFDF9] via-[#FAF5EB] to-[#FFFDF9] dark:from-[#1E1C18] dark:via-[#2A2620] dark:to-[#1E1C18] rounded-3xl p-8 sm:p-14 border-2 border-[#E8D5B7] dark:border-[#D4AF37]/35 text-center max-w-4xl mx-auto shadow-xl relative overflow-hidden">
+        <div className="mt-12 sm:mt-16 bg-gradient-to-r from-[#FFFDF9] via-[#FAF5EB] to-[#FFFDF9] dark:from-[#1E1C18] dark:via-[#2A2620] dark:to-[#1E1C18] rounded-3xl p-8 sm:p-14 border-2 border-[#E8D5B7] dark:border-[#D4AF37]/35 text-center max-w-4xl mx-auto shadow-xl relative overflow-hidden">
           
           {/* Subtle Quote Background Icon Watermark */}
           <Quote className="w-32 h-32 text-[#9C5B23]/5 dark:text-[#D4AF37]/5 absolute -top-4 -left-4 pointer-events-none rotate-12" />

@@ -127,22 +127,6 @@ export const PromoBanners: React.FC<PromoBannersProps> = ({ onShopClick }) => {
 
       </div>
 
-      {/* From Flower to Honey Infographic Process Banner */}
-      <div
-        onClick={onShopClick}
-        className="relative overflow-hidden rounded-3xl bg-paper-texture dark:bg-[#1C1C18] border-2 border-[#E8D5B7] dark:border-[#3D372E] p-4 sm:p-6 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col items-center justify-center max-w-3xl mx-auto"
-      >
-        <div className="text-center mb-3">
-          <span className="text-[10px] sm:text-xs font-bold text-[#9C5B23] dark:text-[#D4AF37] uppercase tracking-widest">Our Artisanal Craft</span>
-          <h4 className="font-serif text-lg sm:text-xl font-bold text-[#2C1810] dark:text-white">From Flower to Pure Honey Process</h4>
-        </div>
-        <img
-          src="/flower-to-honey.png"
-          alt="From Flower to Honey - Artisanal Honey Making Process"
-          className="w-full max-w-xl max-h-[220px] sm:max-h-[260px] object-contain transform group-hover:scale-[1.01] transition-transform duration-500"
-        />
-      </div>
-
     </section>
   );
 };
