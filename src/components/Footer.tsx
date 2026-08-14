@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Phone, Mail, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Phone, Mail, ArrowRight, CheckCircle2, MapPin, ExternalLink } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const [phone, setPhone] = useState('');
@@ -80,12 +80,26 @@ export const Footer: React.FC = () => {
           {/* Column 4: CONTACT US */}
           <div className="space-y-3">
             <h4 className="font-serif text-xs font-bold text-[#231F1B] dark:text-white tracking-widest uppercase mb-4">
-              CONTACT US
+              CONTACT & LOCATION
             </h4>
-            <div className="text-[#5C5247] dark:text-[#E6DBCB] text-xs sm:text-sm space-y-1.5 leading-relaxed font-normal">
-              <div className="font-bold text-[#231F1B] dark:text-white">Natura Bee Farm Pvt. Ltd.</div>
-              <div>House No. B-2994/75, Gali No. 75, Kankarbagh Main Road, Patna, Bihar - 800020</div>
-              <div className="pt-2 text-xs text-[#8C5E2B] dark:text-[#E9BE5F]">care@naturabeefarm.in</div>
+            <div className="text-[#5C5247] dark:text-[#E6DBCB] text-xs sm:text-sm space-y-2 leading-relaxed font-normal">
+              <div className="font-bold text-[#231F1B] dark:text-white">Natural Honey Farm</div>
+              <div>Bahpura - Bihta Rd, Mustafapur, Patna, Bihar 801111</div>
+              <div className="text-xs text-[#8C5E2B] dark:text-[#E9BE5F] font-semibold">Plus Code: HWX8+QR Patna, Bihar</div>
+              <div className="text-xs font-bold text-[#282823] dark:text-[#FEFDF5]">📞 099390 55989</div>
+              <div className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold">🕒 Open Daily: 9:00 AM – 7:00 PM</div>
+              <div className="pt-1.5">
+                <a
+                  href="https://maps.app.goo.gl/wJPC1YirTNqkTF136"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 bg-[#9C5B23] hover:bg-[#834917] text-white px-3.5 py-1.5 rounded-lg text-xs font-extrabold shadow-sm transition-all transform hover:scale-105"
+                >
+                  <MapPin className="w-3.5 h-3.5 text-white" />
+                  <span>Open Live Google Maps</span>
+                  <ExternalLink className="w-3 h-3 text-white" />
+                </a>
+              </div>
             </div>
           </div>
 

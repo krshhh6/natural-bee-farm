@@ -1,4 +1,4 @@
-export type CategoryType = 'all' | 'honey' | 'pickles' | 'badis' | 'spices' | 'flours' | 'ghee' | 'oils';
+export type CategoryType = 'all' | 'honey' | 'wildforest' | 'monofloral' | 'spiced' | 'ayurvedic' | 'rawcomb';
 
 export interface Product {
   id: string;

@@ -14,46 +14,46 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
 
   const categories = [
     {
-      id: 'ghee',
-      name: 'A2 Ghee',
-      subtitle: 'Bilona Curd Churned',
-      image: '/Honey_jar_on_wooden_surface_202608130958.jpeg',
-    },
-    {
-      id: 'pickles',
-      name: 'Pickles',
-      subtitle: 'Sun-Dried Achar',
-      image: '/Glass_jar_filled_with_mustard_202608131002.jpeg',
-    },
-    {
-      id: 'flours',
-      name: 'Atta',
-      subtitle: 'Stone Ground Wheat',
-      image: '/Ashwagandha_honey_jar_on_stone_202608130959.jpeg',
-    },
-    {
-      id: 'oils',
-      name: 'Stone Pressed Oils',
-      subtitle: 'Cold Extracted Oils',
-      image: '/Glass_jar_filled_with_mustard_202608131002.jpeg',
-    },
-    {
-      id: 'honey',
-      name: 'Wild Honey',
-      subtitle: '100% Raw Apiary',
+      id: 'wildforest',
+      name: 'Wild Forest',
+      subtitle: '100% Raw & Unfiltered',
       image: '/Glass_jar_filled_with_honey_202608130958.jpeg',
     },
     {
-      id: 'badis',
-      name: 'Sun-Dried Badis',
-      subtitle: 'Hand-Rolled Lentils',
+      id: 'himalayan',
+      name: 'Himalayan Acacia',
+      subtitle: 'High-Altitude Nectars',
+      image: '/Honey_jar_on_wood_table_202608130959.jpeg',
+    },
+    {
+      id: 'spiced',
+      name: 'Spice Infused',
+      subtitle: 'Cinnamon & Saffron',
+      image: '/Honey_jar_with_cinnamon_and_202608130958.jpeg',
+    },
+    {
+      id: 'ayurvedic',
+      name: 'Ayurvedic Blends',
+      subtitle: 'Tulsi, Neem & More',
+      image: '/Jar_of_tulsi_honey_on_202608130958.jpeg',
+    },
+    {
+      id: 'monofloral',
+      name: 'Monofloral',
+      subtitle: 'Single Blossom Nectars',
+      image: '/Glass_jar_with_jamun_honey_202608131002.jpeg',
+    },
+    {
+      id: 'herbal',
+      name: 'Herbal Honey',
+      subtitle: 'Karanj & Forest Herbs',
       image: '/Karanj_honey_jar_on_stone_202608131002.jpeg',
     },
     {
-      id: 'spices',
-      name: 'Spices',
-      subtitle: 'Whole Hand-Pounded',
-      image: '/Honey_jar_with_cinnamon_and_202608130958.jpeg',
+      id: 'rawcomb',
+      name: 'Raw Honeycomb',
+      subtitle: 'Straight From The Hive',
+      image: '/Honey_jar_on_wooden_surface_202608130958.jpeg',
     },
   ];
 
@@ -156,7 +156,7 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
           </h2>
           
           <p className="text-xs sm:text-base text-[#6B5A47] dark:text-[#FEFDF5]/70 max-w-xl mx-auto mt-3 font-medium relative z-10">
-            Authentic A2 Bilona Ghee, Raw Forest Honey, and Traditional Delicacies prepared using age-old Indian culinary wisdom.
+            Pure Raw Honey in every variety — Wild Forest, Monofloral Blossoms, Spice Infused, and Ayurvedic Blends, crafted with care.
           </p>
 
         </div>

@@ -3,6 +3,8 @@ import { X, Trash2, ShoppingBag, ArrowRight, ShieldCheck, CheckCircle2, Tag, Spa
 import { useCart } from '../context/CartContext';
 import { PRODUCTS } from '../data/products';
 
+import { getWeightMultiplier } from '../utils/price';
+
 export const CartDrawer: React.FC = () => {
   const {
     cart,
@@ -10,6 +12,7 @@ export const CartDrawer: React.FC = () => {
     setIsCartOpen,
     removeFromCart,
     updateQuantity,
+    updateItemWeight,
     cartSubtotal,
     clearCart,
     addToCart,
@@ -56,9 +59,9 @@ export const CartDrawer: React.FC = () => {
   const upsellProducts = PRODUCTS.filter((p) => !cartProductIds.has(p.id)).slice(0, 2);
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-xs animate-fadeIn">
+    <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-xs animate-fade-in">
       <div className="absolute inset-y-0 right-0 max-w-full flex">
-        <div className="w-screen max-w-md bg-white dark:bg-[#1A1816] text-[#231F1B] dark:text-[#FEFDF5] shadow-2xl flex flex-col justify-between animate-slide-up border-l border-[#E7DFD3] dark:border-neutral-800">
+        <div className="w-screen max-w-md bg-white dark:bg-[#1A1816] text-[#231F1B] dark:text-[#FEFDF5] shadow-2xl flex flex-col justify-between animate-slide-in-right border-l border-[#E7DFD3] dark:border-neutral-800">
           
           {/* Cart Header */}
           <div className="p-4 sm:p-5 border-b border-[#E7DFD3] dark:border-neutral-800 flex items-center justify-between bg-white dark:bg-[#1A1816]">
@@ -109,8 +112,14 @@ export const CartDrawer: React.FC = () => {
               {/* Cart Items List */}
               <div className="space-y-3.5">
                 {cart.map((item, idx) => {
-                  const originalItemPrice = item.product.originalPrice ? Math.round(item.product.originalPrice * item.quantity) : Math.round(item.product.price * 1.18 * item.quantity);
-                  const itemPrice = Math.round(item.product.price * item.quantity);
+                  const multiplier = getWeightMultiplier(item.product.weight, item.selectedWeight);
+                  const unitPrice = Math.round(item.product.price * multiplier);
+                  const unitOriginalPrice = item.product.originalPrice
+                    ? Math.round(item.product.originalPrice * multiplier)
+                    : Math.round(unitPrice * 1.18);
+
+                  const itemPrice = unitPrice * item.quantity;
+                  const originalItemPrice = unitOriginalPrice * item.quantity;
                   const itemDiscountPercent = discountPercent > 0 ? discountPercent : 15;
 
                   return (
@@ -131,10 +140,20 @@ export const CartDrawer: React.FC = () => {
                           {item.product.name}
                         </h4>
 
-                        {/* Weight Dropdown Pill */}
-                        <div className="mt-1 inline-flex items-center gap-1 bg-[#F5EEDD] dark:bg-[#2C2720] px-2.5 py-1 rounded-md text-[11px] font-semibold text-[#3B2818] dark:text-[#F3E5AB] border border-[#E2D4C0] dark:border-[#42392C]">
-                          <span>{item.selectedWeight}</span>
-                          <ChevronDown className="w-3 h-3 text-[#8C4B13]" />
+                        {/* Interactive Weight Dropdown Selector */}
+                        <div className="relative mt-1 inline-block">
+                          <select
+                            value={item.selectedWeight}
+                            onChange={(e) => updateItemWeight(item.product.id, item.selectedWeight, e.target.value)}
+                            className="appearance-none bg-[#F5EEDD] dark:bg-[#2C2720] pl-2.5 pr-6 py-1 rounded-md text-[11px] font-semibold text-[#3B2818] dark:text-[#F3E5AB] border border-[#E2D4C0] dark:border-[#42392C] cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#9C5B23]"
+                          >
+                            {(item.product.weightsAvailable || [item.product.weight]).map((w) => (
+                              <option key={w} value={w} className="bg-white dark:bg-[#211E1A] text-[#231F1B] dark:text-white">
+                                {w}
+                              </option>
+                            ))}
+                          </select>
+                          <ChevronDown className="w-3 h-3 text-[#8C4B13] absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                         </div>
 
                         {/* Quantity Stepper & Delete Row */}

@@ -52,21 +52,21 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
   return (
     <div
       onClick={() => onQuickView(product)}
-      className="group bg-white dark:bg-[#1E1C18] rounded-2xl p-4 sm:p-5 border border-[#E7DFD3] dark:border-[#3D372E] shadow-sm hover:shadow-2xl hover:border-[#D4AF37]/60 transition-all duration-300 flex flex-col justify-between cursor-pointer relative h-full transform hover:-translate-y-1"
+      className="group bg-white dark:bg-[#1E1C18] rounded-2xl p-4 sm:p-5 border border-[#E7DFD3] dark:border-[#3D372E] shadow-sm hover:shadow-2xl hover:border-[#D4AF37]/70 transition-all duration-400 ease-out flex flex-col justify-between cursor-pointer relative h-full transform hover:-translate-y-1.5 hover-lift"
     >
       {/* Top Left Deep Red Discount Badge */}
-      <div className="absolute top-3.5 left-0 z-10 bg-gradient-to-r from-[#B91C1C] via-[#DC2626] to-[#B91C1C] text-white font-bold text-[11px] sm:text-xs px-3.5 py-1 rounded-r-full rounded-tl-xl shadow-md flex items-center gap-1.5 tracking-wide border-r border-t border-red-300/30">
-        <Sparkles className="w-3 h-3 text-white fill-white" />
+      <div className="absolute top-3.5 left-0 z-10 bg-gradient-to-r from-[#B91C1C] via-[#DC2626] to-[#B91C1C] text-white font-bold text-[11px] sm:text-xs px-3.5 py-1 rounded-r-full rounded-tl-xl shadow-md flex items-center gap-1.5 tracking-wide border-r border-t border-red-300/30 transition-transform duration-300 group-hover:scale-105">
+        <Sparkles className="w-3 h-3 text-white fill-white animate-pulse" />
         <span>{discountText}</span>
       </div>
 
       <div>
         {/* Product Image Container */}
-        <div className="relative w-full aspect-square sm:aspect-[4/3] rounded-xl bg-[#FAF8F5] dark:bg-[#25221D] p-3 flex items-center justify-center overflow-hidden mb-3.5 border border-[#F0EADF] dark:border-[#332E27] group-hover:border-[#D4AF37]/40 transition-colors">
+        <div className="relative w-full aspect-square sm:aspect-[4/3] rounded-xl bg-[#FAF8F5] dark:bg-[#25221D] p-3 flex items-center justify-center overflow-hidden mb-3.5 border border-[#F0EADF] dark:border-[#332E27] group-hover:border-[#D4AF37]/50 transition-colors duration-400">
           <img
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-contain transform group-hover:scale-108 transition-transform duration-500 ease-out"
           />
         </div>
 

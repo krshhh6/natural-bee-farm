@@ -28,14 +28,14 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [searchInput, setSearchInput] = useState('');
 
   const categories = [
-    { id: 'all', label: 'All Delicacies' },
-    { id: 'honey', label: 'Artisanal Honey' },
-    { id: 'ghee', label: 'Bilona A2 Ghee' },
-    { id: 'oils', label: 'Cold Pressed Oils' },
-    { id: 'pickles', label: 'Traditional Pickles' },
-    { id: 'badis', label: 'Sun-Dried Badis' },
-    { id: 'spices', label: 'Handcrafted Spices' },
-    { id: 'flours', label: 'Organic Flours' },
+    { id: 'all', label: 'All Honey' },
+    { id: 'honey', label: 'Wild Forest Honey' },
+    { id: 'honey', label: 'Himalayan Acacia & Sidr' },
+    { id: 'honey', label: 'Spice & Saffron Infused' },
+    { id: 'honey', label: 'Ayurvedic Blends' },
+    { id: 'honey', label: 'Monofloral Blossoms' },
+    { id: 'honey', label: 'Herbal Honey' },
+    { id: 'honey', label: 'Raw Honeycomb' },
   ];
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -165,10 +165,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 e.preventDefault();
                 onNavigate?.('home');
               }}
-              className="flex flex-col items-center group"
+              className="flex flex-col items-center group py-1"
             >
               {/* Circular Logo Icon */}
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden flex items-center justify-center p-0.5 bg-[#FEFDF5] dark:bg-[#1A1816] shadow-xs group-hover:scale-105 transition-transform duration-300">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden flex items-center justify-center p-0.5 bg-[#FEFDF5] dark:bg-[#1A1816] shadow-xs group-hover:scale-105 transition-transform duration-300">
                 <img
                   src="/logo.png"
                   alt="Natura Bee Farm Logo"
@@ -176,14 +176,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                 />
               </div>
 
-              {/* Brand Title */}
-              <span className="font-serif text-lg sm:text-2xl font-bold tracking-widest text-[#231F1B] dark:text-white uppercase leading-none mt-1">
+              {/* Small Brand Title */}
+              <span className="font-serif text-xs sm:text-sm font-bold tracking-wider text-[#231F1B] dark:text-white uppercase leading-none mt-1">
                 NATURA <span className="text-[#9C5B23] dark:text-[#E9BE5F]">BEE FARM</span>
-              </span>
-
-              {/* Brand Tagline Subtext */}
-              <span className="text-[9px] sm:text-[10px] tracking-[0.25em] font-semibold text-[#8C5E2B] dark:text-[#E9BE5F]/80 uppercase mt-0.5">
-                ARTISANAL TRADITION
               </span>
             </a>
           </div>
@@ -209,10 +204,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             </form>
 
-            {/* Dark / Light Mode Toggle */}
+            {/* Dark Mode Theme Toggle Button */}
             <button
               onClick={toggleDarkMode}
-              className="p-2 rounded-full text-[#231F1B] dark:text-[#FEFDF5] hover:bg-[#F3EAD8] dark:hover:bg-[#28241E] transition-colors"
+              className="p-2 rounded-full text-[#231F1B] dark:text-[#FEFDF5] hover:bg-[#F3EAD8] dark:hover:bg-[#28241E] transition-all duration-300 transform hover:rotate-45 hover:scale-110 active:scale-90 cursor-pointer"
               aria-label="Toggle Theme Mode"
               title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
@@ -233,7 +228,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     setIsAuthModalOpen(true);
                   }
                 }}
-                className="p-2 rounded-full text-[#231F1B] dark:text-[#FEFDF5] hover:bg-[#F3EAD8] dark:hover:bg-[#28241E] transition-colors flex items-center gap-1"
+                className="p-2 rounded-full text-[#231F1B] dark:text-[#FEFDF5] hover:bg-[#F3EAD8] dark:hover:bg-[#28241E] transition-all duration-200 transform hover:scale-110 active:scale-90 flex items-center gap-1 cursor-pointer"
                 aria-label="User Account"
                 title={user ? user.name : 'Sign In / Register'}
               >
@@ -248,7 +243,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               {/* User Dropdown */}
               {user && userDropdownOpen && (
-                <div className="absolute top-full pt-1.5 right-0 w-56 z-50 animate-fadeIn">
+                <div className="absolute top-full pt-1.5 right-0 w-56 z-50 animate-slide-down">
                   <div className="bg-white dark:bg-[#231F1B] rounded-xl shadow-xl border border-[#E7DFD3] dark:border-neutral-800 p-3">
                     <div className="px-3 py-2 border-b border-[#E7DFD3] dark:border-neutral-800">
                       <div className="font-bold text-sm text-[#231F1B] dark:text-[#FEFDF5] truncate">{user.name}</div>
@@ -274,7 +269,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Wishlist Heart Icon */}
             <button
               onClick={() => alert('Wishlist feature - items saved to your favorites!')}
-              className="hidden sm:block p-2 rounded-full text-[#231F1B] dark:text-[#FEFDF5] hover:bg-[#F3EAD8] dark:hover:bg-[#28241E] transition-colors"
+              className="hidden sm:block p-2 rounded-full text-[#231F1B] dark:text-[#FEFDF5] hover:bg-[#F3EAD8] dark:hover:bg-[#28241E] transition-all duration-200 transform hover:scale-110 active:scale-90 cursor-pointer"
               aria-label="Wishlist"
             >
               <Heart className="w-5 h-5 text-[#231F1B] dark:text-[#FEFDF5]" />
@@ -283,11 +278,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Cart Icon with Red Circle Badge */}
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative p-2 text-[#231F1B] dark:text-[#FEFDF5] hover:bg-[#F3EAD8] dark:hover:bg-[#28241E] rounded-full transition-colors flex items-center justify-center"
+              className="relative p-2 text-[#231F1B] dark:text-[#FEFDF5] hover:bg-[#F3EAD8] dark:hover:bg-[#28241E] rounded-full transition-all duration-200 transform hover:scale-110 active:scale-90 flex items-center justify-center cursor-pointer"
               aria-label="Shopping Cart"
             >
               <ShoppingBag className="w-6 h-6 text-[#231F1B] dark:text-[#FEFDF5]" />
-              <span className="absolute -top-0.5 -right-0.5 bg-[#D92626] text-white text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center shadow-md border-2 border-[#FEFDF5] dark:border-[#1A1816]">
+              <span className="absolute -top-0.5 -right-0.5 bg-[#D92626] text-white text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center shadow-md border-2 border-[#FEFDF5] dark:border-[#1A1816] animate-pulse">
                 {cartCount}
               </span>
             </button>
@@ -298,7 +293,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-[#E7DFD3] dark:border-neutral-800 space-y-3 animate-fadeIn bg-[#FEFDF5] dark:bg-[#1A1816]">
+          <div className="lg:hidden py-4 border-t border-[#E7DFD3] dark:border-neutral-800 space-y-3 animate-slide-down bg-[#FEFDF5] dark:bg-[#1A1816]">
             
             {/* Mobile Search Bar */}
             <form onSubmit={handleSearchSubmit} className="px-4">

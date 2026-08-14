@@ -1,13 +1,13 @@
 import React from 'react';
-import { Leaf, Gift, MapPin, Star, ShieldCheck } from 'lucide-react';
+import { Leaf, Gift, Star, ShieldCheck, Droplets } from 'lucide-react';
 
 export const AnnouncementBar: React.FC = () => {
   const items = [
-    { icon: Leaf, text: '100% Preservative-Free Traditional Foods' },
-    { icon: Gift, text: 'Free Shipping on Orders Above ₹500' },
-    { icon: MapPin, text: 'Supplying 50+ Marts Across Patna' },
-    { icon: Star, text: 'Woman-Led Brand — Founded by Shital Gupta' },
-    { icon: ShieldCheck, text: 'Authentic Traditional Foods' },
+    { icon: Leaf, text: '100% Raw & Unprocessed Forest Honey' },
+    { icon: Gift, text: 'Free Shipping on Honey Orders Above ₹499' },
+    { icon: Star, text: '100% Mother-Owned Artisanal Brand' },
+    { icon: ShieldCheck, text: 'Lab Tested Pure Honey — Every Batch' },
+    { icon: Droplets, text: 'Sourced from Bihar\'s Wild Forests' },
   ];
 
   return (

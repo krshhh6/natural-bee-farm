@@ -4,80 +4,91 @@ import { Camera, ArrowRight } from 'lucide-react';
 
 const GALLERY_IMAGES = [
   {
-    src: 'https://images.unsplash.com/photo-1587049352847-4a222e784d38?auto=format&fit=crop&q=80&w=800',
+    src: '/Glass_jar_filled_with_honey_202608130958.jpeg',
     alt: 'Pure Raw Honeycomb & Golden Harvest',
   },
   {
-    src: 'https://images.unsplash.com/photo-1587049352851-8d4e89133924?auto=format&fit=crop&q=80&w=800',
+    src: '/Honey_jar_on_wood_table_202608130959.jpeg',
     alt: 'Artisanal Honey Drizzle',
   },
   {
-    src: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&q=80&w=800',
-    alt: 'Handcrafted Spices & Mortar Pestle',
+    src: '/Honey_jar_with_cinnamon_and_202608130958.jpeg',
+    alt: 'Cinnamon & Spice Honey',
   },
   {
-    src: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&q=80&w=800',
-    alt: 'Sun-Dried Badis & Traditional Heritage',
+    src: '/Jar_of_tulsi_honey_on_202608130958.jpeg',
+    alt: 'Organic Tulsi Honey',
   },
   {
-    src: 'https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?auto=format&fit=crop&q=80&w=800',
-    alt: 'Organic Apiary & Sustainable Beekeeping',
+    src: '/Glass_jar_with_jamun_honey_202608131002.jpeg',
+    alt: 'Wild Jamun Blossom Honey',
   },
   {
-    src: 'https://images.unsplash.com/photo-1546548970-71785318a17b?auto=format&fit=crop&q=80&w=800',
-    alt: 'Artisanal Pickles & Preserves',
+    src: '/Karanj_honey_jar_on_stone_202608131002.jpeg',
+    alt: 'Karanj Herbal Honey',
   },
   {
-    src: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&q=80&w=800',
-    alt: 'Women Artisan Farmers in Bihar',
+    src: '/Honey_jar_on_wooden_surface_202608130958.jpeg',
+    alt: 'Raw Comb Honey',
   },
   {
-    src: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800',
-    alt: 'Fresh Organic Farm Produce',
+    src: '/Ashwagandha_honey_jar_on_stone_202608130959.jpeg',
+    alt: 'Ashwagandha Adaptogenic Honey',
   },
   {
-    src: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&q=80&w=800',
-    alt: 'Flora & Wildflower Fields',
+    src: '/Saffron_honey_jar_on_plate_202608130959.jpeg',
+    alt: 'Kashmiri Kesar Saffron Honey',
+  },
+  {
+    src: '/Glass_jar_of_neem_honey_202608130959.jpeg',
+    alt: 'Pure Neem Blossom Honey',
   },
 ];
 
 export const GallerySection: React.FC = () => {
   return (
-    <section id="gallery" className="py-16 bg-[#1C1C18] text-[#F5E8B6] relative overflow-hidden border-t border-[#595C56]/30">
+    <section id="gallery" className="py-16 bg-[#F5EDD8] dark:bg-[#1C1C18] text-[#2C1810] dark:text-[#F5E8B6] relative overflow-hidden border-t border-[#E8D5B7] dark:border-[#595C56]/30 transition-colors">
       
-      {/* Header above stream - Pill Badge moved up as per annotation */}
+      {/* Header above stream */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 text-center">
-        <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#E9BE5F]/10 border border-[#E9BE5F]/40 text-[#E9BE5F] text-xs font-extrabold uppercase tracking-wider shadow-md">
-          <Camera className="w-4 h-4 text-[#E9BE5F]" />
+        <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#9C5B23]/10 dark:bg-[#E9BE5F]/10 border border-[#9C5B23]/30 dark:border-[#E9BE5F]/40 text-[#9C5B23] dark:text-[#E9BE5F] text-xs font-extrabold uppercase tracking-wider shadow-sm">
+          <Camera className="w-4 h-4 text-[#9C5B23] dark:text-[#E9BE5F]" />
           <span>Explore Our Gallery</span>
         </div>
       </div>
 
-      {/* Full Width Edge-to-Edge Image Stream Hero Component */}
+      {/* Full Width Edge-to-Edge 3D Image Stream Hero Component */}
       <div className="w-full relative">
         <ImageStreamHero
           images={GALLERY_IMAGES}
-          speed={20}
-          cards={11}
+          speed={18}
+          cards={9}
           path={{
-            railExit: 52,
-            exitHeight: 52,
+            cardWidth: 32,
+            cardHeight: 42,
+            cardRadius: 1.2,
+            birthHeight: 8,
+            exitHeight: 88,
+            railBirth: -10,
+            railExit: 58,
+            turnBirth: 4,
+            turnExit: 16,
           }}
-          className="h-[460px] sm:h-[680px] w-full bg-[#1C1C18] border-y border-[#595C56]/30"
+          className="h-[560px] sm:h-[780px] w-full bg-[#F5EDD8] dark:bg-[#1C1C18] border-y border-[#E8D5B7] dark:border-[#595C56]/30 transition-colors"
         >
           <div className="relative z-10 flex h-full flex-col items-center justify-between py-6 sm:py-10 px-4 sm:px-6 text-center pointer-events-none">
             
-            {/* Title & Description moved down into top of stream overlay as per annotation */}
-            <div className="max-w-3xl bg-[#282823]/90 backdrop-blur-md p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-[#595C56]/40 shadow-2xl pointer-events-auto transition-transform hover:scale-[1.01]">
-              <h2 className="font-serif text-xl sm:text-5xl font-bold text-white tracking-tight">
-                Explore Our <span className="text-[#E9BE5F]">Gallery</span>
+            {/* Title & Description Overlay Box in Warm Cream Glassmorphism */}
+            <div className="max-w-3xl bg-[#FAF5EB]/95 dark:bg-[#282823]/95 backdrop-blur-md p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-[#E8D5B7] dark:border-[#595C56]/40 shadow-2xl pointer-events-auto transition-transform hover:scale-[1.01]">
+              <h2 className="font-serif text-2xl sm:text-5xl font-bold text-[#2C1810] dark:text-white tracking-tight">
+                Explore Our <span className="text-[#9C5B23] dark:text-[#E9BE5F]">Honey Gallery</span>
               </h2>
-              <p className="mt-2 sm:mt-3 text-[11px] sm:text-sm text-[#F5E8B6]/90 leading-relaxed max-w-2xl mx-auto">
-                Immerse yourself in the rich visual story of Natura Bee Farm — raw honeycombs, sun-dried badis, hand-pounded spices, and the passionate rural artisans preserving India&apos;s culinary soul.
+              <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-[#5C4033] dark:text-[#F5E8B6]/90 leading-relaxed max-w-2xl mx-auto font-medium">
+                Immerse yourself in the rich visual story of Natura Bee Farm — raw honeycombs, wild forest apiaries, single-origin blossoms, and the passionate rural artisans preserving India&apos;s honey heritage.
               </p>
             </div>
 
-            {/* Bottom Button Only */}
+            {/* Bottom Button */}
             <div className="pointer-events-auto">
               <a
                 href="#product-catalog"
@@ -86,10 +97,10 @@ export const GallerySection: React.FC = () => {
                   const el = document.getElementById('product-catalog');
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="inline-flex items-center gap-2 bg-[#E9BE5F] hover:bg-[#D4AA4B] text-[#282823] px-5 py-2.5 sm:px-8 sm:py-3.5 rounded-full text-xs sm:text-base font-extrabold shadow-2xl shadow-[#E9BE5F]/30 transition-all transform hover:scale-105 active:scale-95 border border-[#282823]"
+                className="inline-flex items-center gap-2 bg-[#9C5B23] hover:bg-[#834917] text-white px-6 py-3 sm:px-8 sm:py-3.5 rounded-full text-xs sm:text-base font-extrabold shadow-2xl shadow-[#9C5B23]/30 transition-all transform hover:scale-105 active:scale-95 border border-[#834917]"
               >
                 <span>Click to watch gallery</span>
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </a>
             </div>
           </div>
@@ -98,4 +109,3 @@ export const GallerySection: React.FC = () => {
     </section>
   );
 };
-

@@ -20,10 +20,10 @@ import { FloatingDock } from '@/components/ui/floating-dock';
 import { IconHome, IconShoppingBag, IconBook, IconStar } from '@tabler/icons-react';
 import { PRODUCTS } from './data/products';
 import type { CategoryType } from './types';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, ShoppingBag, ArrowRight } from 'lucide-react';
 
 const MainContent: React.FC = () => {
-  const { toastMessage, setQuickViewProduct } = useCart();
+  const { toastMessage, setQuickViewProduct, setIsCartOpen, cartCount } = useCart();
   const [currentPage, setCurrentPage] = useState<'home' | 'products'>('home');
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>('all');
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -57,11 +57,39 @@ const MainContent: React.FC = () => {
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#FEFDF5] dark:bg-[#1C1C18] text-[#282823] dark:text-[#FEFDF5] transition-colors duration-200 selection:bg-[#E9BE5F] selection:text-[#282823]">
       
-      {/* Toast Notification */}
+      {/* Toast Notification with Hover Go To Cart Button */}
       {toastMessage && (
-        <div className="fixed bottom-6 left-6 z-50 bg-[#282823] text-[#F5E8B6] px-4 py-3 rounded-2xl shadow-2xl border border-[#595C56]/40 flex items-center space-x-2 text-xs sm:text-sm font-semibold animate-slide-up">
-          <CheckCircle2 className="w-5 h-5 text-[#E9BE5F] shrink-0" />
-          <span>{toastMessage}</span>
+        <div className="fixed bottom-6 right-6 left-6 sm:left-auto sm:max-w-md z-50 bg-[#282823]/95 backdrop-blur-md text-[#FEFDF5] px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl shadow-2xl border border-[#E9BE5F]/50 flex items-center justify-between gap-3 text-xs sm:text-sm font-semibold animate-slide-up">
+          <div className="flex items-center gap-2 min-w-0">
+            <CheckCircle2 className="w-5 h-5 text-[#E9BE5F] shrink-0 animate-bounce" />
+            <span className="truncate">{toastMessage}</span>
+          </div>
+          <button
+            onClick={() => setIsCartOpen(true)}
+            className="shrink-0 bg-gradient-to-r from-[#9C5B23] to-[#B8661B] hover:from-[#834917] hover:to-[#9C5B23] text-white px-4 py-2 rounded-xl text-xs font-extrabold flex items-center gap-1.5 shadow-lg transition-all transform hover:scale-105 active:scale-95 border border-white/20 cursor-pointer animate-pulse-glow"
+          >
+            <span>Go to Cart</span>
+            <ShoppingBag className="w-4 h-4 text-white" />
+          </button>
+        </div>
+      )}
+
+      {/* Persistent Floating Hover "Go to Cart" Pill when cart has items */}
+      {!toastMessage && cartCount > 0 && (
+        <div className="fixed bottom-6 right-6 z-40">
+          <button
+            onClick={() => setIsCartOpen(true)}
+            className="bg-[#9C5B23] hover:bg-[#834917] text-white px-5 py-3 rounded-full text-xs sm:text-sm font-extrabold shadow-2xl shadow-[#9C5B23]/40 border-2 border-white dark:border-[#1C1C18] flex items-center gap-2.5 transition-all transform hover:scale-108 active:scale-95 cursor-pointer group"
+          >
+            <div className="relative">
+              <ShoppingBag className="w-4 h-4 text-white" />
+              <span className="absolute -top-2 -right-2 bg-[#E9BE5F] text-[#282823] text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
+                {cartCount}
+              </span>
+            </div>
+            <span className="font-serif tracking-wider">Go to Cart</span>
+            <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
+          </button>
         </div>
       )}
 
@@ -131,51 +159,7 @@ const MainContent: React.FC = () => {
       <CartDrawer />
       <AuthModal />
 
-      {/* Floating Dock Navigation (Mobile Only) */}
-      <div className="fixed bottom-4 sm:bottom-6 inset-x-0 z-40 flex justify-center pointer-events-none md:hidden px-3">
-        <div className="pointer-events-auto max-w-[calc(100vw-1.5rem)]">
-          <FloatingDock
-            items={[
-              {
-                title: 'Home',
-                icon: <IconHome className="h-full w-full text-[#F5E8B6]" />,
-                href: '#',
-                onClick: navigateToHome,
-              },
-              {
-                title: 'Catalog',
-                icon: <IconShoppingBag className="h-full w-full text-[#F5E8B6]" />,
-                href: '#',
-                onClick: () => navigateToProducts(),
-              },
-              {
-                title: 'Story',
-                icon: <IconBook className="h-full w-full text-[#F5E8B6]" />,
-                href: '#our-story',
-                onClick: () => {
-                  navigateToHome();
-                  setTimeout(() => {
-                    const el = document.getElementById('our-story');
-                    if (el) el.scrollIntoView({ behavior: 'smooth' });
-                  }, 100);
-                },
-              },
-              {
-                title: 'Reviews',
-                icon: <IconStar className="h-full w-full text-[#F5E8B6]" />,
-                href: '#testimonials',
-                onClick: () => {
-                  navigateToHome();
-                  setTimeout(() => {
-                    const el = document.getElementById('testimonials');
-                    if (el) el.scrollIntoView({ behavior: 'smooth' });
-                  }, 100);
-                },
-              },
-            ]}
-          />
-        </div>
-      </div>
+
 
     </div>
   );
