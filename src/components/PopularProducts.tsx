@@ -23,9 +23,11 @@ export const PopularProducts: React.FC<PopularProductsProps> = ({
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const scrollAmount = 340;
-      scrollRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
+      const container = scrollRef.current;
+      const firstCard = container.firstElementChild as HTMLElement;
+      const cardWidth = firstCard ? firstCard.offsetWidth + 24 : 280;
+      container.scrollBy({
+        left: direction === 'left' ? -cardWidth : cardWidth,
         behavior: 'smooth',
       });
     }
@@ -86,13 +88,23 @@ export const PopularProducts: React.FC<PopularProductsProps> = ({
             </div>
           </div>
 
-          {/* Mobile Swipe Hint Pill */}
-          <div className="flex sm:hidden items-center justify-between bg-[#F5EEDD] dark:bg-[#2A2620] px-3.5 py-1.5 rounded-full border border-[#E0D0B6] dark:border-[#40382C] text-[11px] font-bold text-[#8C5E2B] dark:text-[#E9BE5F] mb-4 shadow-xs">
-            <span className="flex items-center gap-1">
-              <ChevronLeft className="w-3.5 h-3.5 animate-pulse" />
-              <span>Swipe left & right to browse</span>
-            </span>
-            <ChevronRight className="w-3.5 h-3.5 animate-pulse" />
+          {/* Mobile Swipe Hint & Navigation Pill */}
+          <div className="flex sm:hidden items-center justify-between bg-[#FAF5EB] dark:bg-[#2A2620] px-3 py-1 rounded-full border border-[#E8D5B7] dark:border-[#40382C] text-[11px] font-bold text-[#9C5B23] dark:text-[#E9BE5F] mb-4 shadow-xs">
+            <button
+              onClick={() => scroll('left')}
+              className="p-1 rounded-full hover:bg-[#9C5B23]/10 active:scale-90 transition-transform cursor-pointer"
+              aria-label="Previous Product"
+            >
+              <ChevronLeft className="w-4 h-4 text-[#9C5B23] dark:text-[#E9BE5F]" />
+            </button>
+            <span>Swipe left &amp; right to browse ({top4Products.length})</span>
+            <button
+              onClick={() => scroll('right')}
+              className="p-1 rounded-full hover:bg-[#9C5B23]/10 active:scale-90 transition-transform cursor-pointer"
+              aria-label="Next Product"
+            >
+              <ChevronRight className="w-4 h-4 text-[#9C5B23] dark:text-[#E9BE5F]" />
+            </button>
           </div>
 
           {/* Relative Wrapper for Carousel + Side Floating Arrow Buttons */}

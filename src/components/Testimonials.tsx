@@ -7,8 +7,11 @@ export const Testimonials: React.FC = () => {
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      scrollRef.current.scrollBy({
-        left: direction === 'left' ? -280 : 280,
+      const container = scrollRef.current;
+      const firstCard = container.firstElementChild as HTMLElement;
+      const cardWidth = firstCard ? firstCard.offsetWidth + 16 : 280;
+      container.scrollBy({
+        left: direction === 'left' ? -cardWidth : cardWidth,
         behavior: 'smooth',
       });
     }
