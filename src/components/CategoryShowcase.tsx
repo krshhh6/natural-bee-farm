@@ -76,7 +76,7 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
   };
 
   return (
-    <section className="py-8 sm:py-12 bg-[#FEFDF5] dark:bg-[#1A1816] transition-colors relative overflow-hidden">
+    <section className="py-8 sm:py-12 bg-transparent dark:bg-[#1A1816] transition-colors relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Categories Row with Navigation Arrows */}

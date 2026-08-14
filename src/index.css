@@ -24,10 +24,11 @@ html {
 }
 
 @layer base {
-  body {
-    @apply bg-[#FEFDF5] text-[#282823] font-sans antialiased selection:bg-[#E9BE5F] selection:text-[#282823];
+  html, body, #root {
+    @apply text-[#2C1810] font-sans antialiased selection:bg-[#9C5B23] selection:text-white;
+    background-color: #FAF5EB;
     background-image: url('/paper-texture.png');
-    background-size: 600px auto;
+    background-size: 550px auto;
     background-repeat: repeat;
     background-attachment: fixed;
   }

@@ -39,11 +39,11 @@ export const PopularProducts: React.FC<PopularProductsProps> = ({
   };
 
   return (
-    <section className="py-12 sm:py-16 bg-[#FEFDF5] dark:bg-[#141412] transition-colors border-y border-[#EBE5DB] dark:border-neutral-800">
+    <section className="py-12 sm:py-16 bg-transparent dark:bg-[#141412] transition-colors border-y border-[#EBE5DB] dark:border-neutral-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Outer Section Card */}
-        <div className="bg-[#FEFDF5] dark:bg-[#1E1E1A] border-t-4 border-[#9C5B23] rounded-[28px] p-6 sm:p-10 shadow-sm border border-[#EBE5DB] dark:border-neutral-800 relative overflow-hidden">
+        <div className="bg-paper-texture dark:bg-[#1E1E1A] border-t-4 border-[#9C5B23] rounded-[28px] p-6 sm:p-10 shadow-sm border border-[#EBE5DB] dark:border-neutral-800 relative overflow-hidden">
           
           {/* Header Row */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">

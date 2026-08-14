@@ -31,7 +31,7 @@ export const BrandStory: React.FC = () => {
   ];
 
   return (
-    <section id="our-story" className="py-16 sm:py-28 bg-[#FAF5EB] dark:bg-[#181715] text-[#2C1810] dark:text-[#F5E8B6] relative overflow-hidden border-y border-[#E8D5B7] dark:border-[#3D372E] transition-colors">
+    <section id="our-story" className="py-16 sm:py-28 bg-transparent dark:bg-[#181715] text-[#2C1810] dark:text-[#F5E8B6] relative overflow-hidden border-y border-[#E8D5B7] dark:border-[#3D372E] transition-colors">
       
       {/* Decorative Warm Ambient Radial Glows */}
       <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#E9BE5F]/20 via-transparent to-transparent blur-3xl pointer-events-none" />

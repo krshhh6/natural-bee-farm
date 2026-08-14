@@ -47,7 +47,7 @@ const GALLERY_IMAGES = [
 
 export const GallerySection: React.FC = () => {
   return (
-    <section id="gallery" className="py-16 bg-[#F5EDD8] dark:bg-[#1C1C18] text-[#2C1810] dark:text-[#F5E8B6] relative overflow-hidden border-t border-[#E8D5B7] dark:border-[#595C56]/30 transition-colors">
+    <section id="gallery" className="py-16 bg-transparent dark:bg-[#1C1C18] text-[#2C1810] dark:text-[#F5E8B6] relative overflow-hidden border-t border-[#E8D5B7] dark:border-[#595C56]/30 transition-colors">
       
       {/* Header above stream */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 text-center">
@@ -74,7 +74,7 @@ export const GallerySection: React.FC = () => {
             turnBirth: 4,
             turnExit: 16,
           }}
-          className="h-[560px] sm:h-[780px] w-full bg-[#F5EDD8] dark:bg-[#1C1C18] border-y border-[#E8D5B7] dark:border-[#595C56]/30 transition-colors"
+          className="h-[560px] sm:h-[780px] w-full bg-transparent dark:bg-[#1C1C18] border-y border-[#E8D5B7] dark:border-[#595C56]/30 transition-colors"
         >
           <div className="relative z-10 flex h-full flex-col items-center justify-between py-6 sm:py-10 px-4 sm:px-6 text-center pointer-events-none">
             

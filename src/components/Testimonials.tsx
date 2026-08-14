@@ -15,7 +15,7 @@ export const Testimonials: React.FC = () => {
   };
 
   return (
-    <section id="testimonials" className="py-10 sm:py-20 lg:py-24 bg-[#F5E8B6] dark:bg-[#1C1C18] transition-colors">
+    <section id="testimonials" className="py-10 sm:py-20 lg:py-24 bg-transparent dark:bg-[#1C1C18] transition-colors border-t border-[#E8D5B7] dark:border-[#3D372E]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -62,7 +62,7 @@ export const Testimonials: React.FC = () => {
           {TESTIMONIALS.map((item) => (
             <div
               key={item.id}
-              className="min-w-[270px] sm:min-w-0 max-w-[310px] sm:max-w-none shrink-0 snap-center bg-[#FAF3D6] dark:bg-[#282823] rounded-2xl sm:rounded-3xl p-5 sm:p-7 border border-[#595C56]/40 shadow-sm sm:shadow-md relative flex flex-col justify-between hover:shadow-2xl hover:border-[#E9BE5F]/60 transition-all duration-300 ease-out hover-lift cursor-pointer"
+              className="min-w-[270px] sm:min-w-0 max-w-[310px] sm:max-w-none shrink-0 snap-center bg-paper-texture dark:bg-[#282823] rounded-2xl sm:rounded-3xl p-5 sm:p-7 border border-[#E8D5B7] dark:border-[#595C56]/40 shadow-sm sm:shadow-md relative flex flex-col justify-between hover:shadow-2xl hover:border-[#9C5B23] transition-all duration-300 ease-out hover-lift cursor-pointer"
             >
               <Quote className="w-7 h-7 sm:w-10 sm:h-10 text-[#E9BE5F]/30 absolute top-4 right-4 sm:top-6 sm:right-6 pointer-events-none" />
               
