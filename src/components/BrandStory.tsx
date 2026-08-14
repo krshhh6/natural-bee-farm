@@ -69,7 +69,7 @@ export const BrandStory: React.FC = () => {
               const Icon = item.icon;
               return (
                 <ScrollStackItem key={idx}>
-                  <div className="bg-white dark:bg-[#201D19] rounded-2xl p-6 border-2 border-[#E8D5B7] dark:border-[#3D372E] shadow-xl flex flex-col justify-between relative overflow-hidden">
+                  <div className="bg-paper-texture dark:bg-[#201D19] rounded-2xl p-6 border-2 border-[#E8D5B7] dark:border-[#3D372E] shadow-xl flex flex-col justify-between relative overflow-hidden">
                     <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-[#9C5B23] dark:via-[#D4AF37] to-transparent" />
 
                     <div>
@@ -108,7 +108,7 @@ export const BrandStory: React.FC = () => {
             return (
               <div
                 key={idx}
-                className="bg-white/90 dark:bg-[#201D19]/90 backdrop-blur-md rounded-2xl p-7 border border-[#E8D5B7] dark:border-[#3D372E] hover:border-[#9C5B23] dark:hover:border-[#D4AF37] transition-all duration-300 hover-lift shadow-md hover:shadow-2xl flex flex-col justify-between group relative overflow-hidden"
+                className="bg-paper-texture dark:bg-[#201D19]/90 backdrop-blur-md rounded-2xl p-7 border border-[#E8D5B7] dark:border-[#3D372E] hover:border-[#9C5B23] dark:hover:border-[#D4AF37] transition-all duration-300 hover-lift shadow-md hover:shadow-2xl flex flex-col justify-between group relative overflow-hidden"
               >
                 {/* Subtle top gold accent bar on hover */}
                 <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-[#9C5B23] dark:via-[#D4AF37] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

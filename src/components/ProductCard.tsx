@@ -52,7 +52,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
   return (
     <div
       onClick={() => onQuickView(product)}
-      className="group bg-white dark:bg-[#1E1C18] rounded-2xl p-4 sm:p-5 border border-[#E7DFD3] dark:border-[#3D372E] shadow-sm hover:shadow-2xl hover:border-[#D4AF37]/70 transition-all duration-400 ease-out flex flex-col justify-between cursor-pointer relative h-full transform hover:-translate-y-1.5 hover-lift"
+      className="group bg-paper-texture dark:bg-[#1E1C18] rounded-2xl p-4 sm:p-5 border border-[#E7DFD3] dark:border-[#3D372E] shadow-sm hover:shadow-2xl hover:border-[#D4AF37]/70 transition-all duration-400 ease-out flex flex-col justify-between cursor-pointer relative h-full transform hover:-translate-y-1.5 hover-lift"
     >
       {/* Top Left Deep Red Discount Badge */}
       <div className="absolute top-3.5 left-0 z-10 bg-gradient-to-r from-[#B91C1C] via-[#DC2626] to-[#B91C1C] text-white font-bold text-[11px] sm:text-xs px-3.5 py-1 rounded-r-full rounded-tl-xl shadow-md flex items-center gap-1.5 tracking-wide border-r border-t border-red-300/30 transition-transform duration-300 group-hover:scale-105">
