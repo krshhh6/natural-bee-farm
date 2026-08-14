@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { AnnouncementBar } from './components/AnnouncementBar';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
+import { TrustStrip } from './components/TrustStrip';
 import { CategoryShowcase } from './components/CategoryShowcase';
 import { PromoBanners } from './components/PromoBanners';
 import { PopularProducts } from './components/PopularProducts';
@@ -117,6 +118,9 @@ const MainContent: React.FC = () => {
         <>
           {/* Hero Showcase Section */}
           <Hero onExploreClick={() => navigateToProducts()} />
+
+          {/* Trust Badges Pill Bar */}
+          <TrustStrip />
 
           {/* "Shop by Category" Showcase Card */}
           <CategoryShowcase
