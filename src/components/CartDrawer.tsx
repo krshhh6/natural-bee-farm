@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Trash2, ShoppingBag, ArrowRight, ShieldCheck, CheckCircle2, Tag, Sparkles, Plus, ChevronDown } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { PRODUCTS } from '../data/products';
@@ -22,6 +22,18 @@ export const CartDrawer: React.FC = () => {
   const [couponCode, setCouponCode] = useState('NEW15');
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>('NEW15');
   const [orderComplete, setOrderComplete] = useState(false);
+
+  // Lock background body scroll when drawer is open
+  useEffect(() => {
+    if (isCartOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isCartOpen]);
 
   if (!isCartOpen) return null;
 

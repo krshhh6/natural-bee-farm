@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Eye, EyeOff, Loader2, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
@@ -7,6 +7,18 @@ import { signInWithGoogle, sendMagicLinkToEmail } from '../lib/firebase';
 export const AuthModal: React.FC = () => {
   const { isAuthModalOpen, setIsAuthModalOpen, authMode, setAuthMode, login, setUserProfile } = useAuth();
   const { showToast } = useCart();
+
+  // Lock background body scrolling when modal is active
+  useEffect(() => {
+    if (isAuthModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isAuthModalOpen]);
 
   // Form State
   const [email, setEmail] = useState('');
@@ -82,14 +94,19 @@ export const AuthModal: React.FC = () => {
   };
 
   const handleDemoLogin = () => {
-    login('customer@naturabeefarm.in', 'ShitalGupta');
+    login('customer@naturabeefarm.in', 'HoneyLover');
     showToast('Signed in with Demo Account 🎉');
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#282823]/80 backdrop-blur-md animate-fadeIn">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#282823]/80 backdrop-blur-md animate-fadeIn overflow-y-auto overscroll-contain"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) setIsAuthModalOpen(false);
+      }}
+    >
       {/* Outer Card Container */}
-      <div className="relative w-full max-w-[460px] bg-[#FAF3D6] dark:bg-[#282823] rounded-[28px] shadow-2xl border border-[#595C56]/40 p-6 sm:p-8 animate-slide-up max-h-[92vh] overflow-y-auto font-sans">
+      <div className="relative w-full max-w-[460px] bg-[#FAF3D6] dark:bg-[#282823] rounded-[28px] shadow-2xl border border-[#595C56]/40 p-6 sm:p-8 animate-slide-up max-h-[85vh] sm:max-h-[90vh] overflow-y-auto font-sans my-auto overscroll-contain">
         
         {/* Top Close Button */}
         <button
@@ -100,28 +117,30 @@ export const AuthModal: React.FC = () => {
           <X className="w-5 h-5" />
         </button>
 
-        {/* Brand Header */}
+        {/* Header Icon + Title */}
         <div className="flex items-center space-x-3 mb-6">
-          <img src="/logo.png" alt="Natura Bee Farm Logo" className="w-10 h-10 object-contain" />
+          <div className="w-12 h-12 rounded-2xl bg-[#E9BE5F] flex items-center justify-center text-[#282823] font-serif font-black text-2xl shadow-md">
+            🐝
+          </div>
           <div>
-            <div className="font-serif text-2xl font-bold tracking-tight text-[#282823] dark:text-[#F5E8B6] leading-none">
-              Natura <span className="text-[#E9BE5F]">Bee Farm</span>
-            </div>
-            <div className="text-[11px] text-[#595C56] dark:text-[#F5E8B6]/70 font-medium mt-0.5">
-              {authMode === 'login' ? 'Sign in to access your orders' : 'Create your account to start shopping'}
-            </div>
+            <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#282823] dark:text-[#F5E8B6]">
+              Natura Bee Farm
+            </h3>
+            <p className="text-xs text-[#595C56] dark:text-[#F5E8B6]/70">
+              {authMode === 'login' ? 'Welcome back! Sign in to your account' : 'Create your account to start shopping'}
+            </p>
           </div>
         </div>
 
-        {/* Auth Mode Toggle Tabs */}
+        {/* Tab Toggle Switch (Sign In / Create Account) */}
         <div className="flex bg-[#F5E8B6] dark:bg-[#1C1C18] p-1 rounded-2xl mb-6 border border-[#595C56]/30">
           <button
             type="button"
             onClick={() => setAuthMode('login')}
-            className={`flex-1 py-2.5 text-xs font-bold rounded-xl transition-all ${
+            className={`flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
               authMode === 'login'
                 ? 'bg-[#E9BE5F] text-[#282823] shadow-sm'
-                : 'text-[#282823] dark:text-[#F5E8B6] hover:text-[#E9BE5F]'
+                : 'text-[#595C56] dark:text-[#F5E8B6]/70 hover:text-[#282823]'
             }`}
           >
             Sign In
@@ -129,19 +148,19 @@ export const AuthModal: React.FC = () => {
           <button
             type="button"
             onClick={() => setAuthMode('register')}
-            className={`flex-1 py-2.5 text-xs font-bold rounded-xl transition-all ${
+            className={`flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
               authMode === 'register'
                 ? 'bg-[#E9BE5F] text-[#282823] shadow-sm'
-                : 'text-[#282823] dark:text-[#F5E8B6] hover:text-[#E9BE5F]'
+                : 'text-[#595C56] dark:text-[#F5E8B6]/70 hover:text-[#282823]'
             }`}
           >
             Create Account
           </button>
         </div>
 
-        {/* Form Section */}
+        {/* Dynamic Form Content */}
         {authMode === 'login' ? (
-          /* LOGIN FORM */
+          /* SIGN IN FORM */
           <form onSubmit={handleLoginSubmit} className="space-y-4">
             
             {/* Email Field */}
@@ -211,7 +230,7 @@ export const AuthModal: React.FC = () => {
             {/* Main Submit Button */}
             <button
               type="submit"
-              className="w-full h-12 bg-[#E9BE5F] hover:bg-[#D4AA4B] text-[#282823] font-bold rounded-2xl text-sm shadow-md shadow-[#E9BE5F]/25 transition-all hover:scale-[1.01] active:scale-[0.99] mt-3"
+              className="w-full h-12 bg-[#E9BE5F] hover:bg-[#D4AA4B] text-[#282823] font-bold rounded-2xl text-sm shadow-md shadow-[#E9BE5F]/25 transition-all hover:scale-[1.01] active:scale-[0.99] mt-3 cursor-pointer"
             >
               Sign In
             </button>
@@ -221,7 +240,7 @@ export const AuthModal: React.FC = () => {
               type="button"
               disabled={sendingMagicLink}
               onClick={handleSendMagicLink}
-              className="w-full py-2.5 bg-[#F5E8B6] hover:bg-[#FAF3D6] text-[#282823] font-bold rounded-2xl text-xs border border-[#E9BE5F] flex items-center justify-center gap-2 transition-all"
+              className="w-full py-2.5 bg-[#F5E8B6] hover:bg-[#FAF3D6] text-[#282823] font-bold rounded-2xl text-xs border border-[#E9BE5F] flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
               {sendingMagicLink ? (
                 <Loader2 className="w-3.5 h-3.5 animate-spin text-[#E9BE5F]" />
@@ -233,7 +252,7 @@ export const AuthModal: React.FC = () => {
 
             {/* Switch to Sign Up */}
             <p className="text-center text-xs text-[#595C56] dark:text-[#F5E8B6]/70 pt-1">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <span
                 onClick={() => setAuthMode('register')}
                 className="text-[#282823] dark:text-[#E9BE5F] font-bold cursor-pointer hover:underline"
@@ -247,7 +266,7 @@ export const AuthModal: React.FC = () => {
               <button
                 type="button"
                 onClick={handleDemoLogin}
-                className="text-xs text-[#595C56] dark:text-[#F5E8B6]/60 hover:text-[#E9BE5F] font-medium underline"
+                className="text-xs text-[#595C56] dark:text-[#F5E8B6]/60 hover:text-[#E9BE5F] font-medium underline cursor-pointer"
               >
                 ⚡ Quick Demo Login
               </button>
@@ -265,7 +284,7 @@ export const AuthModal: React.FC = () => {
                 <input
                   type="text"
                   required
-                  placeholder="ShitalGupta (no spaces)"
+                  placeholder="HoneyLover (no spaces)"
                   value={username}
                   onChange={(e) => setUsername(e.target.value.replace(/\s+/g, ''))}
                   className="w-full bg-transparent text-xs sm:text-sm text-[#282823] dark:text-[#F5E8B6] placeholder-[#595C56] focus:outline-none"
@@ -316,6 +335,13 @@ export const AuthModal: React.FC = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full bg-transparent text-xs sm:text-sm text-[#282823] dark:text-[#F5E8B6] placeholder-[#595C56] focus:outline-none"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-[#E9BE5F] hover:text-[#D4AA4B] ml-2"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
               </div>
             </div>
 
@@ -324,7 +350,7 @@ export const AuthModal: React.FC = () => {
               <label className="text-xs font-semibold text-[#282823] dark:text-[#F5E8B6]">Confirm Password</label>
               <div className="h-11 border border-[#595C56]/40 focus-within:border-[#E9BE5F] rounded-2xl flex items-center px-3.5 bg-[#F5E8B6]/50 dark:bg-[#1C1C18]">
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   required
                   placeholder="Confirm Password"
                   value={confirmPassword}
@@ -337,7 +363,7 @@ export const AuthModal: React.FC = () => {
             {/* Submit Register Button */}
             <button
               type="submit"
-              className="w-full h-12 bg-[#E9BE5F] hover:bg-[#D4AA4B] text-[#282823] font-bold rounded-2xl text-sm shadow-md shadow-[#E9BE5F]/25 transition-all hover:scale-[1.01] active:scale-[0.99] mt-3"
+              className="w-full h-12 bg-[#E9BE5F] hover:bg-[#D4AA4B] text-[#282823] font-bold rounded-2xl text-sm shadow-md shadow-[#E9BE5F]/25 transition-all hover:scale-[1.01] active:scale-[0.99] mt-2 cursor-pointer"
             >
               Sign Up
             </button>
@@ -352,41 +378,69 @@ export const AuthModal: React.FC = () => {
                 Sign In
               </span>
             </p>
-
           </form>
         )}
 
-        {/* Divider: Or With */}
+        {/* Divider */}
         <div className="relative my-5">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-[#595C56]/30"></div>
           </div>
-          <div className="relative flex justify-center text-xs">
-            <span className="bg-[#FAF3D6] dark:bg-[#282823] px-3 text-[#595C56] font-medium">Or With</span>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-[#FAF3D6] dark:bg-[#282823] px-3 text-[#595C56] dark:text-[#F5E8B6]/60 font-semibold">
+              Or With
+            </span>
           </div>
         </div>
 
-        {/* Social Login Button (Full Width Google) */}
-        <div>
+        {/* Social Sign In Buttons */}
+        <div className="grid grid-cols-1 gap-2.5">
+          {/* Google */}
           <button
             type="button"
-            disabled={loadingProvider !== null}
+            disabled={loadingProvider === 'Google'}
             onClick={() => handleSocialLogin('Google')}
-            className="w-full h-12 rounded-2xl border border-[#595C56]/40 bg-[#282823] hover:bg-[#1C1C18] text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-3 shadow-md transition-all hover:scale-[1.01] disabled:opacity-60"
+            className="h-11 border border-[#595C56]/40 hover:border-[#E9BE5F] bg-[#F5E8B6]/50 dark:bg-[#1C1C18] rounded-2xl flex items-center justify-center space-x-2 transition-all hover:bg-[#F5E8B6] dark:hover:bg-[#201D19] cursor-pointer"
           >
             {loadingProvider === 'Google' ? (
               <Loader2 className="w-4 h-4 animate-spin text-[#E9BE5F]" />
             ) : (
-              <svg className="w-5 h-5 shrink-0" viewBox="0 0 512 512">
-                <path fill="#FBBB00" d="M113.47,309.408L95.648,375.94l-65.139,1.378C11.042,341.211,0,299.9,0,256c0-42.451,10.324-82.483,28.624-117.732h0.014l57.992,10.632l25.404,57.644c-5.317,15.501-8.215,32.141-8.215,49.456C103.821,274.792,107.225,292.797,113.47,309.408z" />
-                <path fill="#518EF8" d="M507.527,208.176C510.467,223.662,512,239.655,512,256c0,18.328-1.927,36.206-5.598,53.451c-12.462,58.683-45.025,109.925-90.134,146.187l-0.014-0.014l-73.044-3.727l-10.338-64.535c29.932-17.554,53.324-45.025,65.646-77.911h-136.89V208.176h138.887L507.527,208.176L507.527,208.176z" />
-                <path fill="#28B446" d="M416.253,455.624l0.014,0.014C372.396,490.901,316.666,512,256,512c-97.491,0-182.252-54.491-225.491-134.681l82.961-67.91c21.619,57.698,77.278,98.771,142.53,98.771c28.047,0,54.323-7.582,76.87-20.818L416.253,455.624z" />
-                <path fill="#F14336" d="M419.404,58.936l-82.933,67.896c-23.335-14.586-50.919-23.012-80.471-23.012c-66.729,0-123.429,42.957-143.965,102.724l-83.397-68.276h-0.014C71.23,56.123,157.06,0,256,0C318.115,0,375.068,22.126,419.404,58.936z" />
+              <svg className="w-4 h-4" viewBox="0 0 24 24">
+                <path
+                  fill="#EA4335"
+                  d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"
+                />
+                <path
+                  fill="#4285F4"
+                  d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"
+                />
+                <path
+                  fill="#FBBC05"
+                  d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.4 0 15.2s.7 5.5 1.9 7.9l3.7-2.9c-.2-.7-.4-1.5-.4-2.3z"
+                />
+                <path
+                  fill="#34A853"
+                  d="M12 23.5c3.2 0 6-1.1 8-2.9l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.2L1.9 16.6C3.7 20.3 7.5 23.5 12 23.5z"
+                />
               </svg>
             )}
-            <span>Continue with Google</span>
+            <span className="text-xs sm:text-sm font-semibold text-[#282823] dark:text-[#F5E8B6]">
+              {loadingProvider === 'Google' ? 'Signing in...' : 'Continue with Google'}
+            </span>
           </button>
         </div>
+
+        {/* Footer Note */}
+        <p className="mt-5 text-[10px] text-center text-[#595C56] dark:text-[#F5E8B6]/50">
+          By signing up, you agree to Natura Bee Farm&apos;s{' '}
+          <a href="#terms" className="underline hover:text-[#E9BE5F]">
+            Terms of Service
+          </a>{' '}
+          and{' '}
+          <a href="#privacy" className="underline hover:text-[#E9BE5F]">
+            Privacy Policy
+          </a>.
+        </p>
 
       </div>
     </div>
