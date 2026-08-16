@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CartProvider, useCart } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
+import { StoreProvider, useStore } from '@/context/StoreContext';
 import { AnnouncementBar } from './components/AnnouncementBar';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
@@ -16,16 +17,20 @@ import { ProductModal } from './components/ProductModal';
 import { CartDrawer } from './components/CartDrawer';
 import { AuthModal } from './components/AuthModal';
 import { ProductsPage } from './components/ProductsPage';
+import { AdminDashboard } from './components/admin/AdminDashboard';
+import { AdminLoginModal } from './components/admin/AdminLoginModal';
 import { FloatingDock } from '@/components/ui/floating-dock';
-import { IconHome, IconShoppingBag, IconBook, IconStar } from '@tabler/icons-react';
-import { PRODUCTS } from './data/products';
+import { IconHome, IconShoppingBag, IconStar, IconLock } from '@tabler/icons-react';
 import type { CategoryType } from './types';
 import { CheckCircle2 } from 'lucide-react';
 
 const MainContent: React.FC = () => {
   const { toastMessage, setQuickViewProduct } = useCart();
-  const [currentPage, setCurrentPage] = useState<'home' | 'products'>('home');
+  const { products, isAdminLoggedIn } = useStore();
+  const [currentPage, setCurrentPage] = useState<'home' | 'products' | 'admin'>('home');
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>('all');
+  const [isAdminAuthModalOpen, setIsAdminAuthModalOpen] = useState(false);
+
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return localStorage.getItem('honey_dark_mode') === 'true';
   });
@@ -54,6 +59,31 @@ const MainContent: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const navigateToAdmin = () => {
+    if (isAdminLoggedIn) {
+      setCurrentPage('admin');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      setIsAdminAuthModalOpen(true);
+    }
+  };
+
+  const handleAdminAuthSuccess = () => {
+    setCurrentPage('admin');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Render full-screen Admin Dashboard when currentPage === 'admin'
+  if (currentPage === 'admin' && isAdminLoggedIn) {
+    return (
+      <AdminDashboard
+        onReturnToStore={navigateToHome}
+        isDarkMode={isDarkMode}
+        toggleDarkMode={toggleDarkMode}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#FEFDF5] dark:bg-[#1C1C18] text-[#282823] dark:text-[#FEFDF5] transition-colors duration-200 selection:bg-[#E9BE5F] selection:text-[#282823]">
       
@@ -75,13 +105,17 @@ const MainContent: React.FC = () => {
         isDarkMode={isDarkMode}
         toggleDarkMode={toggleDarkMode}
         currentPage={currentPage}
-        onNavigate={(page) => (page === 'home' ? navigateToHome() : navigateToProducts())}
+        onNavigate={(page) => {
+          if (page === 'home') navigateToHome();
+          else if (page === 'products') navigateToProducts();
+          else if (page === 'admin') navigateToAdmin();
+        }}
       />
 
       {/* Page View Switcher */}
       {currentPage === 'products' ? (
         <ProductsPage
-          products={PRODUCTS}
+          products={products}
           selectedCategory={selectedCategory}
           onSelectCategory={setSelectedCategory}
           onQuickView={setQuickViewProduct}
@@ -103,13 +137,13 @@ const MainContent: React.FC = () => {
 
           {/* Top 4 Honey Showcase Section */}
           <PopularProducts
-            products={PRODUCTS}
+            products={products}
             onQuickView={setQuickViewProduct}
             onExploreClick={() => navigateToProducts()}
             onSelectCategory={(cat) => navigateToProducts(cat)}
           />
 
-          {/* Heritage Pillars Section (Source To Table, Time-Honored Techniques, Unwavering Purity, Commitment to Community) */}
+          {/* Heritage Pillars Section */}
           <HeritagePillars />
 
           {/* Brand Heritage Story */}
@@ -122,7 +156,7 @@ const MainContent: React.FC = () => {
           <Testimonials />
 
           {/* Footer */}
-          <Footer />
+          <Footer onNavigateAdmin={navigateToAdmin} />
         </>
       )}
 
@@ -130,6 +164,13 @@ const MainContent: React.FC = () => {
       <ProductModal />
       <CartDrawer />
       <AuthModal />
+      
+      {/* Admin Authentication Gate Modal */}
+      <AdminLoginModal
+        isOpen={isAdminAuthModalOpen}
+        onClose={() => setIsAdminAuthModalOpen(false)}
+        onSuccess={handleAdminAuthSuccess}
+      />
 
       {/* Floating Dock Navigation (Mobile Only) */}
       <div className="fixed bottom-4 sm:bottom-6 inset-x-0 z-40 flex justify-center pointer-events-none md:hidden px-3">
@@ -149,16 +190,10 @@ const MainContent: React.FC = () => {
                 onClick: () => navigateToProducts(),
               },
               {
-                title: 'Story',
-                icon: <IconBook className="h-full w-full text-[#F5E8B6]" />,
-                href: '#our-story',
-                onClick: () => {
-                  navigateToHome();
-                  setTimeout(() => {
-                    const el = document.getElementById('our-story');
-                    if (el) el.scrollIntoView({ behavior: 'smooth' });
-                  }, 100);
-                },
+                title: 'Admin',
+                icon: <IconLock className="h-full w-full text-[#E9BE5F]" />,
+                href: '#',
+                onClick: navigateToAdmin,
               },
               {
                 title: 'Reviews',
@@ -183,11 +218,13 @@ const MainContent: React.FC = () => {
 
 export function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
-        <MainContent />
-      </CartProvider>
-    </AuthProvider>
+    <StoreProvider>
+      <AuthProvider>
+        <CartProvider>
+          <MainContent />
+        </CartProvider>
+      </AuthProvider>
+    </StoreProvider>
   );
 }
 

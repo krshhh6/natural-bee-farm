@@ -1,8 +1,12 @@
 import React from 'react';
-import { TESTIMONIALS } from '../data/products';
+import { useStore } from '@/context/StoreContext';
+import type { Testimonial } from '@/types';
 import { Star, CheckCircle, Quote } from 'lucide-react';
 
 export const Testimonials: React.FC = () => {
+  const { testimonials } = useStore();
+  const approvedTestimonials = testimonials.filter((t: Testimonial & { isApproved?: boolean }) => t.isApproved !== false);
+
   return (
     <section id="testimonials" className="py-16 sm:py-24 bg-[#F5E8B6] dark:bg-[#1C1C18] transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -24,7 +28,7 @@ export const Testimonials: React.FC = () => {
 
         {/* Testimonials Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {TESTIMONIALS.map((item) => (
+          {approvedTestimonials.map((item) => (
             <div
               key={item.id}
               className="bg-[#FAF3D6] dark:bg-[#282823] rounded-3xl p-8 border border-[#595C56]/40 shadow-md relative flex flex-col justify-between hover:shadow-xl transition-shadow"

@@ -18,8 +18,9 @@ export const PopularProducts: React.FC<PopularProductsProps> = ({
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Grab the top 4 featured products matching the screenshot (Gir Cow Ghee, Khapli Atta, Mustard Oil, Wild Forest Honey)
-  const top4Products = products.slice(0, 4);
+  // Display active featured products from live store catalog
+  const activeProducts = products.filter((p) => p.inStock);
+  const top4Products = activeProducts.length > 0 ? activeProducts.slice(0, 6) : products.slice(0, 6);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {

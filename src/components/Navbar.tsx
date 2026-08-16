@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, User, ShoppingBag, Heart, ChevronDown, Menu, X, LogOut, Sun, Moon } from 'lucide-react';
+import { Search, User, ShoppingBag, Heart, ChevronDown, Menu, X, LogOut, Sun, Moon, ShieldCheck } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 
@@ -8,8 +8,8 @@ interface NavbarProps {
   onSelectCategory: (category: any) => void;
   isDarkMode: boolean;
   toggleDarkMode: () => void;
-  currentPage?: 'home' | 'products';
-  onNavigate?: (page: 'home' | 'products') => void;
+  currentPage?: 'home' | 'products' | 'admin';
+  onNavigate?: (page: 'home' | 'products' | 'admin') => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -138,21 +138,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                 Our Story
               </a>
 
-              {/* Gallery */}
-              <a
-                href="#gallery"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onNavigate?.('home');
-                  setTimeout(() => {
-                    const el = document.getElementById('gallery');
-                    if (el) el.scrollIntoView({ behavior: 'smooth' });
-                  }, 100);
-                }}
-                className="text-[#3D3730] dark:text-[#E6DBCB] hover:text-[#9C5B23] dark:hover:text-[#E9BE5F] transition-colors"
+              {/* Admin Panel Access Link */}
+              <button
+                onClick={() => onNavigate?.('admin')}
+                className={`flex items-center gap-1.5 transition-colors px-2.5 py-1 rounded-full text-xs font-bold ${
+                  currentPage === 'admin'
+                    ? 'bg-[#9C5B23] text-white shadow-sm'
+                    : 'text-[#9C5B23] dark:text-[#E9BE5F] bg-[#9C5B23]/10 dark:bg-[#E9BE5F]/10 hover:bg-[#9C5B23] hover:text-white'
+                }`}
+                title="Open Admin & Business Operations Panel"
               >
-                Gallery
-              </a>
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>Admin Panel</span>
+              </button>
 
             </nav>
           </div>
@@ -255,6 +253,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                       <div className="text-xs text-[#9C5B23] dark:text-[#E9BE5F] truncate">{user.email}</div>
                     </div>
                     <div className="pt-2 space-y-1">
+                      <button
+                        onClick={() => {
+                          setUserDropdownOpen(false);
+                          onNavigate?.('admin');
+                        }}
+                        className="w-full text-left px-3 py-2 text-xs font-bold text-[#9C5B23] dark:text-[#E9BE5F] hover:bg-[#FDF8F0] dark:hover:bg-[#2F2923] rounded-lg flex items-center gap-2 transition-colors"
+                      >
+                        <ShieldCheck className="w-3.5 h-3.5" />
+                        <span>Admin Operations</span>
+                      </button>
                       <button
                         onClick={() => {
                           logout();

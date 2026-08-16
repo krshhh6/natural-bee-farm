@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { X, Trash2, ShoppingBag, ArrowRight, ShieldCheck, CheckCircle2, Tag, Sparkles, Plus, ChevronDown } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { PRODUCTS } from '../data/products';
+import { useStore } from '@/context/StoreContext';
+import type { CartItem } from '../types';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -15,6 +16,8 @@ export const CartDrawer: React.FC = () => {
     addToCart,
     showToast,
   } = useCart();
+
+  const { products, addOrder } = useStore();
 
   const [couponCode, setCouponCode] = useState('NEW15');
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>('NEW15');
@@ -43,6 +46,31 @@ export const CartDrawer: React.FC = () => {
   };
 
   const handleCheckout = () => {
+    // Add real customer order to StoreContext
+    if (cart.length > 0) {
+      addOrder({
+        customerName: 'Guest Customer',
+        customerEmail: 'customer@naturabee.in',
+        customerPhone: '+91 98765 00000',
+        shippingAddress: 'Direct Online Order - Customer Portal',
+        items: cart.map((item: CartItem) => ({
+          productId: item.product.id,
+          productName: item.product.name,
+          weight: item.selectedWeight,
+          price: item.product.price,
+          quantity: item.quantity,
+          image: item.product.image,
+        })),
+        totalAmount: cartSubtotal,
+        discountAmount: savingsAmount,
+        shippingFee: cartSubtotal >= freeShippingThreshold ? 0 : 50,
+        finalAmount: estimatedTotal,
+        status: 'Pending',
+        paymentMethod: 'UPI / Razorpay',
+        paymentStatus: 'Paid',
+      });
+    }
+
     setOrderComplete(true);
     setTimeout(() => {
       clearCart();
@@ -52,8 +80,8 @@ export const CartDrawer: React.FC = () => {
   };
 
   // Must-try upsell products (products not currently in cart)
-  const cartProductIds = new Set(cart.map((i) => i.product.id));
-  const upsellProducts = PRODUCTS.filter((p) => !cartProductIds.has(p.id)).slice(0, 2);
+  const cartProductIds = new Set(cart.map((i: CartItem) => i.product.id));
+  const upsellProducts = products.filter((p) => p.inStock && !cartProductIds.has(p.id)).slice(0, 2);
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-xs animate-fadeIn">
