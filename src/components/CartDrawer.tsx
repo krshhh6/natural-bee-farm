@@ -41,7 +41,7 @@ export const CartDrawer: React.FC = () => {
 
   if (!isCartOpen) return null;
 
-  const discountPercent = appliedCoupon === 'NEW15' ? 15 : appliedCoupon === 'GOMATI10' ? 10 : 0;
+  const discountPercent = appliedCoupon === 'NEW15' ? 15 : appliedCoupon === 'NATURA10' ? 10 : 0;
   const savingsAmount = Math.round((cartSubtotal * discountPercent) / 100);
   const estimatedTotal = cartSubtotal - savingsAmount;
 
@@ -53,11 +53,11 @@ export const CartDrawer: React.FC = () => {
     if (cleanCode === 'NEW15') {
       setAppliedCoupon('NEW15');
       showToast('Applied coupon NEW15 (15% OFF)! 🎉');
-    } else if (cleanCode === 'GOMATI10' || cleanCode === 'HONEY10') {
-      setAppliedCoupon('GOMATI10');
-      showToast('Applied coupon GOMATI10 (10% OFF)! 🎉');
+    } else if (cleanCode === 'NATURA10' || cleanCode === 'HONEY10' || cleanCode === 'BEEFARM10') {
+      setAppliedCoupon('NATURA10');
+      showToast('Applied coupon NATURA10 (10% OFF)! 🎉');
     } else {
-      alert('Invalid coupon code. Try "NEW15" or "GOMATI10"');
+      alert('Invalid coupon code. Try "NEW15" or "NATURA10"');
     }
   };
 

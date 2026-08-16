@@ -237,7 +237,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
         description: '100% Pure Raw Honey',
         ingredients: ['Pure Honey'],
         inStock: true,
-        origin: 'Natura Bee Farm',
+        origin: 'Natural Bee Farm',
       };
       addToCart(fullProd as Product, item.weight);
     });

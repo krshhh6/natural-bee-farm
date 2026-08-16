@@ -29,13 +29,13 @@ export const Footer: React.FC = () => {
               <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center p-0.5 bg-white shadow-xs">
                 <img
                   src="/logo.png"
-                  alt="Natura Bee Farm Logo"
+                  alt="Natural Bee Farm Logo"
                   className="w-full h-full object-contain"
                 />
               </div>
               <div className="flex flex-col">
                 <span className="font-serif text-lg font-bold tracking-widest text-[#231F1B] dark:text-white uppercase leading-none">
-                  NATURA <span className="text-[#9C5B23] dark:text-[#E9BE5F]">BEE FARM</span>
+                  NATURAL <span className="text-[#9C5B23] dark:text-[#E9BE5F]">BEE FARM</span>
                 </span>
                 <span className="text-[9px] tracking-[0.2em] font-semibold text-[#8C5E2B] dark:text-[#E9BE5F]/80 uppercase mt-0.5">
                   ARTISANAL TRADITION
@@ -44,7 +44,7 @@ export const Footer: React.FC = () => {
             </div>
 
             <p className="text-[#5C5247] dark:text-[#E6DBCB] text-xs sm:text-sm leading-relaxed mt-4">
-              Bringing the wisdom and flavors of Old Bharat to today's tables — that's the Natura Bee Farm promise.
+              Bringing the wisdom and flavors of Old Bharat to today's tables — that's the Natural Bee Farm promise.
             </p>
           </div>
 
@@ -222,7 +222,7 @@ export const Footer: React.FC = () => {
             
             {/* Copyright */}
             <div>
-              © {new Date().getFullYear()} Natura Bee Farm. All Rights Reserved.
+              © {new Date().getFullYear()} Natural Bee Farm. All Rights Reserved.
             </div>
 
             {/* Payment Method Badges (VISA, MasterCard, PayPal, GPay, etc.) */}

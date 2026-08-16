@@ -854,7 +854,7 @@ export const ProfileModal: React.FC = () => {
                       </button>
                     </div>
                     <div className="text-xs text-[#5C4033] dark:text-[#D8CFBF] space-y-2 leading-relaxed">
-                      <div className="font-bold text-[#2C1810] dark:text-white">NATURA BEE FARM APICULTURE LTD.</div>
+                      <div className="font-bold text-[#2C1810] dark:text-white">NATURAL BEE FARM APICULTURE LTD.</div>
                       <div>Bahpura - Bihta Rd, Mustafapur, Patna, Bihar 801111</div>
                       <div>GSTIN: 10AABCN1234F1Z5 • FSSAI Lic: 10421000000000</div>
                       <div className="p-3 bg-[#FAF5EB] dark:bg-[#25221D] rounded-xl border border-[#E8D5B7] dark:border-[#3D372E] text-[11px]">

@@ -14,7 +14,7 @@ export const Hero: React.FC<HeroProps> = ({ onExploreClick }) => {
         <div className="relative w-full rounded-[24px] sm:rounded-[36px] overflow-hidden shadow-xl border border-[#E7DFD3] dark:border-neutral-800 transition-all duration-500 ease-out group-hover:shadow-2xl group-hover:border-[#E9BE5F]/60">
           <img
             src="/J11.png"
-            alt="Natura Bee Farm Pure Artisanal Honey & Traditional Foods"
+            alt="Natural Bee Farm Pure Artisanal Honey & Traditional Foods"
             className="w-full h-auto object-cover transform group-hover:scale-[1.015] transition-transform duration-700 ease-out"
           />
           {/* Subtle warm glow overlay on hover */}

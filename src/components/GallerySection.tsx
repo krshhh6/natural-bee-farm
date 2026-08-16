@@ -84,7 +84,7 @@ export const GallerySection: React.FC = () => {
                 Explore Our <span className="text-[#9C5B23] dark:text-[#E9BE5F]">Honey Gallery</span>
               </h2>
               <p className="mt-2 sm:mt-3 text-xs sm:text-sm text-[#5C4033] dark:text-[#F5E8B6]/90 leading-relaxed max-w-2xl mx-auto font-medium">
-                Immerse yourself in the rich visual story of Natura Bee Farm — raw honeycombs, wild forest apiaries, single-origin blossoms, and the passionate rural artisans preserving India&apos;s honey heritage.
+                Immerse yourself in the rich visual story of Natural Bee Farm — raw honeycombs, wild forest apiaries, single-origin blossoms, and the passionate rural artisans preserving India&apos;s honey heritage.
               </p>
             </div>
 

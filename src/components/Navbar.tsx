@@ -204,14 +204,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden flex items-center justify-center p-0.5 bg-[#FEFDF5] dark:bg-[#1A1816] shadow-xs group-hover:scale-105 transition-transform duration-300">
                 <img
                   src="/logo.png"
-                  alt="Natura Bee Farm Logo"
+                  alt="Natural Bee Farm Logo"
                   className="w-full h-full object-contain"
                 />
               </div>
 
               {/* Small Brand Title */}
               <span className="font-serif text-xs sm:text-sm font-bold tracking-wider text-[#231F1B] dark:text-white uppercase leading-none mt-1">
-                NATURA <span className="text-[#9C5B23] dark:text-[#E9BE5F]">BEE FARM</span>
+                NATURAL <span className="text-[#9C5B23] dark:text-[#E9BE5F]">BEE FARM</span>
               </span>
             </a>
           </div>

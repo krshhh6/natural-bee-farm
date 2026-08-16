@@ -91,15 +91,15 @@ export const AuthModal: React.FC = () => {
       if (password) {
         const profile = await registerWithEmailPassword(email, password, username, phone);
         setUserProfile(profile);
-        showToast(`Account created successfully! Welcome to Natura Bee Farm, @${username} 🎉`);
+        showToast(`Account created successfully! Welcome to Natural Bee Farm, @${username} 🎉`);
       } else {
         login(email, username);
-        showToast(`Account created successfully! Welcome to Natura Bee Farm, @${username} 🎉`);
+        showToast(`Account created successfully! Welcome to Natural Bee Farm, @${username} 🎉`);
       }
     } catch (err: any) {
       console.warn('Firebase register notice:', err);
       login(email, username);
-      showToast(`Account created successfully! Welcome to Natura Bee Farm, @${username} 🎉`);
+      showToast(`Account created successfully! Welcome to Natural Bee Farm, @${username} 🎉`);
     } finally {
       setLoadingProvider(null);
     }
@@ -158,7 +158,7 @@ export const AuthModal: React.FC = () => {
           </div>
           <div>
             <h3 className="font-serif text-lg sm:text-xl font-bold text-[#2C1810] dark:text-white leading-snug">
-              Natura Bee Farm
+              Natural Bee Farm
             </h3>
             <p className="text-[11px] text-[#5C4033] dark:text-[#D8CFBF] font-medium">
               {authMode === 'login' ? 'Sign in to access your pure honey orders' : 'Join 10,000+ pure raw honey lovers'}
@@ -461,7 +461,7 @@ export const AuthModal: React.FC = () => {
 
         {/* Footer Note */}
         <p className="mt-4 text-[10px] text-center text-[#5C4033] dark:text-[#D8CFBF]">
-          By signing up, you agree to Natura Bee Farm&apos;s{' '}
+          By signing up, you agree to Natural Bee Farm&apos;s{' '}
           <a href="#terms" className="underline hover:text-[#9C5B23]">
             Terms
           </a>{' '}

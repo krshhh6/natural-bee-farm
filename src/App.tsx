@@ -18,6 +18,7 @@ import { CartDrawer } from './components/CartDrawer';
 import { AuthModal } from './components/AuthModal';
 import { ProductsPage } from './components/ProductsPage';
 import { AccountPage } from './components/AccountPage';
+import { WhatsAppWidget } from './components/WhatsAppWidget';
 import { PRODUCTS } from './data/products';
 import type { CategoryType, AppPage, ProfileTab } from './types';
 import { CheckCircle2, ShoppingBag, ArrowRight } from 'lucide-react';
@@ -78,22 +79,31 @@ const MainContent: React.FC = () => {
   return (
     <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#FEFDF5] dark:bg-[#1C1C18] text-[#282823] dark:text-[#FEFDF5] transition-colors duration-200 selection:bg-[#9C5B23] selection:text-white">
       
-      {/* Toast Notification with Hover Go To Cart Button */}
-      {toastMessage && (
-        <div className="fixed bottom-6 right-6 left-6 sm:left-auto sm:max-w-md z-50 bg-[#282823]/95 backdrop-blur-md text-[#FEFDF5] px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl shadow-2xl border border-[#E9BE5F]/50 flex items-center justify-between gap-3 text-xs sm:text-sm font-semibold animate-slide-up">
-          <div className="flex items-center gap-2 min-w-0">
-            <CheckCircle2 className="w-5 h-5 text-[#E9BE5F] shrink-0 animate-bounce" />
-            <span className="truncate">{toastMessage}</span>
+      {/* Toast Notification with Contextual Go To Cart Button */}
+      {toastMessage && (() => {
+        const isCartToast =
+          toastMessage.toLowerCase().includes('cart') ||
+          toastMessage.toLowerCase().includes('added to') ||
+          toastMessage.toLowerCase().includes('reorder');
+
+        return (
+          <div className="fixed bottom-6 right-6 left-6 sm:left-auto sm:max-w-md z-50 bg-[#282823]/95 backdrop-blur-md text-[#FEFDF5] px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl shadow-2xl border border-[#E9BE5F]/50 flex items-center justify-between gap-3 text-xs sm:text-sm font-semibold animate-slide-up">
+            <div className="flex items-center gap-2 min-w-0">
+              <CheckCircle2 className="w-5 h-5 text-[#E9BE5F] shrink-0" />
+              <span className="truncate">{toastMessage}</span>
+            </div>
+            {isCartToast && (
+              <button
+                onClick={() => setIsCartOpen(true)}
+                className="shrink-0 bg-gradient-to-r from-[#9C5B23] to-[#B8661B] hover:from-[#834917] hover:to-[#9C5B23] text-white px-4 py-2 rounded-xl text-xs font-extrabold flex items-center gap-1.5 shadow-lg transition-all transform hover:scale-105 active:scale-95 border border-white/20 cursor-pointer animate-pulse-glow"
+              >
+                <span>Go to Cart</span>
+                <ShoppingBag className="w-4 h-4 text-white" />
+              </button>
+            )}
           </div>
-          <button
-            onClick={() => setIsCartOpen(true)}
-            className="shrink-0 bg-gradient-to-r from-[#9C5B23] to-[#B8661B] hover:from-[#834917] hover:to-[#9C5B23] text-white px-4 py-2 rounded-xl text-xs font-extrabold flex items-center gap-1.5 shadow-lg transition-all transform hover:scale-105 active:scale-95 border border-white/20 cursor-pointer animate-pulse-glow"
-          >
-            <span>Go to Cart</span>
-            <ShoppingBag className="w-4 h-4 text-white" />
-          </button>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Persistent Floating Hover "Go to Cart" Pill when cart has items */}
       {!toastMessage && cartCount > 0 && (
@@ -183,10 +193,11 @@ const MainContent: React.FC = () => {
         </>
       )}
 
-      {/* Overlays & Modals */}
+      {/* Overlays, Modals & Floating WhatsApp Widget */}
       <ProductModal />
       <CartDrawer />
       <AuthModal />
+      <WhatsAppWidget />
 
     </div>
   );

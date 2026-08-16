@@ -24,7 +24,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Himalayan Foothills & Bihar Forests',
   },
   {
-    id: 'natura-acacia-honey-500g',
+    id: 'natural-acacia-honey-500g',
     name: 'Himalayan Acacia & Sidr Honey',
     category: 'honey',
     categoryName: 'Artisanal Honey',
@@ -46,7 +46,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Himalayan Foothills',
   },
   {
-    id: 'natura-cinnamon-honey-500g',
+    id: 'natural-cinnamon-honey-500g',
     name: 'Cinnamon & Spice Infused Honey',
     category: 'honey',
     categoryName: 'Spice Infused Honey',
@@ -68,7 +68,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Handmade Artisanal Batch, Bihar',
   },
   {
-    id: 'natura-saffron-honey-250g',
+    id: 'natural-saffron-honey-250g',
     name: 'Kashmiri Kesar (Saffron) Honey',
     category: 'honey',
     categoryName: 'Spice Infused Honey',
@@ -90,7 +90,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Pampore, Kashmir & Bihar',
   },
   {
-    id: 'natura-tulsi-honey-500g',
+    id: 'natural-tulsi-honey-500g',
     name: 'Organic Tulsi (Holy Basil) Honey',
     category: 'honey',
     categoryName: 'Ayurvedic Honey',
@@ -111,7 +111,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Organic Tulsi Farms, Bihar',
   },
   {
-    id: 'natura-neem-honey-500g',
+    id: 'natural-neem-honey-500g',
     name: 'Pure Organic Neem Blossom Honey',
     category: 'honey',
     categoryName: 'Ayurvedic Honey',
@@ -132,7 +132,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Neem Orchards, Bihar',
   },
   {
-    id: 'natura-jamun-honey-500g',
+    id: 'natural-jamun-honey-500g',
     name: 'Wild Jamun Blossom Honey',
     category: 'honey',
     categoryName: 'Monofloral Honey',
@@ -153,7 +153,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Wild Jamun Groves, Bihar',
   },
   {
-    id: 'natura-wildflower-honey-500g',
+    id: 'natural-wildflower-honey-500g',
     name: 'Sun-Drenched Wildflower Honey',
     category: 'honey',
     categoryName: 'Monofloral Honey',
@@ -174,7 +174,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Rural Countryside, Bihar',
   },
   {
-    id: 'natura-karanj-honey-500g',
+    id: 'natural-karanj-honey-500g',
     name: 'Organic Karanj Herbal Honey',
     category: 'honey',
     categoryName: 'Herbal Honey',
@@ -195,7 +195,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Chota Nagpur Plateau & Bihar',
   },
   {
-    id: 'natura-ashwagandha-honey-500g',
+    id: 'natural-ashwagandha-honey-500g',
     name: 'Ashwagandha & Ginger Honey',
     category: 'honey',
     categoryName: 'Ayurvedic Honey',
@@ -217,7 +217,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Herbal Farms, Bihar',
   },
   {
-    id: 'natura-raw-comb-honey',
+    id: 'natural-raw-comb-honey',
     name: 'Raw Honeycomb in Jar',
     category: 'honey',
     categoryName: 'Raw Comb Honey',
@@ -239,7 +239,7 @@ export const PRODUCTS: Product[] = [
     origin: 'Bihar Wild Forest Hives',
   },
   {
-    id: 'natura-multifloral-honey-500g',
+    id: 'natural-multifloral-honey-500g',
     name: 'Himalayan Multifloral Honey',
     category: 'honey',
     categoryName: 'Artisanal Honey',

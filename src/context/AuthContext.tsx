@@ -77,7 +77,7 @@ const DEMO_SAMPLE_ORDERS: Order[] = [
         image: '/Glass_jar_filled_with_honey_202608130958.jpeg',
       },
       {
-        id: 'natura-acacia-honey-500g',
+        id: 'natural-acacia-honey-500g',
         name: 'Himalayan Acacia & Sidr Honey',
         weight: '500g',
         quantity: 1,
@@ -114,7 +114,7 @@ const loadAccountsDb = (): Record<string, UserProfile> => {
       membershipTier: 'Artisanal Gold',
       addresses: DEMO_SAMPLE_ADDRESSES,
       orders: DEMO_SAMPLE_ORDERS,
-      wishlist: ['wild-forest-honey', 'natura-acacia-honey-500g'],
+      wishlist: ['wild-forest-honey', 'natural-acacia-honey-500g'],
       notifications: {
         whatsapp: true,
         email: true,

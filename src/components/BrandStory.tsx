@@ -64,7 +64,7 @@ export const BrandStory: React.FC = () => {
             blurStrength={4}
             textClassName="text-[#5C4033] dark:text-[#D8CFBF] text-base sm:text-lg leading-relaxed font-medium max-w-2xl mx-auto"
           >
-            Natura Bee Farm was born out of a passion to preserve age-old Indian apiculture craftsmanship. From the wild forests of Bihar to your morning tea, we bring you 100% pure raw honey prepared without compromises.
+            Natural Bee Farm was born out of a passion to preserve age-old Indian apiculture craftsmanship. From the wild forests of Bihar to your morning tea, we bring you 100% pure raw honey prepared without compromises.
           </ScrollReveal>
         </div>
 
@@ -189,7 +189,7 @@ export const BrandStory: React.FC = () => {
               — 100% Mother-Owned Brand
             </div>
             <div className="text-[11px] text-[#5C4033] dark:text-[#D8CFBF] font-semibold tracking-wider">
-              Empowering Rural Artisans & Mothers, Natura Bee Farm
+              Empowering Rural Artisans & Mothers, Natural Bee Farm
             </div>
           </div>
         </div>

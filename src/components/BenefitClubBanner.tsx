@@ -36,7 +36,7 @@ export const BenefitClubBanner: React.FC<BenefitClubBannerProps> = ({ onShopClic
           className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight"
           style={{ fontFamily: "'RosierHeadingFont', 'Playfair Display', serif" }}
         >
-          Natura Bee Club
+          Natural Bee Club
         </h2>
         <p
           className="text-[#E9BE5F]/80 text-base sm:text-lg mb-3 max-w-2xl mx-auto"
