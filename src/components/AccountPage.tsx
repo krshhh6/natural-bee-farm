@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   User,
   MapPin,
@@ -58,14 +58,27 @@ export const AccountPage: React.FC<AccountPageProps> = ({
 
   const { addToCart, showToast, setIsCartOpen } = useCart();
 
-  // Local state for Personal Info form
+  // Local state for Personal Info form (synchronized with current user)
   const [profileForm, setProfileForm] = useState({
     name: user?.name || '',
     email: user?.email || '',
-    phone: user?.phone || '9939055989',
-    gender: user?.gender || 'female',
-    dob: user?.dob || '1996-05-18',
+    phone: user?.phone || '',
+    gender: user?.gender || '',
+    dob: user?.dob || '',
   });
+
+  useEffect(() => {
+    if (user) {
+      setProfileForm({
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        gender: user.gender || '',
+        dob: user.dob || '',
+      });
+    }
+  }, [user]);
+
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [profileSavedSuccess, setProfileSavedSuccess] = useState(false);
 
@@ -74,7 +87,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
   const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
   const [addressForm, setAddressForm] = useState<Omit<Address, 'id'>>({
     name: user?.name || '',
-    phone: user?.phone || '9939055989',
+    phone: user?.phone || '',
     street: '',
     landmark: '',
     city: '',
@@ -101,7 +114,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
   });
 
   // Order filter state
-  const [orderFilter, setOrderFilter] = useState<'all' | 'In Transit' | 'Delivered'>('all');
+  const [orderFilter, setOrderFilter] = useState<'all' | 'In Transit' | 'Delivered' | 'Processing'>('all');
 
   // Invoice modal state
   const [activeInvoiceOrder, setActiveInvoiceOrder] = useState<any | null>(null);
@@ -124,6 +137,12 @@ export const AccountPage: React.FC<AccountPageProps> = ({
     } else if (cleaned.startsWith('400')) {
       newCity = 'Mumbai';
       newState = 'Maharashtra';
+    } else if (cleaned.startsWith('700')) {
+      newCity = 'Kolkata';
+      newState = 'West Bengal';
+    } else if (cleaned.startsWith('600')) {
+      newCity = 'Chennai';
+      newState = 'Tamil Nadu';
     }
 
     setAddressForm((prev) => ({
@@ -138,7 +157,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
     setEditingAddressId(null);
     setAddressForm({
       name: user?.name || '',
-      phone: user?.phone || '9939055989',
+      phone: user?.phone || '',
       street: '',
       landmark: '',
       city: '',
@@ -200,7 +219,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
       setProfileSavedSuccess(true);
       showToast('Profile information updated successfully! ✨');
       setTimeout(() => setProfileSavedSuccess(false), 3000);
-    }, 400);
+    }, 300);
   };
 
   const handleReorder = (order: any) => {
@@ -312,7 +331,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                       />
                     ) : (
                       <span className="font-serif font-black text-2xl sm:text-3xl text-[#E9BE5F]">
-                        {user?.name?.charAt(0).toUpperCase() || 'A'}
+                        {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
                       </span>
                     )}
                   </div>
@@ -325,22 +344,31 @@ export const AccountPage: React.FC<AccountPageProps> = ({
               <div className="space-y-1">
                 <div className="flex items-center gap-2.5 flex-wrap">
                   <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-white">
-                    {user?.name || 'Ananya Sharma'}
+                    {user?.name || 'My Account'}
                   </h1>
                   <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-black bg-[#E9BE5F]/20 text-[#E9BE5F] border border-[#E9BE5F]/40 shadow-xs">
                     <Sparkles className="w-3 h-3 fill-[#E9BE5F]" />
-                    <span>{user?.membershipTier || 'Artisanal Gold Member'}</span>
+                    <span>{user?.membershipTier || 'Artisanal Member'}</span>
                   </span>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-amber-100/80">
                   <span className="flex items-center gap-1">
                     <Mail className="w-3.5 h-3.5 text-[#E9BE5F]" />
-                    <span>{user?.email || 'ananya.sharma@example.com'}</span>
+                    <span>{user?.email || 'No email attached'}</span>
                   </span>
                   <span className="flex items-center gap-1">
                     <Phone className="w-3.5 h-3.5 text-[#E9BE5F]" />
-                    <span>+91 {user?.phone || '99390 55989'}</span>
+                    {user?.phone ? (
+                      <span>+91 {user.phone}</span>
+                    ) : (
+                      <button
+                        onClick={() => setActiveProfileTab('profile')}
+                        className="underline hover:text-white"
+                      >
+                        + Add phone number
+                      </button>
+                    )}
                   </span>
                 </div>
               </div>
@@ -353,7 +381,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                 className="bg-white/10 hover:bg-white/15 backdrop-blur-md p-3 rounded-2xl border border-white/10 transition-all cursor-pointer text-center"
               >
                 <div className="text-[10px] text-amber-200/80 font-bold uppercase tracking-wider">Orders</div>
-                <div className="text-base sm:text-lg font-black text-white">{user?.orders?.length || 2} Placed</div>
+                <div className="text-base sm:text-lg font-black text-white">{user?.orders?.length || 0} Placed</div>
               </div>
 
               <div
@@ -361,7 +389,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                 className="bg-white/10 hover:bg-white/15 backdrop-blur-md p-3 rounded-2xl border border-white/10 transition-all cursor-pointer text-center"
               >
                 <div className="text-[10px] text-amber-200/80 font-bold uppercase tracking-wider">Addresses</div>
-                <div className="text-base sm:text-lg font-black text-white">{user?.addresses?.length || 2} Saved</div>
+                <div className="text-base sm:text-lg font-black text-white">{user?.addresses?.length || 0} Saved</div>
               </div>
 
               <div
@@ -369,7 +397,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                 className="bg-white/10 hover:bg-white/15 backdrop-blur-md p-3 rounded-2xl border border-white/10 transition-all cursor-pointer text-center"
               >
                 <div className="text-[10px] text-amber-200/80 font-bold uppercase tracking-wider">Wishlist</div>
-                <div className="text-base sm:text-lg font-black text-white">{user?.wishlist?.length || 2} Items</div>
+                <div className="text-base sm:text-lg font-black text-white">{user?.wishlist?.length || 0} Items</div>
               </div>
 
               <div
@@ -377,7 +405,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                 className="bg-gradient-to-br from-[#9C5B23] to-[#B8661B] p-3 rounded-2xl border border-amber-400/40 shadow-lg text-center cursor-pointer hover:scale-105 transition-transform"
               >
                 <div className="text-[10px] text-amber-100 font-bold uppercase tracking-wider">Honey Wallet</div>
-                <div className="text-base sm:text-lg font-black text-[#FEFDF5]">🍯 {user?.honeyPoints ?? 240} pts</div>
+                <div className="text-base sm:text-lg font-black text-[#FEFDF5]">🍯 {user?.honeyPoints ?? 100} pts</div>
               </div>
             </div>
 
@@ -502,7 +530,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                   <span>Honey Rewards Wallet</span>
                 </div>
                 <span className="text-[10px] font-black text-[#9C5B23] dark:text-[#E9BE5F]">
-                  {user?.honeyPoints ?? 240} pts
+                  {user?.honeyPoints ?? 100} pts
                 </span>
               </button>
 
@@ -537,7 +565,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
               </div>
             </div>
 
-            {/* Mother-Owned Quality Guarantee Help Badge */}
+            {/* Quality Guarantee Badge */}
             <div className="bg-[#FAF5EB] dark:bg-[#1E1B17] p-4 rounded-3xl border border-[#E8D5B7] dark:border-[#3D372E] text-xs space-y-2">
               <div className="flex items-center gap-2 text-[#9C5B23] dark:text-[#E9BE5F] font-bold">
                 <ShieldCheck className="w-4 h-4 shrink-0" />
@@ -559,7 +587,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
 
           </div>
 
-          {/* RIGHT COLUMN: Dedicated Spacious Page Content Views */}
+          {/* RIGHT COLUMN: Dedicated Views */}
           <div className="lg:col-span-9 bg-[#FAF5EB] dark:bg-[#1E1B17] rounded-3xl p-6 sm:p-8 border border-[#E8D5B7] dark:border-[#3D372E] shadow-sm">
             
             {/* ======================================================== */}
@@ -572,7 +600,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                     Personal Information
                   </h2>
                   <p className="text-xs text-[#8C7A65] dark:text-[#A69888] mt-1">
-                    Manage your identity, verified contact details, and birthday honey gift preferences.
+                    Manage your personal details, honey reward points, and verified contact numbers.
                   </p>
                 </div>
 
@@ -591,7 +619,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                         onChange={(e) => setProfileForm({ ...profileForm, name: e.target.value })}
                         required
                         className="w-full px-4 py-3 bg-[#FEFDF5] dark:bg-[#25221D] border border-[#E8D5B7] dark:border-[#423A30] rounded-xl text-sm font-semibold text-[#2C1810] dark:text-[#FEFDF5] focus:outline-none focus:border-[#9C5B23] focus:ring-1 focus:ring-[#9C5B23]"
-                        placeholder="e.g. Ananya Sharma"
+                        placeholder="Your full name"
                       />
                     </div>
 
@@ -612,7 +640,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                         onChange={(e) => setProfileForm({ ...profileForm, email: e.target.value })}
                         required
                         className="w-full px-4 py-3 bg-[#FEFDF5] dark:bg-[#25221D] border border-[#E8D5B7] dark:border-[#423A30] rounded-xl text-sm font-semibold text-[#2C1810] dark:text-[#FEFDF5] focus:outline-none focus:border-[#9C5B23] focus:ring-1 focus:ring-[#9C5B23]"
-                        placeholder="ananya.sharma@example.com"
+                        placeholder="your.email@example.com"
                       />
                     </div>
 
@@ -621,11 +649,13 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                       <label className="text-xs font-bold text-[#5C4033] dark:text-[#D8CFBF] uppercase tracking-wider flex items-center justify-between">
                         <span className="flex items-center gap-1.5">
                           <Phone className="w-3.5 h-3.5 text-[#9C5B23]" />
-                          <span>10-Digit Mobile Number *</span>
+                          <span>10-Digit Mobile Number</span>
                         </span>
-                        <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-black">
-                          ✓ OTP Linked
-                        </span>
+                        {profileForm.phone ? (
+                          <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-black">
+                            ✓ Linked
+                          </span>
+                        ) : null}
                       </label>
                       <div className="relative flex">
                         <span className="inline-flex items-center px-3.5 bg-[#E8D5B7]/50 dark:bg-[#3D372E] border border-r-0 border-[#E8D5B7] dark:border-[#423A30] rounded-l-xl text-xs font-bold text-[#5C4033] dark:text-[#FEFDF5]">
@@ -635,9 +665,8 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                           type="tel"
                           value={profileForm.phone}
                           onChange={(e) => setProfileForm({ ...profileForm, phone: e.target.value.replace(/\D/g, '').slice(0, 10) })}
-                          required
                           className="w-full px-4 py-3 bg-[#FEFDF5] dark:bg-[#25221D] border border-[#E8D5B7] dark:border-[#423A30] rounded-r-xl text-sm font-semibold text-[#2C1810] dark:text-[#FEFDF5] focus:outline-none focus:border-[#9C5B23] focus:ring-1 focus:ring-[#9C5B23]"
-                          placeholder="9939055989"
+                          placeholder="e.g. 9876543210"
                         />
                       </div>
                     </div>
@@ -655,7 +684,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                         className="w-full px-4 py-3 bg-[#FEFDF5] dark:bg-[#25221D] border border-[#E8D5B7] dark:border-[#423A30] rounded-xl text-sm font-semibold text-[#2C1810] dark:text-[#FEFDF5] focus:outline-none focus:border-[#9C5B23] focus:ring-1 focus:ring-[#9C5B23]"
                       />
                       <span className="text-[10px] text-[#8C7A65] dark:text-[#A69888] block">
-                        🎁 We send a complimentary 250g artisanal honey jar on your birthday!
+                        🎁 We send a complimentary 250g artisanal honey gift on your birthday!
                       </span>
                     </div>
 
@@ -694,16 +723,16 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                     <div className="flex items-center justify-between text-xs font-bold">
                       <span className="flex items-center gap-1.5 text-[#9C5B23] dark:text-[#E9BE5F]">
                         <Sparkles className="w-4 h-4" />
-                        <span>Artisanal Gold Status</span>
+                        <span>{user?.membershipTier || 'Artisanal Member'}</span>
                       </span>
                       <span className="text-[#5C4033] dark:text-[#D8CFBF]">
-                        {user?.honeyPoints ?? 240} / 500 Points to Platinum
+                        {user?.honeyPoints ?? 100} / 500 Points to Gold Keeper
                       </span>
                     </div>
                     <div className="w-full bg-[#E8D5B7] dark:bg-[#3D372E] h-2.5 rounded-full overflow-hidden">
                       <div
                         className="bg-gradient-to-r from-[#9C5B23] to-[#E9BE5F] h-full rounded-full transition-all duration-500"
-                        style={{ width: `${Math.min(100, ((user?.honeyPoints ?? 240) / 500) * 100)}%` }}
+                        style={{ width: `${Math.min(100, (((user?.honeyPoints ?? 100)) / 500) * 100)}%` }}
                       />
                     </div>
                     <p className="text-[11px] text-[#8C7A65] dark:text-[#A69888]">
@@ -766,7 +795,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                   )}
                 </div>
 
-                {/* DEDICATED IN-PAGE ADDRESS FORM (SPACIOUS & FULL PAGE) */}
+                {/* DEDICATED IN-PAGE ADDRESS FORM */}
                 {isAddingAddress ? (
                   <div className="bg-[#FEFDF5] dark:bg-[#25221D] p-6 rounded-2xl border-2 border-[#9C5B23] shadow-lg space-y-5 animate-slide-down">
                     <div className="flex items-center justify-between border-b border-[#E8D5B7] dark:border-[#3D372E] pb-3">
@@ -795,7 +824,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                             value={addressForm.name}
                             onChange={(e) => setAddressForm({ ...addressForm, name: e.target.value })}
                             required
-                            placeholder="e.g. Ananya Sharma"
+                            placeholder={user?.name || "e.g. Rahul Sharma"}
                             className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B17] border border-[#E8D5B7] dark:border-[#423A30] rounded-xl text-xs font-semibold text-[#2C1810] dark:text-white focus:outline-none focus:border-[#9C5B23]"
                           />
                         </div>
@@ -810,7 +839,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                             value={addressForm.phone}
                             onChange={(e) => setAddressForm({ ...addressForm, phone: e.target.value.replace(/\D/g, '').slice(0, 10) })}
                             required
-                            placeholder="e.g. 9939055989"
+                            placeholder={user?.phone || "e.g. 9876543210"}
                             className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B17] border border-[#E8D5B7] dark:border-[#423A30] rounded-xl text-xs font-semibold text-[#2C1810] dark:text-white focus:outline-none focus:border-[#9C5B23]"
                           />
                         </div>
@@ -827,7 +856,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                           onChange={(e) => setAddressForm({ ...addressForm, street: e.target.value })}
                           required
                           rows={2}
-                          placeholder="e.g. Flat 402, Honey Blossom Residency, Bahpura - Bihta Rd"
+                          placeholder="e.g. Flat 102, Shanti Vihar, Main Road"
                           className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B17] border border-[#E8D5B7] dark:border-[#423A30] rounded-xl text-xs font-semibold text-[#2C1810] dark:text-white focus:outline-none focus:border-[#9C5B23]"
                         />
                       </div>
@@ -844,7 +873,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                             value={addressForm.pincode}
                             onChange={(e) => handlePincodeChange(e.target.value)}
                             required
-                            placeholder="e.g. 801111"
+                            placeholder="e.g. 110001"
                             className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B17] border border-[#E8D5B7] dark:border-[#423A30] rounded-xl text-xs font-semibold text-[#2C1810] dark:text-white focus:outline-none focus:border-[#9C5B23]"
                           />
                         </div>
@@ -859,7 +888,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                             value={addressForm.city}
                             onChange={(e) => setAddressForm({ ...addressForm, city: e.target.value })}
                             required
-                            placeholder="e.g. Patna"
+                            placeholder="e.g. New Delhi"
                             className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B17] border border-[#E8D5B7] dark:border-[#423A30] rounded-xl text-xs font-semibold text-[#2C1810] dark:text-white focus:outline-none focus:border-[#9C5B23]"
                           />
                         </div>
@@ -874,7 +903,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                             value={addressForm.state}
                             onChange={(e) => setAddressForm({ ...addressForm, state: e.target.value })}
                             required
-                            placeholder="e.g. Bihar"
+                            placeholder="e.g. Delhi"
                             className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B17] border border-[#E8D5B7] dark:border-[#423A30] rounded-xl text-xs font-semibold text-[#2C1810] dark:text-white focus:outline-none focus:border-[#9C5B23]"
                           />
                         </div>
@@ -892,7 +921,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                             type="text"
                             value={addressForm.landmark}
                             onChange={(e) => setAddressForm({ ...addressForm, landmark: e.target.value })}
-                            placeholder="e.g. Near Mustafapur Chauraha"
+                            placeholder="e.g. Near City Mall"
                             className="w-full px-3.5 py-2.5 bg-white dark:bg-[#1E1B17] border border-[#E8D5B7] dark:border-[#423A30] rounded-xl text-xs font-semibold text-[#2C1810] dark:text-white focus:outline-none focus:border-[#9C5B23]"
                           />
                         </div>
@@ -957,106 +986,107 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                 ) : null}
 
                 {/* ADDRESS CARDS GRID */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {(user?.addresses || []).map((addr) => (
-                    <div
-                      key={addr.id}
-                      className={`relative p-5 rounded-2xl bg-[#FEFDF5] dark:bg-[#25221D] border-2 transition-all flex flex-col justify-between ${
-                        addr.isDefault
-                          ? 'border-[#9C5B23] shadow-md shadow-[#9C5B23]/10'
-                          : 'border-[#E8D5B7] dark:border-[#3D372E] hover:border-[#9C5B23]/60'
-                      }`}
-                    >
-                      <div className="space-y-2.5">
-                        {/* Badges & Actions */}
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#FAF5EB] dark:bg-[#1E1B17] text-[#9C5B23] dark:text-[#E9BE5F] border border-[#E8D5B7] dark:border-[#3D372E]">
-                              {addr.type === 'home' ? '🏠 Home' : addr.type === 'work' ? '🏢 Work' : '📍 Other'}
-                            </span>
-                            {addr.isDefault && (
-                              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-[#15803D]/15 text-[#15803D] dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800">
-                                Default Address
+                {(user?.addresses || []).length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {user!.addresses!.map((addr) => (
+                      <div
+                        key={addr.id}
+                        className={`relative p-5 rounded-2xl bg-[#FEFDF5] dark:bg-[#25221D] border-2 transition-all flex flex-col justify-between ${
+                          addr.isDefault
+                            ? 'border-[#9C5B23] shadow-md shadow-[#9C5B23]/10'
+                            : 'border-[#E8D5B7] dark:border-[#3D372E] hover:border-[#9C5B23]/60'
+                        }`}
+                      >
+                        <div className="space-y-2.5">
+                          {/* Badges & Actions */}
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#FAF5EB] dark:bg-[#1E1B17] text-[#9C5B23] dark:text-[#E9BE5F] border border-[#E8D5B7] dark:border-[#3D372E]">
+                                {addr.type === 'home' ? '🏠 Home' : addr.type === 'work' ? '🏢 Work' : '📍 Other'}
                               </span>
-                            )}
+                              {addr.isDefault && (
+                                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-[#15803D]/15 text-[#15803D] dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800">
+                                  Default Address
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="flex items-center gap-1">
+                              <button
+                                onClick={() => handleStartEditAddress(addr)}
+                                className="p-1.5 text-[#8C7A65] hover:text-[#9C5B23] hover:bg-[#FAF5EB] dark:hover:bg-[#1E1B17] rounded-lg transition-colors cursor-pointer"
+                                title="Edit Address"
+                              >
+                                <Edit2 className="w-3.5 h-3.5" />
+                              </button>
+                              <button
+                                onClick={() => {
+                                  if (confirm('Are you sure you want to delete this address?')) {
+                                    deleteAddress(addr.id);
+                                    showToast('Address deleted.');
+                                  }
+                                }}
+                                className="p-1.5 text-[#8C7A65] hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors cursor-pointer"
+                                title="Delete Address"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
                           </div>
 
-                          <div className="flex items-center gap-1">
-                            <button
-                              onClick={() => handleStartEditAddress(addr)}
-                              className="p-1.5 text-[#8C7A65] hover:text-[#9C5B23] hover:bg-[#FAF5EB] dark:hover:bg-[#1E1B17] rounded-lg transition-colors cursor-pointer"
-                              title="Edit Address"
-                            >
-                              <Edit2 className="w-3.5 h-3.5" />
-                            </button>
+                          {/* Name & Phone */}
+                          <div>
+                            <div className="font-serif font-bold text-sm text-[#2C1810] dark:text-white">
+                              {addr.name}
+                            </div>
+                            <div className="text-xs text-[#8C7A65] dark:text-[#A69888] font-medium">
+                              Mobile: +91 {addr.phone}
+                            </div>
+                          </div>
+
+                          {/* Street & Location */}
+                          <div className="text-xs text-[#4A3B32] dark:text-[#D8CFBF] leading-relaxed">
+                            <p>{addr.street}</p>
+                            {addr.landmark && <p className="text-[11px] text-[#8C7A65]">Landmark: {addr.landmark}</p>}
+                            <p className="font-semibold text-[#2C1810] dark:text-white mt-1">
+                              {addr.city}, {addr.state} - <span className="font-mono font-bold">{addr.pincode}</span>
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Default Action Button */}
+                        {!addr.isDefault && (
+                          <div className="pt-3 mt-3 border-t border-[#E8D5B7] dark:border-[#3D372E]">
                             <button
                               onClick={() => {
-                                if (confirm('Are you sure you want to delete this address?')) {
-                                  deleteAddress(addr.id);
-                                  showToast('Address deleted.');
-                                }
+                                setDefaultAddress(addr.id);
+                                showToast(`Set "${addr.street.slice(0, 20)}..." as default address! 📍`);
                               }}
-                              className="p-1.5 text-[#8C7A65] hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors cursor-pointer"
-                              title="Delete Address"
+                              className="text-[11px] font-black text-[#9C5B23] dark:text-[#E9BE5F] hover:underline cursor-pointer"
                             >
-                              <Trash2 className="w-3.5 h-3.5" />
+                              Set as Default Delivery Address &rarr;
                             </button>
                           </div>
-                        </div>
-
-                        {/* Name & Phone */}
-                        <div>
-                          <div className="font-serif font-bold text-sm text-[#2C1810] dark:text-white">
-                            {addr.name}
-                          </div>
-                          <div className="text-xs text-[#8C7A65] dark:text-[#A69888] font-medium">
-                            Mobile: +91 {addr.phone}
-                          </div>
-                        </div>
-
-                        {/* Street & Location */}
-                        <div className="text-xs text-[#4A3B32] dark:text-[#D8CFBF] leading-relaxed">
-                          <p>{addr.street}</p>
-                          {addr.landmark && <p className="text-[11px] text-[#8C7A65]">Landmark: {addr.landmark}</p>}
-                          <p className="font-semibold text-[#2C1810] dark:text-white mt-1">
-                            {addr.city}, {addr.state} - <span className="font-mono font-bold">{addr.pincode}</span>
-                          </p>
-                        </div>
+                        )}
                       </div>
-
-                      {/* Default Action Button */}
-                      {!addr.isDefault && (
-                        <div className="pt-3 mt-3 border-t border-[#E8D5B7] dark:border-[#3D372E]">
-                          <button
-                            onClick={() => {
-                              setDefaultAddress(addr.id);
-                              showToast(`Set "${addr.street.slice(0, 20)}..." as default address! 📍`);
-                            }}
-                            className="text-[11px] font-black text-[#9C5B23] dark:text-[#E9BE5F] hover:underline cursor-pointer"
-                          >
-                            Set as Default Delivery Address &rarr;
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                {(user?.addresses || []).length === 0 && !isAddingAddress && (
-                  <div className="text-center py-12 space-y-3">
+                    ))}
+                  </div>
+                ) : !isAddingAddress ? (
+                  <div className="text-center py-12 space-y-3 bg-[#FEFDF5] dark:bg-[#25221D] rounded-2xl border border-dashed border-[#E8D5B7] dark:border-[#3D372E] p-8">
                     <MapPin className="w-12 h-12 text-[#9C5B23] mx-auto opacity-50" />
-                    <h3 className="font-serif text-lg font-bold text-[#2C1810] dark:text-white">No Addresses Saved Yet</h3>
+                    <h3 className="font-serif text-lg font-bold text-[#2C1810] dark:text-white">No Delivery Addresses Saved Yet</h3>
                     <p className="text-xs text-[#8C7A65] max-w-sm mx-auto">
-                      Add your home or office shipping address for instant 1-click doorstep delivery.
+                      Add your home or office address for fast, 1-click doorstep delivery.
                     </p>
                     <button
                       onClick={handleStartAddAddress}
-                      className="px-5 py-2.5 bg-[#9C5B23] text-white rounded-xl text-xs font-bold shadow-md cursor-pointer"
+                      className="px-6 py-2.5 bg-[#9C5B23] hover:bg-[#834917] text-white rounded-xl text-xs font-bold shadow-md cursor-pointer inline-flex items-center gap-2"
                     >
-                      + Add First Address
+                      <Plus className="w-4 h-4" />
+                      <span>Add Your First Address</span>
                     </button>
                   </div>
-                )}
+                ) : null}
 
               </div>
             )}
@@ -1078,154 +1108,174 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-1.5 bg-[#FEFDF5] dark:bg-[#25221D] p-1 rounded-xl border border-[#E8D5B7] dark:border-[#3D372E]">
-                    {(['all', 'In Transit', 'Delivered'] as const).map((filter) => (
-                      <button
-                        key={filter}
-                        onClick={() => setOrderFilter(filter)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                          orderFilter === filter
-                            ? 'bg-[#9C5B23] text-white shadow-xs'
-                            : 'text-[#5C4033] dark:text-[#D8CFBF] hover:bg-[#FAF5EB] dark:hover:bg-[#1E1B17]'
-                        }`}
-                      >
-                        {filter === 'all' ? 'All Orders' : filter}
-                      </button>
-                    ))}
-                  </div>
+                  {(user?.orders || []).length > 0 && (
+                    <div className="flex items-center gap-1.5 bg-[#FEFDF5] dark:bg-[#25221D] p-1 rounded-xl border border-[#E8D5B7] dark:border-[#3D372E]">
+                      {(['all', 'In Transit', 'Delivered', 'Processing'] as const).map((filter) => (
+                        <button
+                          key={filter}
+                          onClick={() => setOrderFilter(filter)}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                            orderFilter === filter
+                              ? 'bg-[#9C5B23] text-white shadow-xs'
+                              : 'text-[#5C4033] dark:text-[#D8CFBF] hover:bg-[#FAF5EB] dark:hover:bg-[#1E1B17]'
+                          }`}
+                        >
+                          {filter === 'all' ? 'All Orders' : filter}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* Orders List Cards */}
-                <div className="space-y-5">
-                  {filteredOrders.map((order) => (
-                    <div
-                      key={order.id}
-                      className="bg-[#FEFDF5] dark:bg-[#25221D] rounded-2xl border border-[#E8D5B7] dark:border-[#3D372E] p-5 sm:p-6 shadow-sm space-y-5"
-                    >
-                      {/* Order Card Top Bar */}
-                      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E8D5B7]/60 dark:border-[#3D372E] pb-3 text-xs">
-                        <div className="flex items-center gap-3">
-                          <span className="font-mono font-black text-sm text-[#2C1810] dark:text-white">
-                            #{order.id}
-                          </span>
-                          <span className="text-[#8C7A65] dark:text-[#A69888]">
-                            Placed on {order.date}
-                          </span>
+                {filteredOrders.length > 0 ? (
+                  <div className="space-y-5">
+                    {filteredOrders.map((order) => (
+                      <div
+                        key={order.id}
+                        className="bg-[#FEFDF5] dark:bg-[#25221D] rounded-2xl border border-[#E8D5B7] dark:border-[#3D372E] p-5 sm:p-6 shadow-sm space-y-5"
+                      >
+                        {/* Order Card Top Bar */}
+                        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E8D5B7]/60 dark:border-[#3D372E] pb-3 text-xs">
+                          <div className="flex items-center gap-3">
+                            <span className="font-mono font-black text-sm text-[#2C1810] dark:text-white">
+                              #{order.id}
+                            </span>
+                            <span className="text-[#8C7A65] dark:text-[#A69888]">
+                              Placed on {order.date}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <span className={`px-3 py-1 rounded-full text-xs font-black flex items-center gap-1.5 ${
+                              order.status === 'In Transit'
+                                ? 'bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-950/40 dark:text-amber-300'
+                                : order.status === 'Delivered'
+                                ? 'bg-emerald-100 text-emerald-900 border border-emerald-300 dark:bg-emerald-950/40 dark:text-emerald-300'
+                                : 'bg-blue-100 text-blue-900 border border-blue-300 dark:bg-blue-950/40 dark:text-blue-300'
+                            }`}>
+                              <Truck className="w-3.5 h-3.5" />
+                              <span>{order.status}</span>
+                            </span>
+
+                            <span className="font-black text-sm text-[#2C1810] dark:text-white">
+                              ₹{order.total}.00
+                            </span>
+                          </div>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                          <span className={`px-3 py-1 rounded-full text-xs font-black flex items-center gap-1.5 ${
-                            order.status === 'In Transit'
-                              ? 'bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-950/40 dark:text-amber-300'
-                              : 'bg-emerald-100 text-emerald-900 border border-emerald-300 dark:bg-emerald-950/40 dark:text-emerald-300'
-                          }`}>
-                            <Truck className="w-3.5 h-3.5" />
-                            <span>{order.status}</span>
-                          </span>
-
-                          <span className="font-black text-sm text-[#2C1810] dark:text-white">
-                            ₹{order.total}.00
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Items list with images */}
-                      <div className="space-y-3">
-                        {order.items.map((item) => (
-                          <div
-                            key={item.id}
-                            className="flex items-center justify-between gap-4 p-2.5 rounded-xl bg-paper-texture dark:bg-[#1E1B17] border border-[#E8D5B7]/60"
-                          >
-                            <div className="flex items-center gap-3.5 min-w-0">
-                              <img
-                                src={item.image}
-                                alt={item.name}
-                                className="w-12 h-12 rounded-lg object-contain bg-white shrink-0 p-1 border border-amber-100"
-                              />
-                              <div className="truncate">
-                                <div className="font-serif font-bold text-xs sm:text-sm text-[#2C1810] dark:text-white truncate">
-                                  {item.name}
-                                </div>
-                                <div className="text-[11px] text-[#8C7A65] flex items-center gap-2 mt-0.5">
-                                  <span className="font-bold text-[#9C5B23]">{item.weight}</span>
-                                  <span>•</span>
-                                  <span>Qty: {item.quantity}</span>
+                        {/* Items list with images */}
+                        <div className="space-y-3">
+                          {order.items.map((item) => (
+                            <div
+                              key={item.id}
+                              className="flex items-center justify-between gap-4 p-2.5 rounded-xl bg-paper-texture dark:bg-[#1E1B17] border border-[#E8D5B7]/60"
+                            >
+                              <div className="flex items-center gap-3.5 min-w-0">
+                                <img
+                                  src={item.image}
+                                  alt={item.name}
+                                  className="w-12 h-12 rounded-lg object-contain bg-white shrink-0 p-1 border border-amber-100"
+                                />
+                                <div className="truncate">
+                                  <div className="font-serif font-bold text-xs sm:text-sm text-[#2C1810] dark:text-white truncate">
+                                    {item.name}
+                                  </div>
+                                  <div className="text-[11px] text-[#8C7A65] flex items-center gap-2 mt-0.5">
+                                    <span className="font-bold text-[#9C5B23]">{item.weight}</span>
+                                    <span>•</span>
+                                    <span>Qty: {item.quantity}</span>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
 
-                            <div className="text-xs font-black text-[#2C1810] dark:text-white shrink-0">
-                              ₹{item.price * item.quantity}.00
+                              <div className="text-xs font-black text-[#2C1810] dark:text-white shrink-0">
+                                ₹{item.price * item.quantity}.00
+                              </div>
                             </div>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Visual Live Delhivery / Shiprocket Tracking Bar */}
-                      <div className="p-4 rounded-xl bg-[#FAF5EB] dark:bg-[#1E1B17] border border-[#E8D5B7] dark:border-[#3D372E] space-y-3">
-                        <div className="flex items-center justify-between text-xs font-bold">
-                          <span className="text-[#5C4033] dark:text-[#D8CFBF] flex items-center gap-1.5">
-                            <Truck className="w-4 h-4 text-[#9C5B23]" />
-                            <span>Shiprocket Express AWB: {order.trackingNumber}</span>
-                          </span>
-                          <span className="text-[#9C5B23] dark:text-[#E9BE5F]">
-                            {order.deliveryDate || 'Expected Soon'}
-                          </span>
+                          ))}
                         </div>
 
-                        {/* Step progress bar */}
-                        <div className="grid grid-cols-4 gap-1 sm:gap-2 text-center text-[10px] font-bold">
-                          <div className="space-y-1">
-                            <div className="h-1.5 rounded-full bg-emerald-600" />
-                            <span className="text-emerald-700 dark:text-emerald-400">1. Confirmed ✓</span>
-                          </div>
-                          <div className="space-y-1">
-                            <div className="h-1.5 rounded-full bg-emerald-600" />
-                            <span className="text-emerald-700 dark:text-emerald-400">2. Apiary Sealed ✓</span>
-                          </div>
-                          <div className="space-y-1">
-                            <div className={`h-1.5 rounded-full ${order.status === 'In Transit' ? 'bg-amber-500 animate-pulse' : 'bg-emerald-600'}`} />
-                            <span className={order.status === 'In Transit' ? 'text-amber-700 dark:text-amber-400' : 'text-emerald-700'}>
-                              3. In Transit 🚚
+                        {/* Visual Live Tracking Bar */}
+                        <div className="p-4 rounded-xl bg-[#FAF5EB] dark:bg-[#1E1B17] border border-[#E8D5B7] dark:border-[#3D372E] space-y-3">
+                          <div className="flex items-center justify-between text-xs font-bold">
+                            <span className="text-[#5C4033] dark:text-[#D8CFBF] flex items-center gap-1.5">
+                              <Truck className="w-4 h-4 text-[#9C5B23]" />
+                              <span>Shipment Tracking: {order.trackingNumber || 'Processing'}</span>
+                            </span>
+                            <span className="text-[#9C5B23] dark:text-[#E9BE5F]">
+                              {order.deliveryDate || 'Expected Soon'}
                             </span>
                           </div>
-                          <div className="space-y-1">
-                            <div className={`h-1.5 rounded-full ${order.status === 'Delivered' ? 'bg-emerald-600' : 'bg-neutral-200 dark:bg-neutral-700'}`} />
-                            <span className={order.status === 'Delivered' ? 'text-emerald-700 dark:text-emerald-400' : 'text-neutral-400'}>
-                              4. Delivered
-                            </span>
+
+                          {/* Step progress bar */}
+                          <div className="grid grid-cols-4 gap-1 sm:gap-2 text-center text-[10px] font-bold">
+                            <div className="space-y-1">
+                              <div className="h-1.5 rounded-full bg-emerald-600" />
+                              <span className="text-emerald-700 dark:text-emerald-400">1. Placed ✓</span>
+                            </div>
+                            <div className="space-y-1">
+                              <div className="h-1.5 rounded-full bg-emerald-600" />
+                              <span className="text-emerald-700 dark:text-emerald-400">2. Apiary Sealed ✓</span>
+                            </div>
+                            <div className="space-y-1">
+                              <div className={`h-1.5 rounded-full ${order.status === 'In Transit' ? 'bg-amber-500 animate-pulse' : order.status === 'Delivered' ? 'bg-emerald-600' : 'bg-neutral-200 dark:bg-neutral-700'}`} />
+                              <span className={order.status === 'In Transit' ? 'text-amber-700 dark:text-amber-400' : order.status === 'Delivered' ? 'text-emerald-700' : 'text-neutral-400'}>
+                                3. In Transit 🚚
+                              </span>
+                            </div>
+                            <div className="space-y-1">
+                              <div className={`h-1.5 rounded-full ${order.status === 'Delivered' ? 'bg-emerald-600' : 'bg-neutral-200 dark:bg-neutral-700'}`} />
+                              <span className={order.status === 'Delivered' ? 'text-emerald-700 dark:text-emerald-400' : 'text-neutral-400'}>
+                                4. Delivered
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Order Action Buttons */}
+                        <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+                          <div className="text-[11px] text-[#8C7A65]">
+                            <span>Paid via </span>
+                            <span className="font-bold text-[#2C1810] dark:text-white">{order.paymentMethod}</span>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => setActiveInvoiceOrder(order)}
+                              className="px-3.5 py-2 bg-white dark:bg-[#1E1B17] border border-[#E8D5B7] dark:border-[#3D372E] text-[#5C4033] dark:text-[#D8CFBF] rounded-xl text-xs font-bold hover:bg-[#FAF5EB] flex items-center gap-1.5 transition-colors cursor-pointer"
+                            >
+                              <Receipt className="w-3.5 h-3.5 text-[#9C5B23]" />
+                              <span>Tax Invoice</span>
+                            </button>
+
+                            <button
+                              onClick={() => handleReorder(order)}
+                              className="px-4 py-2 bg-[#9C5B23] hover:bg-[#834917] text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
+                            >
+                              <RotateCcw className="w-3.5 h-3.5" />
+                              <span>Reorder Items</span>
+                            </button>
                           </div>
                         </div>
                       </div>
-
-                      {/* Order Action Buttons */}
-                      <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-                        <div className="text-[11px] text-[#8C7A65]">
-                          <span>Paid via </span>
-                          <span className="font-bold text-[#2C1810] dark:text-white">{order.paymentMethod}</span>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => setActiveInvoiceOrder(order)}
-                            className="px-3.5 py-2 bg-white dark:bg-[#1E1B17] border border-[#E8D5B7] dark:border-[#3D372E] text-[#5C4033] dark:text-[#D8CFBF] rounded-xl text-xs font-bold hover:bg-[#FAF5EB] flex items-center gap-1.5 transition-colors cursor-pointer"
-                          >
-                            <Receipt className="w-3.5 h-3.5 text-[#9C5B23]" />
-                            <span>Tax Invoice</span>
-                          </button>
-
-                          <button
-                            onClick={() => handleReorder(order)}
-                            className="px-4 py-2 bg-[#9C5B23] hover:bg-[#834917] text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
-                          >
-                            <RotateCcw className="w-3.5 h-3.5" />
-                            <span>Reorder Items</span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12 space-y-3 bg-[#FEFDF5] dark:bg-[#25221D] rounded-2xl border border-dashed border-[#E8D5B7] dark:border-[#3D372E] p-8">
+                    <ShoppingBag className="w-12 h-12 text-[#9C5B23] mx-auto opacity-50" />
+                    <h3 className="font-serif text-lg font-bold text-[#2C1810] dark:text-white">You Have No Orders Yet</h3>
+                    <p className="text-xs text-[#8C7A65] max-w-sm mx-auto">
+                      Explore our 100% raw honey harvests and taste the pure nectar bottled directly from tribal beekeepers.
+                    </p>
+                    <button
+                      onClick={onNavigateProducts}
+                      className="px-6 py-2.5 bg-[#9C5B23] hover:bg-[#834917] text-white rounded-xl text-xs font-bold shadow-md cursor-pointer inline-flex items-center gap-2"
+                    >
+                      <span>Explore Honey Catalog &rarr;</span>
+                    </button>
+                  </div>
+                )}
 
               </div>
             )}
@@ -1314,7 +1364,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-12 space-y-3">
+                  <div className="text-center py-12 space-y-3 bg-[#FEFDF5] dark:bg-[#25221D] rounded-2xl border border-dashed border-[#E8D5B7] dark:border-[#3D372E] p-8">
                     <Heart className="w-12 h-12 text-[#9C5B23] mx-auto opacity-40" />
                     <h3 className="font-serif text-lg font-bold text-[#2C1810] dark:text-white">Your Wishlist is Empty</h3>
                     <p className="text-xs text-[#8C7A65] max-w-sm mx-auto">
@@ -1322,9 +1372,9 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                     </p>
                     <button
                       onClick={onNavigateProducts}
-                      className="px-5 py-2.5 bg-[#9C5B23] text-white rounded-xl text-xs font-bold shadow-md cursor-pointer"
+                      className="px-6 py-2.5 bg-[#9C5B23] hover:bg-[#834917] text-white rounded-xl text-xs font-bold shadow-md cursor-pointer inline-flex items-center gap-2"
                     >
-                      Explore Honey Collection &rarr;
+                      <span>Explore Honey Collection &rarr;</span>
                     </button>
                   </div>
                 )}
@@ -1353,10 +1403,10 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                       <span>Available Reward Balance</span>
                     </div>
                     <div className="font-serif text-3xl sm:text-4xl font-black text-white">
-                      🍯 {user?.honeyPoints ?? 240} <span className="text-lg font-normal">Points</span>
+                      🍯 {user?.honeyPoints ?? 100} <span className="text-lg font-normal">Points</span>
                     </div>
                     <p className="text-xs text-amber-100 font-medium">
-                      Equivalent to <strong className="text-white">₹{user?.honeyPoints ?? 240}.00 INR</strong> instant checkout savings
+                      Equivalent to <strong className="text-white">₹{user?.honeyPoints ?? 100}.00 INR</strong> instant checkout savings
                     </p>
                   </div>
 
@@ -1368,7 +1418,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                   </button>
                 </div>
 
-                {/* Earning Rules & Ledger */}
+                {/* Earning Rules */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                   <div className="p-4 rounded-2xl bg-paper-texture dark:bg-[#25221D] border border-[#E8D5B7] dark:border-[#3D372E] space-y-1.5">
                     <div className="font-bold text-[#9C5B23] dark:text-[#E9BE5F] flex items-center gap-1.5">
@@ -1392,27 +1442,6 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                       <span>Refer a Friend</span>
                     </div>
                     <p className="text-[#8C7A65]">Share your code to gift ₹100 off and receive 150 points on their first delivery.</p>
-                  </div>
-                </div>
-
-                {/* Recent Points Activity Ledger */}
-                <div className="space-y-3">
-                  <h3 className="font-serif font-bold text-sm text-[#2C1810] dark:text-white">Recent Points Activity</h3>
-                  <div className="rounded-2xl border border-[#E8D5B7] dark:border-[#3D372E] overflow-hidden bg-[#FEFDF5] dark:bg-[#25221D]">
-                    <div className="p-3.5 border-b border-[#E8D5B7] dark:border-[#3D372E] flex items-center justify-between text-xs">
-                      <div>
-                        <div className="font-bold text-[#2C1810] dark:text-white">Order #NBF-89241 Cashback</div>
-                        <div className="text-[10px] text-[#8C7A65]">14 Aug 2026 • 2x Wild Forest Honey</div>
-                      </div>
-                      <span className="font-black text-emerald-600 dark:text-emerald-400 text-sm">+180 pts</span>
-                    </div>
-                    <div className="p-3.5 flex items-center justify-between text-xs">
-                      <div>
-                        <div className="font-bold text-[#2C1810] dark:text-white">Welcome Honey Club Bonus</div>
-                        <div className="text-[10px] text-[#8C7A65]">10 Aug 2026 • New Account Registration</div>
-                      </div>
-                      <span className="font-black text-emerald-600 dark:text-emerald-400 text-sm">+60 pts</span>
-                    </div>
                   </div>
                 </div>
 

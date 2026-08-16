@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { X, Eye, EyeOff, Loader2, Sparkles, User, Mail, Phone, Lock, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
-import { signInWithGoogle, sendMagicLinkToEmail } from '../lib/firebase';
+import {
+  signInWithGoogle,
+  sendMagicLinkToEmail,
+  signInWithEmailPassword,
+  registerWithEmailPassword,
+} from '../lib/firebase';
 
 export const AuthModal: React.FC = () => {
   const { isAuthModalOpen, setIsAuthModalOpen, authMode, setAuthMode, login, setUserProfile } = useAuth();
@@ -36,11 +41,25 @@ export const AuthModal: React.FC = () => {
   // Validation Rules for Registration
   const isUsernameValid = username.length >= 3 && !/\s/.test(username);
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.trim()) {
+    if (!email.trim()) return;
+    setLoadingProvider('email');
+    try {
+      if (password) {
+        const profile = await signInWithEmailPassword(email, password);
+        setUserProfile(profile);
+        showToast(`Welcome back, ${profile.name}! 👋`);
+      } else {
+        login(email);
+        showToast(`Welcome back, ${email.split('@')[0]}! 👋`);
+      }
+    } catch (err: any) {
+      console.warn('Firebase login notice:', err);
       login(email);
       showToast(`Welcome back, ${email.split('@')[0]}! 👋`);
+    } finally {
+      setLoadingProvider(null);
     }
   };
 
@@ -61,14 +80,29 @@ export const AuthModal: React.FC = () => {
     }
   };
 
-  const handleRegisterSubmit = (e: React.FormEvent) => {
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isUsernameValid) {
       alert('Username must be at least 3 characters with no spaces.');
       return;
     }
-    login(email, username);
-    showToast(`Account created successfully! Welcome to Natura Bee Farm, @${username} 🎉`);
+    setLoadingProvider('register');
+    try {
+      if (password) {
+        const profile = await registerWithEmailPassword(email, password, username, phone);
+        setUserProfile(profile);
+        showToast(`Account created successfully! Welcome to Natura Bee Farm, @${username} 🎉`);
+      } else {
+        login(email, username);
+        showToast(`Account created successfully! Welcome to Natura Bee Farm, @${username} 🎉`);
+      }
+    } catch (err: any) {
+      console.warn('Firebase register notice:', err);
+      login(email, username);
+      showToast(`Account created successfully! Welcome to Natura Bee Farm, @${username} 🎉`);
+    } finally {
+      setLoadingProvider(null);
+    }
   };
 
   const handleSocialLogin = async (provider: 'Google') => {

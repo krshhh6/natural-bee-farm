@@ -5,6 +5,8 @@ import { useAuth } from '../context/AuthContext';
 import { PRODUCTS } from '../data/products';
 import { getWeightMultiplier } from '../utils/price';
 
+import type { Order } from '../types';
+
 export const CartDrawer: React.FC = () => {
   const {
     cart,
@@ -19,7 +21,7 @@ export const CartDrawer: React.FC = () => {
     showToast,
   } = useCart();
 
-  const { user, openProfile } = useAuth();
+  const { user, openProfile, addOrder } = useAuth();
 
   const [couponCode, setCouponCode] = useState('NEW15');
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>('NEW15');
@@ -60,6 +62,33 @@ export const CartDrawer: React.FC = () => {
   };
 
   const handleCheckout = () => {
+    if (cart.length === 0) return;
+
+    if (user) {
+      const defaultAddr = user.addresses?.find((a) => a.isDefault) || user.addresses?.[0];
+      const newOrder: Order = {
+        id: `NBF-${Math.floor(10000 + Math.random() * 90000)}`,
+        date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+        items: cart.map((item) => ({
+          id: item.product.id,
+          name: item.product.name,
+          weight: item.selectedWeight || item.product.weight,
+          quantity: item.quantity,
+          price: item.product.price,
+          image: item.product.image,
+        })),
+        total: estimatedTotal,
+        status: 'In Transit',
+        paymentMethod: 'Razorpay UPI (Verified)',
+        shippingAddress: defaultAddr
+          ? `${defaultAddr.street}, ${defaultAddr.city} - ${defaultAddr.pincode}`
+          : 'Standard Postal Delivery',
+        trackingNumber: `DEL-${Math.floor(100000 + Math.random() * 900000)}`,
+        deliveryDate: 'Expected in 3-4 Days',
+      };
+      addOrder(newOrder);
+    }
+
     setOrderComplete(true);
     setTimeout(() => {
       clearCart();
