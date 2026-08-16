@@ -19,9 +19,13 @@
   --color-blond: #FEFDF5;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 @layer base {
-  body {
-    @apply bg-[#FEFDF5] text-[#282823] font-sans antialiased selection:bg-[#E9BE5F] selection:text-[#282823];
+  html, body, #root {
+    @apply bg-[#FEFDF5] text-[#2C1810] font-sans antialiased selection:bg-[#9C5B23] selection:text-white;
   }
 
   h1, h2, h3, h4, h5, h6, .font-serif {
@@ -29,8 +33,51 @@
   }
 }
 
+/* ─── Section-Wise Artisanal Paper Texture Utility ────────────────────────────── */
+.bg-paper-texture {
+  background-image: url('/paper-texture.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* ─── Infinite Marquee Auto-Scroll Utility ────────────────────────────────────── */
+@keyframes marqueeScroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 20s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee:hover, .animate-marquee:active {
+  animation-play-state: paused;
+}
+
+/* ─── Scrollbars & Mobile Touch Swiping ────────────────────────────────────── */
+.custom-scrollbar, .no-scrollbar, [class*="overflow-x-auto"] {
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-x pan-y !important;
+  overscroll-behavior-x: contain !important;
+}
+
+@media (max-width: 768px) {
+  .snap-x {
+    scroll-snap-type: x proximity !important;
+  }
+}
+
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
@@ -38,4 +85,121 @@
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #E9BE5F;
   border-radius: 9999px;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ─── Keyframe Animations ────────────────────────────── */
+
+/* Floating Motion */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Slow Floating Motion */
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+/* Soft Glow Pulse */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(233, 190, 95, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(233, 190, 95, 0.45);
+  }
+}
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Fade In Up */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Slide In Right */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.animate-slide-in-right {
+  animation: slideInRight 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Slide Down Dropdown */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-slide-down {
+  animation: slideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Scale Up */
+@keyframes scaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.animate-scale-up {
+  animation: scaleUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Card Hover Elevation Utility */
+.hover-lift {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hover-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px -8px rgba(35, 31, 27, 0.12);
 }

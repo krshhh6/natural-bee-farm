@@ -1,32 +1,29 @@
-# React + TypeScript + Vite
+# Natural Bee Farm 🍯
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+> **100% Pure Raw Honey • Artisanal Heritage • 100% Mother-Owned Apiary**
+> Bahpura - Bihta Rd, Mustafapur, Patna, Bihar 801111
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🌟 Overview
+**Natural Bee Farm** is an artisanal e-commerce web platform offering unheated, unpasteurized, single-origin raw honey, organic spices, and traditional heritage food preparations bottled directly from ethical tribal beekeepers.
 
-## React Compiler
+## 🚀 Tech Stack
+* **Frontend**: React 19, TypeScript, Vite
+* **Styling**: TailwindCSS & Custom Artisanal Tokens
+* **Authentication**: Firebase Authentication (Google OAuth, Magic Links, Email/Password)
+* **Cloud Database**: Google Cloud Firestore (Real-time user profiles, orders, addresses, rewards)
+* **Integrations**: WhatsApp Live Apiary Support, Shiprocket & Delhivery Express Tracking, GST Tax Invoices
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Local Development
 
-## Expanding the Oxlint configuration
+```bash
+# Install dependencies
+npm install
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+# Start development server
+npm run dev
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+# Production build & type-checking
+npm run build
 ```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.

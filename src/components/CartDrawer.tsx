@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
-import { X, Trash2, ShoppingBag, ArrowRight, ShieldCheck, CheckCircle2, Tag, Sparkles, Plus, ChevronDown } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Trash2, ShoppingBag, ArrowRight, ShieldCheck, CheckCircle2, Tag, Sparkles, Plus, ChevronDown, MapPin } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useStore } from '@/context/StoreContext';
-import type { CartItem } from '../types';
+import { useAuth } from '../context/AuthContext';
+import { getWeightMultiplier } from '../utils/price';
+
+import type { CartItem, Order } from '../types';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -11,21 +14,35 @@ export const CartDrawer: React.FC = () => {
     setIsCartOpen,
     removeFromCart,
     updateQuantity,
+    updateItemWeight,
     cartSubtotal,
     clearCart,
     addToCart,
     showToast,
   } = useCart();
 
-  const { products, addOrder } = useStore();
+  const { products, addOrder: addStoreOrder } = useStore();
+  const { user, openProfile, addOrder: addAuthOrder } = useAuth();
 
   const [couponCode, setCouponCode] = useState('NEW15');
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>('NEW15');
   const [orderComplete, setOrderComplete] = useState(false);
 
+  // Lock background body scroll when drawer is open
+  useEffect(() => {
+    if (isCartOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isCartOpen]);
+
   if (!isCartOpen) return null;
 
-  const discountPercent = appliedCoupon === 'NEW15' ? 15 : appliedCoupon === 'GOMATI10' ? 10 : 0;
+  const discountPercent = appliedCoupon === 'NEW15' ? 15 : appliedCoupon === 'NATURA10' ? 10 : 0;
   const savingsAmount = Math.round((cartSubtotal * discountPercent) / 100);
   const estimatedTotal = cartSubtotal - savingsAmount;
 
@@ -37,38 +54,64 @@ export const CartDrawer: React.FC = () => {
     if (cleanCode === 'NEW15') {
       setAppliedCoupon('NEW15');
       showToast('Applied coupon NEW15 (15% OFF)! 🎉');
-    } else if (cleanCode === 'GOMATI10' || cleanCode === 'HONEY10') {
-      setAppliedCoupon('GOMATI10');
-      showToast('Applied coupon GOMATI10 (10% OFF)! 🎉');
+    } else if (cleanCode === 'NATURA10' || cleanCode === 'HONEY10' || cleanCode === 'BEEFARM10') {
+      setAppliedCoupon('NATURA10');
+      showToast('Applied coupon NATURA10 (10% OFF)! 🎉');
     } else {
-      alert('Invalid coupon code. Try "NEW15" or "GOMATI10"');
+      alert('Invalid coupon code. Try "NEW15" or "NATURA10"');
     }
   };
 
   const handleCheckout = () => {
-    // Add real customer order to StoreContext
-    if (cart.length > 0) {
-      addOrder({
-        customerName: 'Guest Customer',
-        customerEmail: 'customer@naturabee.in',
-        customerPhone: '+91 98765 00000',
-        shippingAddress: 'Direct Online Order - Customer Portal',
-        items: cart.map((item: CartItem) => ({
-          productId: item.product.id,
-          productName: item.product.name,
-          weight: item.selectedWeight,
-          price: item.product.price,
+    if (cart.length === 0) return;
+
+    // Add to Admin Store Context Queue
+    addStoreOrder({
+      customerName: user ? user.name : 'Guest Customer',
+      customerEmail: user ? user.email : 'customer@naturabee.in',
+      customerPhone: user?.phone || '+91 98765 00000',
+      shippingAddress: user?.addresses?.find((a) => a.isDefault)?.street || 'Standard Postal Delivery',
+      items: cart.map((item: CartItem) => ({
+        productId: item.product.id,
+        productName: item.product.name,
+        weight: item.selectedWeight,
+        price: item.product.price,
+        quantity: item.quantity,
+        image: item.product.image,
+      })),
+      totalAmount: cartSubtotal,
+      discountAmount: savingsAmount,
+      shippingFee: cartSubtotal >= freeShippingThreshold ? 0 : 50,
+      finalAmount: estimatedTotal,
+      status: 'Pending',
+      paymentMethod: 'UPI / Razorpay',
+      paymentStatus: 'Paid',
+    });
+
+    // Add to User Account Order History if logged in
+    if (user) {
+      const defaultAddr = user.addresses?.find((a) => a.isDefault) || user.addresses?.[0];
+      const newOrder: Order = {
+        id: `NBF-${Math.floor(10000 + Math.random() * 90000)}`,
+        date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+        items: cart.map((item) => ({
+          id: item.product.id,
+          name: item.product.name,
+          weight: item.selectedWeight || item.product.weight,
           quantity: item.quantity,
+          price: item.product.price,
           image: item.product.image,
         })),
-        totalAmount: cartSubtotal,
-        discountAmount: savingsAmount,
-        shippingFee: cartSubtotal >= freeShippingThreshold ? 0 : 50,
-        finalAmount: estimatedTotal,
-        status: 'Pending',
-        paymentMethod: 'UPI / Razorpay',
-        paymentStatus: 'Paid',
-      });
+        total: estimatedTotal,
+        status: 'In Transit',
+        paymentMethod: 'Razorpay UPI (Verified)',
+        shippingAddress: defaultAddr
+          ? `${defaultAddr.street}, ${defaultAddr.city} - ${defaultAddr.pincode}`
+          : 'Standard Postal Delivery',
+        trackingNumber: `DEL-${Math.floor(100000 + Math.random() * 900000)}`,
+        deliveryDate: 'Expected in 3-4 Days',
+      };
+      addAuthOrder(newOrder);
     }
 
     setOrderComplete(true);
@@ -84,9 +127,9 @@ export const CartDrawer: React.FC = () => {
   const upsellProducts = products.filter((p) => p.inStock && !cartProductIds.has(p.id)).slice(0, 2);
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-xs animate-fadeIn">
+    <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-xs animate-fade-in">
       <div className="absolute inset-y-0 right-0 max-w-full flex">
-        <div className="w-screen max-w-md bg-white dark:bg-[#1A1816] text-[#231F1B] dark:text-[#FEFDF5] shadow-2xl flex flex-col justify-between animate-slide-up border-l border-[#E7DFD3] dark:border-neutral-800">
+        <div className="w-screen max-w-md bg-white dark:bg-[#1A1816] text-[#231F1B] dark:text-[#FEFDF5] shadow-2xl flex flex-col justify-between animate-slide-in-right border-l border-[#E7DFD3] dark:border-neutral-800">
           
           {/* Cart Header */}
           <div className="p-4 sm:p-5 border-b border-[#E7DFD3] dark:border-neutral-800 flex items-center justify-between bg-white dark:bg-[#1A1816]">
@@ -137,8 +180,14 @@ export const CartDrawer: React.FC = () => {
               {/* Cart Items List */}
               <div className="space-y-3.5">
                 {cart.map((item, idx) => {
-                  const originalItemPrice = item.product.originalPrice ? Math.round(item.product.originalPrice * item.quantity) : Math.round(item.product.price * 1.18 * item.quantity);
-                  const itemPrice = Math.round(item.product.price * item.quantity);
+                  const multiplier = getWeightMultiplier(item.product.weight, item.selectedWeight);
+                  const unitPrice = Math.round(item.product.price * multiplier);
+                  const unitOriginalPrice = item.product.originalPrice
+                    ? Math.round(item.product.originalPrice * multiplier)
+                    : Math.round(unitPrice * 1.18);
+
+                  const itemPrice = unitPrice * item.quantity;
+                  const originalItemPrice = unitOriginalPrice * item.quantity;
                   const itemDiscountPercent = discountPercent > 0 ? discountPercent : 15;
 
                   return (
@@ -159,10 +208,20 @@ export const CartDrawer: React.FC = () => {
                           {item.product.name}
                         </h4>
 
-                        {/* Weight Dropdown Pill */}
-                        <div className="mt-1 inline-flex items-center gap-1 bg-[#F5EEDD] dark:bg-[#2C2720] px-2.5 py-1 rounded-md text-[11px] font-semibold text-[#3B2818] dark:text-[#F3E5AB] border border-[#E2D4C0] dark:border-[#42392C]">
-                          <span>{item.selectedWeight}</span>
-                          <ChevronDown className="w-3 h-3 text-[#8C4B13]" />
+                        {/* Interactive Weight Dropdown Selector */}
+                        <div className="relative mt-1 inline-block">
+                          <select
+                            value={item.selectedWeight}
+                            onChange={(e) => updateItemWeight(item.product.id, item.selectedWeight, e.target.value)}
+                            className="appearance-none bg-[#F5EEDD] dark:bg-[#2C2720] pl-2.5 pr-6 py-1 rounded-md text-[11px] font-semibold text-[#3B2818] dark:text-[#F3E5AB] border border-[#E2D4C0] dark:border-[#42392C] cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#9C5B23]"
+                          >
+                            {(item.product.weightsAvailable || [item.product.weight]).map((w) => (
+                              <option key={w} value={w} className="bg-white dark:bg-[#211E1A] text-[#231F1B] dark:text-white">
+                                {w}
+                              </option>
+                            ))}
+                          </select>
+                          <ChevronDown className="w-3 h-3 text-[#8C4B13] absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                         </div>
 
                         {/* Quantity Stepper & Delete Row */}
@@ -341,6 +400,35 @@ export const CartDrawer: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Delivery Address Selector Preview */}
+                {user && (
+                  <div className="p-2.5 bg-[#FAF5EB] dark:bg-[#25221D] rounded-xl border border-[#E8D5B7] dark:border-[#3D372E] flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <MapPin className="w-3.5 h-3.5 text-[#9C5B23] shrink-0" />
+                      <div className="truncate">
+                        <span className="font-bold text-[#2C1810] dark:text-white">
+                          Deliver to: {user.addresses?.find(a => a.isDefault)?.name || user.name}
+                        </span>
+                        <span className="text-[11px] text-[#8C7A65] block truncate">
+                          {user.addresses?.find(a => a.isDefault)
+                            ? `${user.addresses.find(a => a.isDefault)!.street}, ${user.addresses.find(a => a.isDefault)!.city} (${user.addresses.find(a => a.isDefault)!.pincode})`
+                            : 'No address added yet'}
+                        </span>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsCartOpen(false);
+                        openProfile('addresses');
+                      }}
+                      className="text-[11px] font-black text-[#9C5B23] dark:text-[#E9BE5F] hover:underline shrink-0 ml-2 cursor-pointer"
+                    >
+                      Change
+                    </button>
+                  </div>
+                )}
+
                 {/* Main Orange Checkout Button */}
                 <button
                   onClick={handleCheckout}
@@ -378,3 +466,5 @@ export const CartDrawer: React.FC = () => {
     </div>
   );
 };
+
+export default CartDrawer;

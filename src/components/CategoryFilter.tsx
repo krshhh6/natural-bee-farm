@@ -22,12 +22,13 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
   productsCount,
 }) => {
   const categories: { id: CategoryType; label: string }[] = [
-    { id: 'all', label: 'All Delicacies' },
+    { id: 'all', label: 'All Raw Honey' },
     { id: 'honey', label: 'Artisanal Honey' },
-    { id: 'pickles', label: 'Traditional Pickles' },
-    { id: 'badis', label: 'Sun-Dried Badis' },
-    { id: 'spices', label: 'Handcrafted Spices' },
-    { id: 'flours', label: 'Organic Flours' },
+    { id: 'wildforest', label: 'Wild Forest' },
+    { id: 'monofloral', label: 'Monofloral Single-Origin' },
+    { id: 'spiced', label: 'Spice Infused' },
+    { id: 'ayurvedic', label: 'Ayurvedic Blends' },
+    { id: 'rawcomb', label: 'Raw Honeycomb' },
   ];
 
   return (

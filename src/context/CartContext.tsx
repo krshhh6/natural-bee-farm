@@ -1,11 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { Product, CartItem } from '../types';
+import { getWeightMultiplier } from '../utils/price';
 
 interface CartContextType {
   cart: CartItem[];
   addToCart: (product: Product, selectedWeight?: string, quantity?: number) => void;
   removeFromCart: (productId: string, selectedWeight: string) => void;
   updateQuantity: (productId: string, selectedWeight: string, delta: number) => void;
+  updateItemWeight: (productId: string, oldWeight: string, newWeight: string) => void;
   clearCart: () => void;
   cartCount: number;
   cartSubtotal: number;
@@ -74,10 +76,26 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
   };
 
+  const updateItemWeight = (productId: string, oldWeight: string, newWeight: string) => {
+    setCart((prev) =>
+      prev.map((item) => {
+        if (item.product.id === productId && item.selectedWeight === oldWeight) {
+          return { ...item, selectedWeight: newWeight };
+        }
+        return item;
+      })
+    );
+    showToast(`Updated weight to ${newWeight}`);
+  };
+
   const clearCart = () => setCart([]);
 
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
-  const cartSubtotal = cart.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+  const cartSubtotal = cart.reduce((acc, item) => {
+    const multiplier = getWeightMultiplier(item.product.weight, item.selectedWeight);
+    const unitPrice = Math.round(item.product.price * multiplier);
+    return acc + unitPrice * item.quantity;
+  }, 0);
 
   return (
     <CartContext.Provider
@@ -86,6 +104,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         addToCart,
         removeFromCart,
         updateQuantity,
+        updateItemWeight,
         clearCart,
         cartCount,
         cartSubtotal,
