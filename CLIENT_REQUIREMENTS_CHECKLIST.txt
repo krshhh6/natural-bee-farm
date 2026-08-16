@@ -1,0 +1,109 @@
+================================================================================
+          PROJECT ONBOARDING & CLIENT ASSET REQUIREMENT DOCUMENT
+       E-Commerce Website Development (Natural Bee Farm / Gomati Foods)
+================================================================================
+
+Dear Client,
+
+To transition the approved website prototype into a full, live, and operational 
+e-commerce platform, please provide the following details, assets, and credentials. 
+We have organized this into 7 clear sections for your convenience.
+
+--------------------------------------------------------------------------------
+1. BRAND IDENTITY & MEDIA ASSETS
+--------------------------------------------------------------------------------
+[ ] Brand Logo: High-resolution PNG (transparent background) & SVG/Vector format.
+[ ] Brand Favicon / App Icon (Square icon for browser tab).
+[ ] Brand Story / "About Us" Content:
+    - Founder's note / Mission statement.
+    - Story behind traditional harvesting & tribal apiculturists.
+    - 3-5 key brand value pillars (e.g., 100% Raw, NMR Tested, Single-Origin).
+[ ] High-Resolution Photos & Banners:
+    - Clean product jar photos (front, back, and nutritional label).
+    - Farm / Apiary / Harvesting process photos & short video clips.
+    - Hero banner background images (Desktop & Mobile dimensions).
+
+--------------------------------------------------------------------------------
+2. COMPLETE PRODUCT CATALOG & INVENTORY DETAILS
+--------------------------------------------------------------------------------
+Please provide an Excel sheet / document containing the following for all products:
+[ ] Product Name & Category (e.g., Raw Honey, Monofloral, Spiced, Ghee, Oils).
+[ ] Available Pack Sizes / Weights (e.g., 250g, 500g, 1kg).
+[ ] Pricing:
+    - Maximum Retail Price (MRP).
+    - Selling / Discounted Price for each weight variant.
+[ ] Short Description & Key Benefits (e.g., Immunity booster, NMR tested).
+[ ] Full Ingredient List & Nutritional Facts per 100g (Energy, Carbs, Protein, etc.).
+[ ] Origin & Sourcing Region (e.g., Himalayan Foothills, Bihar Wild Forests).
+[ ] Initial Available Stock Quantity per SKU (to prevent overselling).
+
+--------------------------------------------------------------------------------
+3. BUSINESS, LEGAL & FOOD SAFETY COMPLIANCE (MANDATORY IN INDIA)
+--------------------------------------------------------------------------------
+[ ] FSSAI License Number (to display in footer, product pages & invoices).
+[ ] GSTIN (GST Number) & Registered Business Name / Entity Name.
+[ ] Official Contact Information:
+    - Registered Office Address & Warehouse Dispatch Address.
+    - Customer Support Email (e.g., support@naturalbeefarm.in).
+    - Customer Care Phone / Toll-free Number & Calling Hours (e.g., Mon-Sat 10AM-6PM).
+[ ] Lab Reports / Purity Certificates (PDFs for customer transparency, if any).
+[ ] Legal Policies (or we can provide standard e-commerce templates for approval):
+    - Shipping & Delivery Policy (Expected delivery days: 3-5 business days).
+    - Return, Refund & Cancellation Policy (Food items non-returnable unless damaged).
+    - Terms & Conditions & Privacy Policy.
+
+--------------------------------------------------------------------------------
+4. PAYMENT GATEWAY & BANKING SETUP
+--------------------------------------------------------------------------------
+[ ] Payment Gateway Choice (Razorpay / PhonePe / Cashfree / Paytm):
+    - Razorpay / PhonePe Merchant Key ID & Key Secret (or access to configure).
+[ ] Supported Payment Modes Required:
+    - [x] UPI (Google Pay, PhonePe, Paytm, BHIM, QR code)
+    - [x] Debit & Credit Cards (Visa, Mastercard, RuPay)
+    - [x] NetBanking (All major Indian banks)
+    - [ ] Cash on Delivery (COD) -> Yes/No?
+[ ] COD Policy:
+    - If COD is enabled, is there an extra COD fee (e.g., ₹50 extra)?
+    - Any minimum or maximum order limit for COD?
+
+--------------------------------------------------------------------------------
+5. SHIPPING & LOGISTICS (SHIPROCKET INTEGRATION)
+--------------------------------------------------------------------------------
+Since orders will be fulfilled via Shiprocket, please provide:
+[ ] Shiprocket API User Credentials:
+    - Go to Shiprocket Dashboard -> Settings -> API -> Configure -> Create API User.
+    - Provide the API User Email & Password (or generated API Token).
+[ ] Registered Pickup Location Name (as saved in your Shiprocket account):
+    - Exact name of the primary dispatch address / warehouse.
+[ ] Package Dimensions & Weight Guidelines:
+    - Average box dimensions (Length x Breadth x Height in cm) for 1 jar / 2 jars / 3 jars.
+    - Used to auto-calculate accurate courier shipping weights.
+[ ] Shipping Cost & Policy for Customers:
+    - Standard shipping fee (e.g. Flat ₹50 or calculated dynamically by Shiprocket).
+    - Free Shipping threshold (e.g. Free shipping on orders above ₹499 / ₹999).
+[ ] Cash on Delivery (COD) via Shiprocket:
+    - Enable COD courier delivery? (Yes / No)
+    - Any extra handling fee for COD (e.g. ₹50)?
+
+--------------------------------------------------------------------------------
+6. MARKETING, OFFERS & CUSTOMER COMMUNICATION
+--------------------------------------------------------------------------------
+[ ] Discount Coupons & Promotional Offers:
+    - Welcome / First-Order Coupon (e.g., "WELCOME10" - 10% OFF or "NEW15" - 15% OFF).
+    - Cart Value Offers (e.g., "Buy 2 Get 10% Off").
+[ ] Social Media Links:
+    - Instagram, Facebook, YouTube, WhatsApp Channel, Twitter/X.
+[ ] WhatsApp Business Number (for automated order confirmation & live tracking updates).
+[ ] Customer Testimonials / Reviews (5-10 genuine customer quotes with names & ratings).
+
+--------------------------------------------------------------------------------
+7. DOMAIN & DEPLOYMENT PREFERENCES
+--------------------------------------------------------------------------------
+[ ] Custom Domain Name (e.g., www.naturalbeefarm.in or www.gomatitraditionalfoods.com):
+    - Domain Registrar access (GoDaddy / Namecheap / Hostinger / Cloudflare) to point DNS.
+[ ] Business Email Setup (e.g., orders@naturalbeefarm.in via Google Workspace / Zoho).
+
+================================================================================
+Summary: Once these details are shared, we will implement the full product catalog,
+payment gateway, and live shipping system to launch the website immediately.
+================================================================================

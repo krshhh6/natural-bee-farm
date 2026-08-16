@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { X, Trash2, ShoppingBag, ArrowRight, ShieldCheck, CheckCircle2, Tag, Sparkles, Plus, ChevronDown } from 'lucide-react';
+import { X, Trash2, ShoppingBag, ArrowRight, ShieldCheck, CheckCircle2, Tag, Sparkles, Plus, ChevronDown, MapPin } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import { PRODUCTS } from '../data/products';
-
 import { getWeightMultiplier } from '../utils/price';
 
 export const CartDrawer: React.FC = () => {
@@ -18,6 +18,8 @@ export const CartDrawer: React.FC = () => {
     addToCart,
     showToast,
   } = useCart();
+
+  const { user, openProfile } = useAuth();
 
   const [couponCode, setCouponCode] = useState('NEW15');
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>('NEW15');
@@ -343,6 +345,35 @@ export const CartDrawer: React.FC = () => {
                     </span>
                   </div>
                 </div>
+
+                {/* Delivery Address Selector Preview */}
+                {user && (
+                  <div className="p-2.5 bg-[#FAF5EB] dark:bg-[#25221D] rounded-xl border border-[#E8D5B7] dark:border-[#3D372E] flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <MapPin className="w-3.5 h-3.5 text-[#9C5B23] shrink-0" />
+                      <div className="truncate">
+                        <span className="font-bold text-[#2C1810] dark:text-white">
+                          Deliver to: {user.addresses?.find(a => a.isDefault)?.name || user.name}
+                        </span>
+                        <span className="text-[11px] text-[#8C7A65] block truncate">
+                          {user.addresses?.find(a => a.isDefault)
+                            ? `${user.addresses.find(a => a.isDefault)!.street}, ${user.addresses.find(a => a.isDefault)!.city} (${user.addresses.find(a => a.isDefault)!.pincode})`
+                            : 'No address added yet'}
+                        </span>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsCartOpen(false);
+                        openProfile('addresses');
+                      }}
+                      className="text-[11px] font-black text-[#9C5B23] dark:text-[#E9BE5F] hover:underline shrink-0 ml-2 cursor-pointer"
+                    >
+                      Change
+                    </button>
+                  </div>
+                )}
 
                 {/* Main Orange Checkout Button */}
                 <button

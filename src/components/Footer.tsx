@@ -186,6 +186,15 @@ export const Footer: React.FC = () => {
               </a>
             </div>
 
+            {/* Custom Typographic NATURAL BEE FARM Logo */}
+            <div className="pt-4">
+              <img
+                src="/brand-logo-typography.png"
+                alt="NATURAL BEE FARM"
+                className="w-full max-w-[340px] sm:max-w-[420px] h-auto object-contain dark:invert transition-all drop-shadow-xs"
+              />
+            </div>
+
           </div>
 
         </div>

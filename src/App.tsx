@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CartProvider, useCart } from './context/CartContext';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { AnnouncementBar } from './components/AnnouncementBar';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
@@ -17,13 +17,15 @@ import { ProductModal } from './components/ProductModal';
 import { CartDrawer } from './components/CartDrawer';
 import { AuthModal } from './components/AuthModal';
 import { ProductsPage } from './components/ProductsPage';
+import { AccountPage } from './components/AccountPage';
 import { PRODUCTS } from './data/products';
-import type { CategoryType } from './types';
+import type { CategoryType, AppPage, ProfileTab } from './types';
 import { CheckCircle2, ShoppingBag, ArrowRight } from 'lucide-react';
 
 const MainContent: React.FC = () => {
   const { toastMessage, setQuickViewProduct, setIsCartOpen, cartCount } = useCart();
-  const [currentPage, setCurrentPage] = useState<'home' | 'products'>('home');
+  const { user, setIsAuthModalOpen, setActiveProfileTab } = useAuth();
+  const [currentPage, setCurrentPage] = useState<AppPage>('home');
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>('all');
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return localStorage.getItem('honey_dark_mode') === 'true';
@@ -51,6 +53,26 @@ const MainContent: React.FC = () => {
     }
     setCurrentPage('products');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const navigateToAccount = (tab: ProfileTab = 'profile') => {
+    if (!user) {
+      setIsAuthModalOpen(true);
+      return;
+    }
+    setActiveProfileTab(tab);
+    setCurrentPage('account');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handlePageNavigation = (page: AppPage, tab?: ProfileTab) => {
+    if (page === 'home') {
+      navigateToHome();
+    } else if (page === 'products') {
+      navigateToProducts();
+    } else if (page === 'account') {
+      navigateToAccount(tab || 'profile');
+    }
   };
 
   return (
@@ -102,11 +124,16 @@ const MainContent: React.FC = () => {
         isDarkMode={isDarkMode}
         toggleDarkMode={toggleDarkMode}
         currentPage={currentPage}
-        onNavigate={(page) => (page === 'home' ? navigateToHome() : navigateToProducts())}
+        onNavigate={handlePageNavigation}
       />
 
-      {/* Page View Switcher */}
-      {currentPage === 'products' ? (
+      {/* Dedicated Page View Switcher */}
+      {currentPage === 'account' ? (
+        <AccountPage
+          onNavigateHome={navigateToHome}
+          onNavigateProducts={() => navigateToProducts()}
+        />
+      ) : currentPage === 'products' ? (
         <ProductsPage
           products={PRODUCTS}
           selectedCategory={selectedCategory}
@@ -160,8 +187,6 @@ const MainContent: React.FC = () => {
       <ProductModal />
       <CartDrawer />
       <AuthModal />
-
-
 
     </div>
   );
