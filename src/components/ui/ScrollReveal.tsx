@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useMemo } from 'react';
+// @ts-ignore
 import { gsap } from 'gsap';
+// @ts-ignore
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './ScrollReveal.css';
 
