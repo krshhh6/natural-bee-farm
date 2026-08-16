@@ -1,5 +1,4 @@
 import React, { useLayoutEffect, useRef, useCallback } from 'react';
-// @ts-ignore
 import Lenis from 'lenis';
 import './ScrollStack.css';
 
