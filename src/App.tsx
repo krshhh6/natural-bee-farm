@@ -23,15 +23,32 @@ import { WhatsAppWidget } from './components/WhatsAppWidget';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { AdminLoginModal } from './components/admin/AdminLoginModal';
 import { FloatingDock } from '@/components/ui/floating-dock';
-import { IconHome, IconShoppingBag, IconStar, IconLock } from '@tabler/icons-react';
+import { IconHome, IconShoppingBag, IconStar } from '@tabler/icons-react';
 import type { CategoryType, AppPage, ProfileTab } from './types';
 import { CheckCircle2, ShoppingBag, ArrowRight } from 'lucide-react';
+
+const checkIsAdminUrl = () => {
+  if (typeof window === 'undefined') return false;
+  const pathname = window.location.pathname.toLowerCase().replace(/\/+$/, '');
+  const hash = window.location.hash.toLowerCase();
+  const search = new URLSearchParams(window.location.search);
+  return (
+    pathname === '/admin' ||
+    pathname.startsWith('/admin') ||
+    hash === '#admin' ||
+    hash.startsWith('#admin') ||
+    search.get('page') === 'admin' ||
+    search.has('admin')
+  );
+};
 
 const MainContent: React.FC = () => {
   const { toastMessage, setQuickViewProduct, setIsCartOpen, cartCount } = useCart();
   const { user, setIsAuthModalOpen, setActiveProfileTab } = useAuth();
   const { products, isAdminLoggedIn } = useStore();
-  const [currentPage, setCurrentPage] = useState<AppPage | 'admin'>('home');
+  const [currentPage, setCurrentPage] = useState<AppPage | 'admin'>(() => {
+    return checkIsAdminUrl() ? 'admin' : 'home';
+  });
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>('all');
   const [isAdminAuthModalOpen, setIsAdminAuthModalOpen] = useState(false);
 
@@ -48,10 +65,39 @@ const MainContent: React.FC = () => {
     localStorage.setItem('honey_dark_mode', String(isDarkMode));
   }, [isDarkMode]);
 
+  // URL / Link-based routing listener for Admin Panel and browser history
+  useEffect(() => {
+    const handleLocationChange = () => {
+      if (checkIsAdminUrl()) {
+        if (isAdminLoggedIn) {
+          setCurrentPage('admin');
+        } else {
+          setIsAdminAuthModalOpen(true);
+        }
+      } else {
+        if (currentPage === 'admin') {
+          setCurrentPage('home');
+        }
+      }
+    };
+
+    handleLocationChange();
+
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('hashchange', handleLocationChange);
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('hashchange', handleLocationChange);
+    };
+  }, [isAdminLoggedIn, currentPage]);
+
   const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
 
   const navigateToHome = () => {
     setCurrentPage('home');
+    if (checkIsAdminUrl()) {
+      window.history.pushState(null, '', '/');
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -60,6 +106,9 @@ const MainContent: React.FC = () => {
       setSelectedCategory(category);
     }
     setCurrentPage('products');
+    if (checkIsAdminUrl()) {
+      window.history.pushState(null, '', '/');
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -70,10 +119,16 @@ const MainContent: React.FC = () => {
     }
     setActiveProfileTab(tab);
     setCurrentPage('account');
+    if (checkIsAdminUrl()) {
+      window.history.pushState(null, '', '/');
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const navigateToAdmin = () => {
+    if (window.location.pathname !== '/admin') {
+      window.history.pushState(null, '', '/admin');
+    }
     if (isAdminLoggedIn) {
       setCurrentPage('admin');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -84,7 +139,18 @@ const MainContent: React.FC = () => {
 
   const handleAdminAuthSuccess = () => {
     setCurrentPage('admin');
+    if (window.location.pathname !== '/admin') {
+      window.history.pushState(null, '', '/admin');
+    }
+    setIsAdminAuthModalOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCloseAdminAuthModal = () => {
+    setIsAdminAuthModalOpen(false);
+    if (checkIsAdminUrl() && currentPage !== 'admin') {
+      window.history.replaceState(null, '', '/');
+    }
   };
 
   const handlePageNavigation = (page: AppPage | 'admin', tab?: ProfileTab) => {
@@ -223,7 +289,7 @@ const MainContent: React.FC = () => {
           <Testimonials />
 
           {/* Footer */}
-          <Footer onNavigateAdmin={navigateToAdmin} />
+          <Footer />
         </>
       )}
 
@@ -236,7 +302,7 @@ const MainContent: React.FC = () => {
       {/* Admin Authentication Gate Modal */}
       <AdminLoginModal
         isOpen={isAdminAuthModalOpen}
-        onClose={() => setIsAdminAuthModalOpen(false)}
+        onClose={handleCloseAdminAuthModal}
         onSuccess={handleAdminAuthSuccess}
       />
 
@@ -256,12 +322,6 @@ const MainContent: React.FC = () => {
                 icon: <IconShoppingBag className="h-full w-full text-[#F5E8B6]" />,
                 href: '#',
                 onClick: () => navigateToProducts(),
-              },
-              {
-                title: 'Admin',
-                icon: <IconLock className="h-full w-full text-[#E9BE5F]" />,
-                href: '#',
-                onClick: navigateToAdmin,
               },
               {
                 title: 'Reviews',

@@ -187,8 +187,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </div>
 
             <button
-              onClick={logoutAdmin}
-              className="p-1.5 rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+              onClick={() => {
+                logoutAdmin();
+                onReturnToStore();
+              }}
+              className="p-1.5 rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors cursor-pointer"
               title="Logout Admin"
             >
               <LogOut className="w-4 h-4" />
