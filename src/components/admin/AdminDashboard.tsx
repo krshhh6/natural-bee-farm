@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
 import {
-  LayoutDashboard,
+  BarChart3,
   Package,
   ShoppingBag,
   Users,
-  Tag,
-  Sparkles,
-  MessageSquare,
+  TicketPercent,
+  Image,
+  Star,
   RotateCcw,
   Store,
   LogOut,
   Menu,
   X,
-  ShieldCheck,
   ExternalLink,
   Sun,
   Moon,
+  Search,
+  Bell,
+  Building2,
 } from 'lucide-react';
 import { useStore } from '@/context/StoreContext';
 import type { Product } from '@/types';
@@ -37,6 +39,17 @@ interface AdminDashboardProps {
   toggleDarkMode: () => void;
 }
 
+interface NavSection {
+  title: string;
+  items: {
+    id: AdminTabType;
+    label: string;
+    icon: React.ReactNode;
+    badge?: number;
+    badgeColor?: string;
+  }[];
+}
+
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onReturnToStore,
   isDarkMode,
@@ -45,142 +58,178 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const { adminUser, logoutAdmin, orders, products, refunds } = useStore();
   const [activeTab, setActiveTab] = useState<AdminTabType>('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const pendingOrdersCount = orders.filter((o: Order) => o.status === 'Pending' || o.status === 'Processing').length;
   const pendingRefundsCount = refunds.filter((r: RefundRequest) => r.status === 'Pending Review').length;
+  const outOfStockCount = products.filter((p: Product) => !p.inStock).length;
 
-  const navMenuItems: {
-    id: AdminTabType;
-    label: string;
-    icon: React.ReactNode;
-    badge?: number;
-  }[] = [
+  const navSections: NavSection[] = [
     {
-      id: 'overview',
-      label: 'Dashboard Overview',
-      icon: <LayoutDashboard className="w-4 h-4" />,
+      title: 'ANALYTICS & OVERVIEW',
+      items: [
+        {
+          id: 'overview',
+          label: 'Dashboard Overview',
+          icon: <BarChart3 className="w-4 h-4" />,
+        },
+      ],
     },
     {
-      id: 'products',
-      label: 'Products & Variants',
-      icon: <Package className="w-4 h-4" />,
-      badge: products.filter((p: Product) => !p.inStock).length > 0 ? products.filter((p: Product) => !p.inStock).length : undefined,
+      title: 'STORE MANAGEMENT',
+      items: [
+        {
+          id: 'products',
+          label: 'Products Catalog',
+          icon: <Package className="w-4 h-4" />,
+          badge: outOfStockCount > 0 ? outOfStockCount : undefined,
+          badgeColor: 'bg-amber-600 text-white',
+        },
+        {
+          id: 'orders',
+          label: 'Orders & Dispatch',
+          icon: <ShoppingBag className="w-4 h-4" />,
+          badge: pendingOrdersCount > 0 ? pendingOrdersCount : undefined,
+          badgeColor: 'bg-amber-600 text-white',
+        },
+        {
+          id: 'customers',
+          label: 'Customer Directory',
+          icon: <Users className="w-4 h-4" />,
+        },
+        {
+          id: 'coupons',
+          label: 'Coupons & Offers',
+          icon: <TicketPercent className="w-4 h-4" />,
+        },
+      ],
     },
     {
-      id: 'orders',
-      label: 'Orders & Fulfillment',
-      icon: <ShoppingBag className="w-4 h-4" />,
-      badge: pendingOrdersCount > 0 ? pendingOrdersCount : undefined,
-    },
-    {
-      id: 'customers',
-      label: 'Customer Directory',
-      icon: <Users className="w-4 h-4" />,
-    },
-    {
-      id: 'coupons',
-      label: 'Coupons & Offers',
-      icon: <Tag className="w-4 h-4" />,
-    },
-    {
-      id: 'content',
-      label: 'Homepage Banners / CMS',
-      icon: <Sparkles className="w-4 h-4" />,
-    },
-    {
-      id: 'reviews',
-      label: 'Reviews & Feedback',
-      icon: <MessageSquare className="w-4 h-4" />,
-    },
-    {
-      id: 'refunds',
-      label: 'Refunds & Returns',
-      icon: <RotateCcw className="w-4 h-4" />,
-      badge: pendingRefundsCount > 0 ? pendingRefundsCount : undefined,
+      title: 'CONTENT & SUPPORT',
+      items: [
+        {
+          id: 'content',
+          label: 'Homepage Banners',
+          icon: <Image className="w-4 h-4" />,
+        },
+        {
+          id: 'reviews',
+          label: 'Customer Reviews',
+          icon: <Star className="w-4 h-4" />,
+        },
+        {
+          id: 'refunds',
+          label: 'Refunds & Returns',
+          icon: <RotateCcw className="w-4 h-4" />,
+          badge: pendingRefundsCount > 0 ? pendingRefundsCount : undefined,
+          badgeColor: 'bg-rose-600 text-white',
+        },
+      ],
     },
   ];
 
+  const getTabTitle = (tabId: AdminTabType) => {
+    for (const section of navSections) {
+      const match = section.items.find((item) => item.id === tabId);
+      if (match) return match.label;
+    }
+    return 'Admin Panel';
+  };
+
   return (
-    <div className="min-h-screen bg-[#FEFDF5] dark:bg-[#1A1816] text-[#282823] dark:text-[#FEFDF5] flex flex-col lg:flex-row transition-colors duration-200">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#09090B] text-slate-800 dark:text-slate-100 flex flex-col lg:flex-row font-sans transition-colors duration-200 antialiased selection:bg-amber-500 selection:text-white">
       
-      {/* SIDEBAR NAVIGATION (Desktop) */}
-      <aside className="hidden lg:flex flex-col w-64 border-r border-[#E7DFD3] dark:border-neutral-800 bg-white dark:bg-[#1F1C18] p-5 shrink-0 justify-between sticky top-0 h-screen">
+      {/* DESKTOP SIDEBAR */}
+      <aside className="hidden lg:flex flex-col w-64 border-r border-slate-200/80 dark:border-zinc-800/80 bg-white dark:bg-[#111113] p-4 shrink-0 justify-between sticky top-0 h-screen z-40">
         
-        <div className="space-y-6">
+        <div className="space-y-6 overflow-y-auto pr-1">
           
-          {/* Logo Header */}
-          <div className="flex items-center gap-3 px-2">
-            <div className="w-10 h-10 rounded-2xl bg-[#9C5B23] text-white flex items-center justify-center font-bold text-sm shadow-md">
-              NBF
-            </div>
-            <div>
-              <div className="font-serif font-extrabold text-sm tracking-wider text-[#231F1B] dark:text-white uppercase leading-none">
-                NATURA <span className="text-[#9C5B23] dark:text-[#E9BE5F]">BEE</span>
+          {/* Enterprise Logo Header */}
+          <div className="flex items-center justify-between px-2 pt-2">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-slate-900 dark:bg-zinc-100 text-white dark:text-slate-900 flex items-center justify-center font-bold text-xs shadow-2xs">
+                <Building2 className="w-4 h-4 text-amber-500" />
               </div>
-              <div className="text-[10px] tracking-widest font-bold text-[#9C5B23] dark:text-[#E9BE5F] mt-1 flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3" />
-                ADMIN OPERATIONS
+              <div>
+                <div className="font-bold text-sm tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <span>NATURA BEE</span>
+                </div>
+                <div className="text-[10px] font-semibold text-slate-400 dark:text-zinc-500 tracking-wider">
+                  ENTERPRISE ADMIN
+                </div>
               </div>
             </div>
+            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-mono font-semibold bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400 border border-slate-200 dark:border-zinc-700">
+              v2.4
+            </span>
           </div>
 
-          {/* Navigation Links */}
-          <nav className="space-y-1 text-xs font-bold">
-            {navMenuItems.map((item) => {
-              const isActive = activeTab === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveTab(item.id)}
-                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl transition-all cursor-pointer ${
-                    isActive
-                      ? 'bg-[#9C5B23] text-white shadow-md'
-                      : 'text-[#595247] dark:text-[#C5BBAE] hover:bg-[#F5EEDD] dark:hover:bg-[#2A2621] hover:text-[#9C5B23] dark:hover:text-[#E9BE5F]'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    {item.icon}
-                    <span>{item.label}</span>
-                  </div>
-                  {item.badge !== undefined && (
-                    <span
-                      className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${
-                        isActive
-                          ? 'bg-white text-[#9C5B23]'
-                          : 'bg-red-500 text-white'
-                      }`}
-                    >
-                      {item.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </nav>
+          {/* Grouped Navigation */}
+          <div className="space-y-5 pt-2">
+            {navSections.map((section) => (
+              <div key={section.title} className="space-y-1">
+                <div className="px-3 text-[10px] font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-wider">
+                  {section.title}
+                </div>
+                <div className="space-y-0.5">
+                  {section.items.map((item) => {
+                    const isActive = activeTab === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => setActiveTab(item.id)}
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all duration-150 cursor-pointer ${
+                          isActive
+                            ? 'bg-slate-900 text-white dark:bg-zinc-800 dark:text-white font-semibold shadow-2xs'
+                            : 'text-slate-600 dark:text-zinc-400 hover:bg-slate-100/80 dark:hover:bg-zinc-800/60 hover:text-slate-900 dark:hover:text-zinc-100'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <span className={isActive ? 'text-amber-400' : 'text-slate-400 dark:text-zinc-500'}>
+                            {item.icon}
+                          </span>
+                          <span>{item.label}</span>
+                        </div>
+                        {item.badge !== undefined && (
+                          <span
+                            className={`px-1.5 py-0.5 rounded-full text-[10px] font-extrabold ${
+                              item.badgeColor || 'bg-amber-600 text-white'
+                            }`}
+                          >
+                            {item.badge}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
 
         </div>
 
-        {/* Bottom Sidebar User Info & Store Action */}
-        <div className="pt-4 border-t border-[#E7DFD3] dark:border-neutral-800 space-y-3">
+        {/* Bottom Sidebar User Info & Quick Switcher */}
+        <div className="pt-4 border-t border-slate-200/80 dark:border-zinc-800/80 space-y-3">
           
           <button
             onClick={onReturnToStore}
-            className="w-full py-2.5 px-3 rounded-xl bg-[#F5EEDD] dark:bg-[#2A2621] hover:bg-[#E9BE5F]/20 text-[#9C5B23] dark:text-[#E9BE5F] text-xs font-bold transition-colors flex items-center justify-center gap-2 border border-[#E0D0B6] dark:border-[#40372B]"
+            className="w-full py-2 px-3 rounded-lg bg-slate-100 dark:bg-zinc-800/70 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-300 text-xs font-semibold transition-colors flex items-center justify-center gap-2 border border-slate-200/80 dark:border-zinc-700/60 cursor-pointer"
           >
-            <Store className="w-4 h-4" />
+            <Store className="w-3.5 h-3.5" />
             <span>Return to Storefront</span>
           </button>
 
-          <div className="flex items-center justify-between px-2 pt-1">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-[#9C5B23] text-white flex items-center justify-center font-bold text-xs">
+          <div className="flex items-center justify-between px-1 pt-1">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-full bg-slate-900 dark:bg-zinc-100 text-white dark:text-slate-900 flex items-center justify-center font-bold text-xs shrink-0 ring-2 ring-slate-200 dark:ring-zinc-700">
                 {adminUser?.name.charAt(0) || 'A'}
               </div>
-              <div className="truncate max-w-[100px]">
-                <div className="font-bold text-xs text-[#231F1B] dark:text-white truncate">
-                  {adminUser?.name || 'Admin'}
+              <div className="truncate min-w-0">
+                <div className="font-bold text-xs text-slate-900 dark:text-white truncate">
+                  {adminUser?.name || 'Master Admin'}
                 </div>
-                <div className="text-[10px] text-[#9C5B23] dark:text-[#E9BE5F] font-semibold">
+                <div className="text-[10px] text-slate-500 dark:text-zinc-400 font-medium truncate">
                   {adminUser?.role || 'Super Admin'}
                 </div>
               </div>
@@ -188,8 +237,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
             <button
               onClick={logoutAdmin}
-              className="p-1.5 rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
-              title="Logout Admin"
+              className="p-1.5 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors cursor-pointer"
+              title="Logout"
             >
               <LogOut className="w-4 h-4" />
             </button>
@@ -199,50 +248,60 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       </aside>
 
-      {/* MOBILE SIDEBAR MODAL */}
+      {/* MOBILE SIDEBAR OVERLAY */}
       {sidebarOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm lg:hidden flex">
-          <div className="w-72 bg-white dark:bg-[#1F1C18] p-5 h-full flex flex-col justify-between overflow-y-auto">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs lg:hidden flex">
+          <div className="w-72 bg-white dark:bg-[#111113] p-5 h-full flex flex-col justify-between overflow-y-auto border-r border-slate-200 dark:border-zinc-800">
             <div>
-              <div className="flex items-center justify-between mb-6">
-                <div className="font-serif font-bold text-base text-[#231F1B] dark:text-white">
-                  Admin Navigation
+              <div className="flex items-center justify-between mb-6 pb-3 border-b border-slate-200 dark:border-zinc-800">
+                <div className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold text-xs">
+                    <Building2 className="w-3.5 h-3.5 text-amber-500" />
+                  </div>
+                  <span>Admin Menu</span>
                 </div>
-                <button onClick={() => setSidebarOpen(false)} className="p-1 text-gray-500">
-                  <X className="w-6 h-6" />
+                <button onClick={() => setSidebarOpen(false)} className="p-1 text-slate-400 hover:text-slate-600 cursor-pointer">
+                  <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <nav className="space-y-1 text-xs font-bold">
-                {navMenuItems.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      setActiveTab(item.id);
-                      setSidebarOpen(false);
-                    }}
-                    className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl transition-all ${
-                      activeTab === item.id
-                        ? 'bg-[#9C5B23] text-white'
-                        : 'text-[#595247] dark:text-[#C5BBAE] hover:bg-[#F5EEDD]'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      {item.icon}
-                      <span>{item.label}</span>
+              <div className="space-y-6">
+                {navSections.map((section) => (
+                  <div key={section.title} className="space-y-1">
+                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                      {section.title}
                     </div>
-                  </button>
+                    {section.items.map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => {
+                          setActiveTab(item.id);
+                          setSidebarOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                          activeTab === item.id
+                            ? 'bg-slate-900 text-white shadow-sm'
+                            : 'text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-zinc-800'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          {item.icon}
+                          <span>{item.label}</span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
                 ))}
-              </nav>
+              </div>
             </div>
 
-            <div className="pt-4 border-t border-[#E7DFD3]">
+            <div className="pt-4 border-t border-slate-200 dark:border-zinc-800">
               <button
                 onClick={() => {
                   setSidebarOpen(false);
                   onReturnToStore();
                 }}
-                className="w-full py-2.5 px-3 rounded-xl bg-[#F5EEDD] text-[#9C5B23] text-xs font-bold flex items-center justify-center gap-2"
+                className="w-full py-2.5 px-3 rounded-lg bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Store className="w-4 h-4" />
                 <span>Return to Storefront</span>
@@ -252,61 +311,89 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         </div>
       )}
 
-      {/* MAIN CONTENT AREA */}
+      {/* MAIN CONTENT CANVAS */}
       <main className="flex-1 flex flex-col min-w-0">
         
-        {/* TOP DASHBOARD BAR */}
-        <header className="sticky top-0 z-30 bg-white/95 dark:bg-[#1F1C18]/95 backdrop-blur-md border-b border-[#E7DFD3] dark:border-neutral-800 px-4 sm:px-8 py-4 flex items-center justify-between">
+        {/* ENTERPRISE TOP HEADER BAR */}
+        <header className="sticky top-0 z-30 bg-white/80 dark:bg-[#111113]/80 backdrop-blur-md border-b border-slate-200/80 dark:border-zinc-800/80 px-4 sm:px-8 py-3 flex items-center justify-between gap-4">
           
+          {/* Left Title & Mobile Trigger */}
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-2 rounded-lg hover:bg-[#F5EEDD] dark:hover:bg-[#2A2621]"
+              className="lg:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 text-slate-600 dark:text-zinc-300 cursor-pointer"
             >
-              <Menu className="w-6 h-6" />
+              <Menu className="w-5 h-5" />
             </button>
             <div>
-              <h1 className="text-lg sm:text-xl font-extrabold font-serif text-[#231F1B] dark:text-white capitalize">
-                {navMenuItems.find((m) => m.id === activeTab)?.label}
+              <h1 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
+                {getTabTitle(activeTab)}
               </h1>
-              <div className="text-[11px] text-[#736B60] dark:text-[#A69C8F]">
-                Natura Bee Farm Business Operations & Admin Panel
+              <div className="text-[11px] text-slate-500 dark:text-zinc-400 font-medium hidden sm:block">
+                Natura Bee Farm • Operations & Control Hub
               </div>
             </div>
           </div>
 
-          {/* Right Header Utilities */}
-          <div className="flex items-center gap-3">
+          {/* Middle Search Input */}
+          <div className="hidden md:flex items-center flex-1 max-w-sm relative">
+            <Search className="w-4 h-4 absolute left-3 text-slate-400 dark:text-zinc-500 pointer-events-none" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search catalog, orders, customers... (⌘K)"
+              className="w-full pl-9 pr-12 py-1.5 text-xs bg-slate-100/80 dark:bg-zinc-800/60 border border-slate-200 dark:border-zinc-700/80 rounded-lg text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400/40 focus:border-slate-500 transition-all"
+            />
+            <kbd className="absolute right-2.5 px-1.5 py-0.5 text-[9px] font-mono font-semibold text-slate-400 bg-white dark:bg-zinc-700 rounded border border-slate-200 dark:border-zinc-600 shadow-2xs pointer-events-none">
+              ⌘K
+            </kbd>
+          </div>
+
+          {/* Right Header Controls */}
+          <div className="flex items-center gap-2.5">
             
-            {/* Store Status Indicator */}
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold border border-emerald-500/20">
+            {/* Live Store Pill */}
+            <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs font-semibold border border-emerald-500/20">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Store Live & Active</span>
+              <span>Live Store</span>
             </div>
 
-            {/* Dark Mode Toggle */}
+            {/* Notification Bell */}
             <button
-              onClick={toggleDarkMode}
-              className="p-2 rounded-full text-[#231F1B] dark:text-[#FEFDF5] hover:bg-[#F3EAD8] dark:hover:bg-[#28241E]"
+              className="p-2 rounded-lg text-slate-600 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors relative cursor-pointer"
+              title="System Alerts"
             >
-              {isDarkMode ? <Sun className="w-5 h-5 text-[#E9BE5F]" /> : <Moon className="w-5 h-5" />}
+              <Bell className="w-4 h-4" />
+              {(pendingOrdersCount > 0 || pendingRefundsCount > 0) && (
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber-500 ring-2 ring-white dark:ring-[#111113]" />
+              )}
             </button>
 
-            {/* Store Front Switcher */}
+            {/* Dark Mode Switcher */}
+            <button
+              onClick={toggleDarkMode}
+              className="p-2 rounded-lg text-slate-600 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+              title="Toggle Theme"
+            >
+              {isDarkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
+            </button>
+
+            {/* Storefront View Button */}
             <button
               onClick={onReturnToStore}
-              className="px-3.5 py-1.5 rounded-xl bg-[#F5EEDD] dark:bg-[#2A2621] hover:bg-[#9C5B23] hover:text-white text-[#9C5B23] dark:text-[#E9BE5F] font-bold text-xs transition-colors flex items-center gap-1.5"
+              className="px-3 py-1.5 rounded-lg bg-slate-900 dark:bg-zinc-100 hover:bg-slate-800 dark:hover:bg-zinc-200 text-white dark:text-slate-900 font-semibold text-xs transition-colors flex items-center gap-1.5 shadow-2xs cursor-pointer"
             >
               <ExternalLink className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Storefront View</span>
+              <span className="hidden sm:inline">Storefront</span>
             </button>
 
           </div>
 
         </header>
 
-        {/* TAB BODY RENDER */}
-        <div className="p-4 sm:p-8 flex-1">
+        {/* TAB BODY CONTAINER */}
+        <div className="p-4 sm:p-8 flex-1 max-w-7xl w-full mx-auto">
           {activeTab === 'overview' && <DashboardOverview onNavigateTab={setActiveTab} />}
           {activeTab === 'products' && <ProductsManager />}
           {activeTab === 'orders' && <OrdersManager />}
