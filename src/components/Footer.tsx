@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { Phone, Mail, ArrowRight, CheckCircle2, MapPin, ExternalLink } from 'lucide-react';
 
-interface FooterProps {
-  onNavigateAdmin?: () => void;
-}
+interface FooterProps {}
 
-export const Footer: React.FC<FooterProps> = ({ onNavigateAdmin }) => {
+export const Footer: React.FC<FooterProps> = () => {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
@@ -64,14 +62,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateAdmin }) => {
               <li><a href="#" className="hover:text-[#9C5B23] dark:hover:text-[#E9BE5F] transition-colors">Blog</a></li>
               <li><a href="#our-story" className="hover:text-[#9C5B23] dark:hover:text-[#E9BE5F] transition-colors">Quality & Testing</a></li>
               <li><a href="#" className="hover:text-[#9C5B23] dark:hover:text-[#E9BE5F] transition-colors">Manufacturer List</a></li>
-              <li>
-                <button
-                  onClick={() => onNavigateAdmin?.()}
-                  className="font-bold text-[#9C5B23] dark:text-[#E9BE5F] hover:underline transition-colors cursor-pointer"
-                >
-                  🔐 Store Admin Panel
-                </button>
-              </li>
             </ul>
           </div>
 

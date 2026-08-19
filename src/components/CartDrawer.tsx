@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { X, Trash2, ShoppingBag, ArrowRight, ShieldCheck, CheckCircle2, Tag, Sparkles, Plus, ChevronDown, MapPin } from 'lucide-react';
+import { X, Trash2, ShoppingBag, ShieldCheck, CheckCircle2, Tag, Sparkles, Plus, ChevronDown, MapPin } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useStore } from '@/context/StoreContext';
 import { useAuth } from '../context/AuthContext';
 import { getWeightMultiplier } from '../utils/price';
 
 import type { CartItem, Order } from '../types';
+import type { Coupon } from '../types/admin';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -21,11 +22,27 @@ export const CartDrawer: React.FC = () => {
     showToast,
   } = useCart();
 
-  const { products, addOrder: addStoreOrder } = useStore();
+  const { products, addOrder: addStoreOrder, coupons } = useStore();
   const { user, openProfile, addOrder: addAuthOrder } = useAuth();
 
-  const [couponCode, setCouponCode] = useState('NEW15');
+  const [couponCode, setCouponCode] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>('NEW15');
+  const [appliedCouponObj, setAppliedCouponObj] = useState<Coupon | null>(() => {
+    return {
+      id: 'coup-new15',
+      code: 'NEW15',
+      discountType: 'percentage',
+      discountValue: 15,
+      minOrderValue: 0,
+      maxDiscount: 300,
+      usageLimit: 1000,
+      usedCount: 0,
+      expiryDate: '2027-12-31',
+      isActive: true,
+    };
+  });
+  const [couponError, setCouponError] = useState<string | null>(null);
+  const [showOffersList, setShowOffersList] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
 
   // Lock background body scroll when drawer is open
@@ -42,24 +59,106 @@ export const CartDrawer: React.FC = () => {
 
   if (!isCartOpen) return null;
 
-  const discountPercent = appliedCoupon === 'NEW15' ? 15 : appliedCoupon === 'NATURA10' ? 10 : 0;
-  const savingsAmount = Math.round((cartSubtotal * discountPercent) / 100);
-  const estimatedTotal = cartSubtotal - savingsAmount;
+  // Calculate discount and savings dynamically
+  let savingsAmount = 0;
+  if (appliedCouponObj) {
+    if (appliedCouponObj.discountType === 'percentage') {
+      let discount = Math.round((cartSubtotal * appliedCouponObj.discountValue) / 100);
+      if (appliedCouponObj.maxDiscount && discount > appliedCouponObj.maxDiscount) {
+        discount = appliedCouponObj.maxDiscount;
+      }
+      savingsAmount = Math.min(discount, cartSubtotal);
+    } else if (appliedCouponObj.discountType === 'fixed') {
+      savingsAmount = Math.min(appliedCouponObj.discountValue, cartSubtotal);
+    } else if (appliedCouponObj.discountType === 'free_shipping') {
+      savingsAmount = 0;
+    }
+  } else if (appliedCoupon === 'NEW15') {
+    savingsAmount = Math.round((cartSubtotal * 15) / 100);
+  }
 
+  const estimatedTotal = Math.max(0, cartSubtotal - savingsAmount);
+  const discountPercent = appliedCouponObj
+    ? appliedCouponObj.discountType === 'percentage'
+      ? appliedCouponObj.discountValue
+      : Math.round((savingsAmount / (cartSubtotal || 1)) * 100)
+    : appliedCoupon === 'NEW15'
+    ? 15
+    : 0;
   const freeShippingThreshold = 500;
+
+  const applySpecificCoupon = (code: string) => {
+    setCouponError(null);
+    const cleanCode = code.trim().toUpperCase();
+    if (!cleanCode) {
+      setCouponError('Coupon Invalid or Expired');
+      return;
+    }
+
+    // 1. Search in store context coupons (covers DEVS, HONEY15, PUREFLAVOR200, FREESHIP, etc.)
+    const found = coupons?.find(
+      (c) => c.code.toUpperCase() === cleanCode && c.isActive
+    );
+
+    if (found) {
+      // Validate expiry (up to 23:59:59 on the expiry date)
+      if (found.expiryDate) {
+        const exp = new Date(found.expiryDate);
+        exp.setHours(23, 59, 59, 999);
+        if (exp.getTime() < Date.now()) {
+          setCouponError('Coupon Invalid or Expired');
+          return;
+        }
+      }
+
+      // Validate min order value
+      if (found.minOrderValue && cartSubtotal < found.minOrderValue) {
+        setCouponError(`Min order of ₹${found.minOrderValue} required for ${found.code}`);
+        return;
+      }
+
+      // Validate usage cap
+      if (found.usageLimit && found.usedCount >= found.usageLimit) {
+        setCouponError('Coupon Invalid or Expired');
+        return;
+      }
+
+      setAppliedCouponObj(found);
+      setAppliedCoupon(found.code);
+      setCouponCode(found.code);
+      setCouponError(null);
+      showToast(`Applied coupon ${found.code}! 🎉`);
+      return;
+    }
+
+    // 2. Built-in fallbacks if not yet in store context
+    if (cleanCode === 'NEW15' || cleanCode === 'DEVS' || cleanCode === 'NATURAL10' || cleanCode === 'NATURA10' || cleanCode === 'HONEY10') {
+      const fallback: Coupon = {
+        id: `fb-${cleanCode.toLowerCase()}`,
+        code: cleanCode,
+        discountType: 'percentage',
+        discountValue: cleanCode === 'NATURAL10' || cleanCode === 'NATURA10' || cleanCode === 'HONEY10' ? 10 : 15,
+        minOrderValue: 0,
+        usageLimit: 1000,
+        usedCount: 0,
+        expiryDate: '2027-12-31',
+        isActive: true,
+      };
+      setAppliedCouponObj(fallback);
+      setAppliedCoupon(cleanCode);
+      setCouponCode(cleanCode);
+      setCouponError(null);
+      showToast(`Applied coupon ${cleanCode}! 🎉`);
+      return;
+    }
+
+    // 3. User requirement: zero popup window / alert. Show inline below the apply tab.
+    setCouponError('Coupon Invalid or Expired');
+  };
 
   const handleApplyCoupon = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    const cleanCode = couponCode.trim().toUpperCase();
-    if (cleanCode === 'NEW15') {
-      setAppliedCoupon('NEW15');
-      showToast('Applied coupon NEW15 (15% OFF)! 🎉');
-    } else if (cleanCode === 'NATURA10' || cleanCode === 'HONEY10' || cleanCode === 'BEEFARM10') {
-      setAppliedCoupon('NATURA10');
-      showToast('Applied coupon NATURA10 (10% OFF)! 🎉');
-    } else {
-      alert('Invalid coupon code. Try "NEW15" or "NATURA10"');
-    }
+    applySpecificCoupon(couponCode);
   };
 
   const handleCheckout = () => {
@@ -288,9 +387,24 @@ export const CartDrawer: React.FC = () => {
                       <Tag className="w-4 h-4 text-[#1B5E20]" />
                       <span>{appliedCoupon} applied</span>
                     </div>
-                    <span className="bg-[#C8E6C9] text-[#1B5E20] px-2 py-0.5 rounded text-[11px]">
-                      Saved ₹{savingsAmount}.00
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="bg-[#C8E6C9] text-[#1B5E20] px-2 py-0.5 rounded text-[11px]">
+                        Saved ₹{savingsAmount}.00
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setAppliedCoupon(null);
+                          setAppliedCouponObj(null);
+                          setCouponCode('');
+                          setCouponError(null);
+                        }}
+                        className="text-neutral-400 hover:text-red-600 text-xs ml-1 cursor-pointer"
+                        title="Remove coupon"
+                      >
+                        ✕
+                      </button>
+                    </div>
                   </div>
                 ) : null}
 
@@ -302,30 +416,76 @@ export const CartDrawer: React.FC = () => {
                       type="text"
                       placeholder="Enter Coupon Code"
                       value={couponCode}
-                      onChange={(e) => setCouponCode(e.target.value)}
+                      onChange={(e) => {
+                        setCouponCode(e.target.value);
+                        if (couponError) setCouponError(null);
+                      }}
                       className="w-full pl-8 pr-3 py-2 bg-[#FAF8F5] dark:bg-[#1A1816] border border-[#E0D0B6] dark:border-[#3D372E] rounded-lg text-xs font-semibold text-[#231F1B] dark:text-white placeholder-neutral-400 focus:outline-none focus:border-[#9C5B23]"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-[#9C5B23] hover:bg-[#834917] text-white font-bold rounded-lg text-xs transition-colors"
+                    className="px-4 py-2 bg-[#9C5B23] hover:bg-[#834917] text-white font-bold rounded-lg text-xs transition-colors cursor-pointer"
                   >
                     Apply
                   </button>
                 </form>
 
-                <div className="flex items-center justify-between text-xs font-bold">
-                  <button
-                    onClick={() => {
-                      setCouponCode('NEW15');
-                      setAppliedCoupon('NEW15');
-                      showToast('Applied coupon NEW15!');
-                    }}
-                    className="text-[#0066CC] hover:underline flex items-center gap-1"
-                  >
-                    <span>View All Offers</span>
-                    <ArrowRight className="w-3 h-3" />
-                  </button>
+                {/* User Requested: Display inline below the apply tab */}
+                {couponError && (
+                  <div className="text-xs font-bold text-red-600 dark:text-red-400 flex items-center gap-1.5 animate-fadeIn">
+                    <span className="text-sm">⚠️</span>
+                    <span>{couponError}</span>
+                  </div>
+                )}
+
+                {/* Available Offers Accordion */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs font-bold">
+                    <button
+                      type="button"
+                      onClick={() => setShowOffersList((prev) => !prev)}
+                      className="text-[#0066CC] dark:text-[#60A5FA] hover:underline flex items-center gap-1 cursor-pointer"
+                    >
+                      <span>{showOffersList ? 'Hide Available Offers' : 'View All Offers'}</span>
+                      <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${showOffersList ? 'rotate-180' : ''}`} />
+                    </button>
+                  </div>
+
+                  {showOffersList && (
+                    <div className="pt-2 space-y-2 max-h-48 overflow-y-auto no-scrollbar border-t border-[#E7DFD3] dark:border-neutral-800">
+                      {coupons && coupons.filter((c) => c.isActive).map((c) => (
+                        <div
+                          key={c.id}
+                          className="p-2.5 bg-[#FAF8F5] dark:bg-[#1A1816] rounded-lg border border-[#E0D0B6] dark:border-[#3D372E] flex items-center justify-between gap-2"
+                        >
+                          <div>
+                            <div className="flex items-center gap-1.5 font-bold text-xs text-[#231F1B] dark:text-white">
+                              <Tag className="w-3 h-3 text-[#9C5B23]" />
+                              <span>{c.code}</span>
+                              <span className="text-[10px] text-[#15803D] bg-emerald-100 dark:bg-emerald-900/40 px-1.5 py-0.2 rounded font-extrabold">
+                                {c.discountType === 'percentage'
+                                  ? `${c.discountValue}% OFF`
+                                  : c.discountType === 'fixed'
+                                  ? `₹${c.discountValue} OFF`
+                                  : 'FREE SHIPPING'}
+                              </span>
+                            </div>
+                            <div className="text-[10px] text-neutral-500 mt-0.5">
+                              {c.minOrderValue ? `Min order ₹${c.minOrderValue}` : 'No minimum order'}
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => applySpecificCoupon(c.code)}
+                            className="px-2.5 py-1 bg-[#9C5B23] hover:bg-[#834917] text-white text-[10px] font-bold rounded-md transition-colors cursor-pointer"
+                          >
+                            {appliedCoupon === c.code ? 'Applied' : 'Apply'}
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 

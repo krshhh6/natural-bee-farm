@@ -10,7 +10,6 @@ import {
   LogOut,
   Sun,
   Moon,
-  ShieldCheck,
   MapPin,
   Package,
   Coins,
@@ -171,21 +170,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 Our Story
               </a>
-
-              {/* Admin Panel Access Link */}
-              <button
-                onClick={() => onNavigate?.('admin')}
-                className={`flex items-center gap-1.5 transition-colors px-2.5 py-1 rounded-full text-xs font-bold ${
-                  currentPage === 'admin'
-                    ? 'bg-[#9C5B23] text-white shadow-sm'
-                    : 'text-[#9C5B23] dark:text-[#E9BE5F] bg-[#9C5B23]/10 dark:bg-[#E9BE5F]/10 hover:bg-[#9C5B23] hover:text-white'
-                }`}
-                title="Open Admin & Business Operations Panel"
-              >
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>Admin Panel</span>
-              </button>
-
             </nav>
           </div>
 
@@ -397,16 +381,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                     </div>
 
                     <div className="pt-1.5 border-t border-[#E8D5B7] dark:border-[#3D372E]">
-                      <button
-                        onClick={() => {
-                          setUserDropdownOpen(false);
-                          onNavigate?.('admin');
-                        }}
-                        className="w-full text-left px-3 py-2 text-xs font-bold text-[#9C5B23] dark:text-[#E9BE5F] hover:bg-[#FDF8F0] dark:hover:bg-[#2F2923] rounded-lg flex items-center gap-2 transition-colors cursor-pointer"
-                      >
-                        <ShieldCheck className="w-3.5 h-3.5" />
-                        <span>Admin Operations</span>
-                      </button>
                       <button
                         onClick={() => {
                           logout();

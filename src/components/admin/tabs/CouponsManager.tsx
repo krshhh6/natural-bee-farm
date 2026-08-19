@@ -21,10 +21,10 @@ export const CouponsManager: React.FC = () => {
     code: '',
     discountType: 'percentage' as 'percentage' | 'fixed' | 'free_shipping',
     discountValue: 15,
-    minOrderValue: 799,
-    maxDiscount: 300,
+    minOrderValue: 0,
+    maxDiscount: 0,
     usageLimit: 500,
-    expiryDate: '2026-12-31',
+    expiryDate: '2027-12-31',
     isActive: true,
   });
 
@@ -34,10 +34,10 @@ export const CouponsManager: React.FC = () => {
       code: '',
       discountType: 'percentage',
       discountValue: 15,
-      minOrderValue: 799,
-      maxDiscount: 300,
+      minOrderValue: 0,
+      maxDiscount: 0,
       usageLimit: 500,
-      expiryDate: '2026-12-31',
+      expiryDate: '2027-12-31',
       isActive: true,
     });
     setIsModalOpen(true);
@@ -49,10 +49,10 @@ export const CouponsManager: React.FC = () => {
       code: c.code,
       discountType: c.discountType,
       discountValue: c.discountValue,
-      minOrderValue: c.minOrderValue,
+      minOrderValue: c.minOrderValue || 0,
       maxDiscount: c.maxDiscount || 0,
-      usageLimit: c.usageLimit,
-      expiryDate: c.expiryDate,
+      usageLimit: c.usageLimit || 500,
+      expiryDate: c.expiryDate || '2027-12-31',
       isActive: c.isActive,
     });
     setIsModalOpen(true);
@@ -63,11 +63,11 @@ export const CouponsManager: React.FC = () => {
     const payload = {
       code: formData.code.toUpperCase().trim(),
       discountType: formData.discountType,
-      discountValue: Number(formData.discountValue),
-      minOrderValue: Number(formData.minOrderValue),
-      maxDiscount: formData.maxDiscount ? Number(formData.maxDiscount) : undefined,
-      usageLimit: Number(formData.usageLimit),
-      expiryDate: formData.expiryDate,
+      discountValue: Number(formData.discountValue) || 0,
+      minOrderValue: Number(formData.minOrderValue) || 0,
+      maxDiscount: formData.maxDiscount && Number(formData.maxDiscount) > 0 ? Number(formData.maxDiscount) : undefined,
+      usageLimit: Number(formData.usageLimit) || 500,
+      expiryDate: formData.expiryDate || '2027-12-31',
       isActive: formData.isActive,
     };
 
@@ -75,7 +75,7 @@ export const CouponsManager: React.FC = () => {
       updateCoupon({
         ...payload,
         id: editingCoupon.id,
-        usedCount: editingCoupon.usedCount,
+        usedCount: editingCoupon.usedCount || 0,
       });
     } else {
       createCoupon(payload);
